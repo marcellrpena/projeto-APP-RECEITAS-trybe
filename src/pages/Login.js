@@ -9,12 +9,10 @@ function Login() {
   return (
     <main>
       <form>
-        <button
-          data-testid="login-submit-btn"
-          type="submit"
-          onClick={ handleClick }
-        >
-          Enter
+        <input type="email" data-testid="email-input" />
+        <input type="password" data-testid="password-input" />
+        <button type="submit" data-testid="login-submit-btn">
+          Login
         </button>
       </form>
     </main>
