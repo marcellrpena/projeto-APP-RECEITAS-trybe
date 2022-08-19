@@ -1,9 +1,9 @@
 import React from 'react';
 import Header from '../components/Header';
 
-function Profile() {
+function Profile(props) {
   return (
-    <Header name="Profile" />
+    <Header name="Profile" props={ props } />
   );
 }
 

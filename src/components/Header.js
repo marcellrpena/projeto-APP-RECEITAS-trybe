@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function Header({ name }) {
+function Header({ name, props: { history } }) {
   const names = ['Profile', 'Done Recipes', 'Favorite Recipes'];
   return (
     <header>
-      <img
+      <input
+        type="button"
         data-testid="profile-top-btn"
+        onClick={ () => history.push('/profile') }
         src="src/images/profileIcon.svg"
         alt="profilePhoto"
       />
@@ -17,7 +19,8 @@ function Header({ name }) {
       </h1>
       {
         !names.includes(name) && (
-          <img
+          <input
+            type="button"
             data-testid="search-top-btn"
             src="src/images/searchIcon.svg"
             alt="SearchIcon"
