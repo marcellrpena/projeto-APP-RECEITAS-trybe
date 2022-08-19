@@ -1,10 +1,10 @@
 import React from 'react';
 
 function Login() {
-  const handleClick = (e) => {
+  /* const handleClick = (e) => {
     e.preventDefault();
     console.log('oi');
-  };
+  }; */
 
   return (
     <main>
