@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { shape, string } from 'prop-types';
 import { RecipesContext } from '../contexts/Contexts';
-import fetchRecipes from '../services/fetchRecipes';
+import fetchRecipesBy from '../services/fetchRecipes';
 
-function SearchBar() {
+function SearchBar({ history }) {
   const [userSearch, setUserSearch] = useState({
     filter: '',
     search: '',
@@ -17,7 +18,10 @@ function SearchBar() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setRecipes(await fetchRecipes(userSearch));
+    const { pathname } = history.location;
+    const TYPE = pathname.includes('foods') ? 'themealdb' : 'thecocktaildb';
+    const recipes = await fetchRecipesBy(TYPE, userSearch);
+    setRecipes(recipes);
   };
 
   useEffect(() => {
@@ -43,16 +47,16 @@ function SearchBar() {
           data-testid="search-input"
           onChange={ handleChange }
         />
-        <label htmlFor="igredient-radio">
+        <label htmlFor="ingredient-radio">
           <input
             type="radio"
             name="filter"
-            value="igredient"
-            id="igredient-radio"
+            value="ingredient"
+            id="ingredient-radio"
             data-testid="ingredient-search-radio"
             onChange={ handleChange }
           />
-          Igredients
+          Ingredients
         </label>
         <label htmlFor="search-radio">
           <input
@@ -87,5 +91,11 @@ function SearchBar() {
     </div>
   );
 }
+
+SearchBar.propTypes = {
+  history: shape({
+    location: shape({ pathname: string }).isRequired,
+  }).isRequired,
+};
 
 export default SearchBar;

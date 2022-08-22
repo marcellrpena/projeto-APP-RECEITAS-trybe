@@ -1,5 +1,5 @@
 import React from 'react';
-import renderWithRouter from './helpers/renderWith';
+import renderWithRouter from './helpers/renderWithRouter';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import LoginProvider from '../contexts/LoginProvider';

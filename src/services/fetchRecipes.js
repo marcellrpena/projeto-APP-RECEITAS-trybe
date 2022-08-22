@@ -1,12 +1,11 @@
 const getEndpoint = ({ search, filter }) => {
-  if (filter === 'igredient') return `filter.php?i=${search}`;
+  if (filter === 'ingredient') return `filter.php?i=${search}`;
   if (filter === 'search') return `search.php?s=${search}`;
   return `search.php?f=${search}`;
 };
 
-const fetchRecipes = async (userSearch) => {
-  const ENDPOINT = `https://www.themealdb.com/api/json/v1/1/${getEndpoint(userSearch)}`;
-  console.log(ENDPOINT);
+const fetchRecipesBy = async (type, userSearch) => {
+  const ENDPOINT = `https://www.${type}.com/api/json/v1/1/${getEndpoint(userSearch)}`;
   try {
     const response = await fetch(ENDPOINT);
     const data = await response.json();
@@ -16,4 +15,4 @@ const fetchRecipes = async (userSearch) => {
   }
 };
 
-export default fetchRecipes;
+export default fetchRecipesBy;

@@ -32,7 +32,7 @@ function Header({ name, props: { history } }) {
           >
             <img src={ searchIcon } alt="Search Icon" />
           </button>
-          {isSearching && <SearchBar />}
+          {isSearching && <SearchBar history={ history } />}
         </div>
       )}
     </header>
