@@ -1,13 +1,9 @@
 import React from 'react';
-import SearchBar from '../components/SearchBar';
+import Header from '../components/Header';
 
-function Foods() {
+function Foods(props) {
   return (
-    <div>
-      <h1>Foods</h1>
-      <SearchBar />
-
-    </div>
+    <Header name="Foods" props={ props } />
   );
 }
 
