@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import searchIcon from '../images/searchIcon.svg';
 import profileIcon from '../images/profileIcon.svg';
+import SearchBar from './SearchBar';
 
 function Header({ name, props: { history } }) {
-  const [searchBar, setSearchBar] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const names = ['Profile', 'Done Recipes', 'Favorite Recipes'];
   return (
     <header>
@@ -27,11 +28,11 @@ function Header({ name, props: { history } }) {
             src={ searchIcon }
             alt="Search Icon"
             data-testid="search-top-btn"
-            onClick={ () => setSearchBar(!searchBar) }
+            onClick={ () => setIsSearching(!isSearching) }
           >
             <img src={ searchIcon } alt="Search Icon" />
           </button>
-          {searchBar && <input type="text" data-testid="search-input" />}
+          {isSearching && <SearchBar />}
         </div>
       )}
     </header>

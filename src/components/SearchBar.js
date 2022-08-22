@@ -4,6 +4,7 @@ function SearchBar() {
   return (
     <div>
       <form>
+        <input type="text" id="search-input" data-testid="search-input" />
         <label htmlFor="igredient-radio">
           <input
             type="radio"
