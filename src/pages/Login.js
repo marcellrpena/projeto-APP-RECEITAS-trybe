@@ -1,6 +1,6 @@
 import { func, shape } from 'prop-types';
 import React, { useState, useContext, useEffect } from 'react';
-import LoginContext from '../contexts/RecipeContexts';
+import { LoginContext } from '../contexts/Contexts';
 
 function Login({ history }) {
   const [password, setPassword] = useState('');
