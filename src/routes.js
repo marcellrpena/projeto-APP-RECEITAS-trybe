@@ -1,13 +1,26 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+
 import Login from './pages/Login';
 import Foods from './pages/Foods';
+import Drinks from './pages/Drinks';
+import Profile from './pages/Profile';
+import DoneRecipes from './pages/DoneRecipes';
+import FavoriteRecipes from './pages/FavoriteRecipes';
 
 function Content() {
   return (
     <Switch>
       <Route exact path="/" component={ Login } />
-      <Route path="/foods" component={ Foods } />
+      <Route path="foods/{id-da-receita}" />
+      <Route path="/drinks/{id-da-receita}" />
+      <Route exact path="/foods" component={ Foods } />
+      <Route exact path="/drinks" component={ Drinks } />
+      <Route exact path="/profile" component={ Profile } />
+      <Route path="/done-recipes" component={ DoneRecipes } />
+      <Route path="/favorite-recipes" component={ FavoriteRecipes } />
+      <Route path="/foods/{id}/in-progress" />
+      <Route path="/drinks/{id}/in-progress" />
     </Switch>
   );
 }
