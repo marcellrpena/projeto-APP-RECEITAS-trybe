@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import searchIcon from '../images/searchIcon.svg';
 
 function Header({ name, props: { history } }) {
   const [searchBar, setSearchBar] = useState(false);
@@ -21,13 +22,20 @@ function Header({ name, props: { history } }) {
       {
         !names.includes(name) && (
           <div>
-            <input
+            <button
               type="button"
               data-testid="search-top-btn"
               src="src/images/searchIcon.svg"
               alt="SearchIcon"
               onClick={ () => setSearchBar(!searchBar) }
-            />
+            >
+              <img
+                src={ searchIcon }
+                alt="ícone de busca"
+                height="40"
+                width="50"
+              />
+            </button>
             {
               searchBar && (<input
                 type="text"

@@ -9,8 +9,6 @@ const renderWithRouter = (component) => {
     ...render(<Router history={ history }>{component}</Router>), history,
   });
 };
-<<<<<<< HEAD
+
 export default renderWithRouter;
-=======
-export default renderWithRouter;
->>>>>>> main-group-19-header
+
