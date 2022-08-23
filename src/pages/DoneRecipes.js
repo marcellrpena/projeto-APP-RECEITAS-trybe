@@ -1,10 +1,9 @@
 import React from 'react';
+import Header from '../components/Header';
 
-function DoneRecipes() {
+function DoneRecipes(props) {
   return (
-    <div>
-      <h1>Done Recipes</h1>
-    </div>
+    <Header name="Done Recipes" props={ props } />
   );
 }
 

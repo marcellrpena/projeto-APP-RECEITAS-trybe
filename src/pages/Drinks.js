@@ -1,12 +1,11 @@
 import React from 'react';
+import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-function Drinks() {
+function Drinks(props) {
   return (
-    <div>
-      <h1>Drinks</h1>
-      <Footer />
-    </div>
+    <Header name="Drinks" props={ props } />
+    <Footer />
   );
 }
 
