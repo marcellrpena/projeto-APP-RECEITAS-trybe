@@ -3,7 +3,10 @@ import React, { useState } from 'react';
 import { RecipesContext } from './Contexts';
 
 function RecipesProvider({ children }) {
-  const [recipes, setRecipes] = useState([]);
+  const [recipes, setRecipes] = useState({
+    meals: [],
+    drinks: [],
+  });
 
   const context = {
     recipes,

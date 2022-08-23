@@ -5,11 +5,12 @@ const getEndpoint = ({ search, filter }) => {
 };
 
 const fetchRecipesBy = async (type, userSearch) => {
-  const ENDPOINT = `https://www.${type}.com/api/json/v1/1/${getEndpoint(userSearch)}`;
+  const recipeType = type === 'meals' ? 'themealdb' : 'thecocktaildb';
+  const ENDPOINT = `https://www.${recipeType}.com/api/json/v1/1/${getEndpoint(userSearch)}`;
   try {
     const response = await fetch(ENDPOINT);
     const data = await response.json();
-    return data;
+    return data.meals ? data.meals : data.drinks;
   } catch (error) {
     return error;
   }

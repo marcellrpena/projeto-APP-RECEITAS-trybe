@@ -11,7 +11,7 @@ function Content() {
   return (
     <Switch>
       <Route exact path="/" component={ Login } />
-      <Route path="foods/{id-da-receita}" />
+      <Route path="/foods/{id-da-receita}" />
       <Route path="/drinks/{id-da-receita}" />
       <Route exact path="/foods" component={ Foods } />
       <Route exact path="/drinks" component={ Drinks } />
