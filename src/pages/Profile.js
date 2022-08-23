@@ -23,7 +23,7 @@ function Profile(props) {
           <button
             type="button"
             data-testid="profile-done-btn"
-            onClick={ () => history.push('done-recipes') }
+            onClick={ () => history.push('/done-recipes') }
           >
             Done Recipes
           </button>
