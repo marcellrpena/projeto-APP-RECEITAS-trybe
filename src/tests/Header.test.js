@@ -1,6 +1,6 @@
 import React from 'react';
 import renderWithRouter from './helpers/renderWithRouter';
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import LoginProvider from '../contexts/LoginProvider';
 import App from '../App';
