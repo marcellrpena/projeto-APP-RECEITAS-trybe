@@ -6,7 +6,7 @@ function Foods(props) {
   return (
     <>
       <Header name="Foods" props={ props } />
-      <Recipes />
+      <Recipes props={ props } />
     </>
   );
 }

@@ -1,17 +1,31 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { shape, string } from 'prop-types';
 import { RecipesContext } from '../contexts/Contexts';
 import RecipeCard from './RecipeCard';
+import { fetchRecipesDidMount } from '../services/fetchRecipes';
 
 const MAX_RECIPES = 12;
-function Recipes() {
-  const { recipes } = useContext(RecipesContext);
-  console.log({ recipes });
+function Recipes({ props: { history } }) {
+  const { recipes: { meals, drinks }, setRecipes, recipes } = useContext(RecipesContext);
+  const { pathname } = history.location;
+
+  useEffect(() => {
+    const request = async () => {
+      const response = await fetchRecipesDidMount(pathname);
+      const result = { ...recipes, ...response };
+      setRecipes(result);
+    };
+    request();
+  }, []);
+
+  const recipesToRender = pathname === '/foods' ? meals : drinks;
+  console.log(recipesToRender);
 
   return (
     <div>
       {
-        recipes.length > 1
-        && recipes.slice(0, MAX_RECIPES)
+        recipesToRender.length > 1
+        && recipesToRender.slice(0, MAX_RECIPES)
           .map((recipe, index) => (
             <RecipeCard
               key={ index }
@@ -25,5 +39,13 @@ function Recipes() {
     </div>
   );
 }
+
+Recipes.propTypes = {
+  props: shape({
+    history: shape({
+      location: shape({ pathname: string }),
+    }),
+  }).isRequired,
+};
 
 export default Recipes;
