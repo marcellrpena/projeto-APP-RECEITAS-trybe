@@ -4,8 +4,21 @@ const getEndpoint = ({ search, filter }) => {
   return `search.php?f=${search}`;
 };
 
-const fetchRecipesBy = async (type, userSearch) => {
-  const ENDPOINT = `https://www.${type}.com/api/json/v1/1/${getEndpoint(userSearch)}`;
+export const fetchRecipesBy = async (type, userSearch) => {
+  const recipeType = type === 'meals' ? 'themealdb' : 'thecocktaildb';
+  const ENDPOINT = `https://www.${recipeType}.com/api/json/v1/1/${getEndpoint(userSearch)}`;
+  try {
+    const response = await fetch(ENDPOINT);
+    const data = await response.json();
+    return data.meals ? data.meals : data.drinks;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const fetchRecipesDidMount = async (type) => {
+  const recipeType = type.includes('foods') ? 'themealdb' : 'thecocktaildb';
+  const ENDPOINT = `https://www.${recipeType}.com/api/json/v1/1/search.php?s=`;
   try {
     const response = await fetch(ENDPOINT);
     const data = await response.json();
@@ -14,5 +27,3 @@ const fetchRecipesBy = async (type, userSearch) => {
     return error;
   }
 };
-
-export default fetchRecipesBy;

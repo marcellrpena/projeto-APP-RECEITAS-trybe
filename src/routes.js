@@ -19,8 +19,8 @@ function Content() {
       <Route exact path="/profile" component={ Profile } />
       <Route path="/done-recipes" component={ DoneRecipes } />
       <Route path="/favorite-recipes" component={ FavoriteRecipes } />
-      <Route path="/foods/{id}/in-progress" />
-      <Route path="/drinks/{id}/in-progress" />
+      <Route path="/foods/:id/in-progress" />
+      <Route path="/drinks/:id/in-progress" />
     </Switch>
   );
 }
