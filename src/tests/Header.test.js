@@ -4,33 +4,35 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import LoginProvider from '../contexts/LoginProvider';
 import App from '../App';
+import { meals } from '../../cypress/mocks/meals';
+import RecipesProvider from '../contexts/RecipesProvider';
+import renderWithRouterAndContext from './helpers/renderWithRouter';
 
 describe('Testes do componente Header', () => {
   describe('Testa o clique no icone Profile do header', () => {
+    beforeEach(() => {
+      jest.spyOn(global, 'fetch');
+      global.fetch.mockResolvedValue({
+        json: jest.fn().mockResolvedValue(meals),
+      });
+    });
+
     it('Testa se ao clicar no icone de profile é redirecionado para página de profile', () => {
-      const { history } = renderWithRouter(
-        <LoginProvider>
-          <App />
-        </LoginProvider>
-      );
+      const { history } = renderWithRouterAndContext(<App />);
       const emailInput = screen.getByTestId('email-input');
       const passInput = screen.getByTestId('password-input');
       const loginBtn = screen.getByTestId('login-submit-btn');
-  
+
       userEvent.type(emailInput, 'test@test.com');
       userEvent.type(passInput, '1234567');
       userEvent.click(loginBtn);
-      const iconProfile = screen.getByTestId("profile-top-btn");
+      const iconProfile = screen.getByTestId('profile-top-btn');
       userEvent.click(iconProfile);
       const { pathname } = history.location;
       expect(pathname).toBe('/profile');
     });
     it('Testa se ao clicar no icone de Seach uma barra de busca aparece', () => {
-      renderWithRouter(
-        <LoginProvider>
-          <App />
-        </LoginProvider>
-      );
+      renderWithRouterAndContext(<App />)
       const emailInput = screen.getByTestId('email-input');
       const passInput = screen.getByTestId('password-input');
       const loginBtn = screen.getByTestId('login-submit-btn');

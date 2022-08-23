@@ -4,7 +4,7 @@ const getEndpoint = ({ search, filter }) => {
   return `search.php?f=${search}`;
 };
 
-const fetchRecipesBy = async (type, userSearch) => {
+export const fetchRecipesBy = async (type, userSearch) => {
   const recipeType = type === 'meals' ? 'themealdb' : 'thecocktaildb';
   const ENDPOINT = `https://www.${recipeType}.com/api/json/v1/1/${getEndpoint(userSearch)}`;
   try {
@@ -16,4 +16,14 @@ const fetchRecipesBy = async (type, userSearch) => {
   }
 };
 
-export default fetchRecipesBy;
+export const fetchRecipesDidMount = async (type) => {
+  const recipeType = type.includes('foods') ? 'themealdb' : 'thecocktaildb';
+  const ENDPOINT = `https://www.${recipeType}.com/api/json/v1/1/search.php?s=`;
+  try {
+    const response = await fetch(ENDPOINT);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
+};

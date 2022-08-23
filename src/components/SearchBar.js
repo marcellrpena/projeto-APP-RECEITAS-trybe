@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { shape, string } from 'prop-types';
 import { RecipesContext } from '../contexts/Contexts';
-import fetchRecipesBy from '../services/fetchRecipes';
+import { fetchRecipesBy } from '../services/fetchRecipes';
 
 function SearchBar({ history }) {
   const [userSearch, setUserSearch] = useState({
@@ -100,7 +100,7 @@ function SearchBar({ history }) {
 
 SearchBar.propTypes = {
   history: shape({
-    location: shape({ pathname: string }).isRequired,
+    location: shape({ pathname: string }),
   }).isRequired,
 };
 
