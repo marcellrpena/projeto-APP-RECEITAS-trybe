@@ -15,6 +15,7 @@ function Login({ history }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const TOKEN = 1;
+    console.log(email);
     localStorage.setItem('user', JSON.stringify({ email }));
     localStorage.setItem('mealsToken', TOKEN);
     localStorage.setItem('cocktailsToken', TOKEN);
@@ -61,7 +62,6 @@ function Login({ history }) {
           type="submit"
           data-testid="login-submit-btn"
           disabled={ disableBtn }
-          onClick={ () => history.push('/foods') }
         >
           Login
         </button>
