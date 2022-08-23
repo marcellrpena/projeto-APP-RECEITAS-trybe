@@ -11,15 +11,15 @@ function Content() {
   return (
     <Switch>
       <Route exact path="/" component={ Login } />
-      <Route path="foods/{id-da-receita}" />
-      <Route path="/drinks/{id-da-receita}" />
+      <Route path="/foods/:id" />
+      <Route path="/drinks/:id" />
       <Route exact path="/foods" component={ Foods } />
       <Route exact path="/drinks" component={ Drinks } />
       <Route exact path="/profile" component={ Profile } />
       <Route path="/done-recipes" component={ DoneRecipes } />
       <Route path="/favorite-recipes" component={ FavoriteRecipes } />
-      <Route path="/foods/{id}/in-progress" />
-      <Route path="/drinks/{id}/in-progress" />
+      <Route path="/foods/:id/in-progress" />
+      <Route path="/drinks/:id/in-progress" />
     </Switch>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { shape, string } from 'prop-types';
 import { RecipesContext } from '../contexts/Contexts';
-import fetchRecipesBy from '../services/fetchRecipes';
+import { fetchRecipesBy } from '../services/fetchRecipes';
 
 function SearchBar({ history }) {
   const [userSearch, setUserSearch] = useState({
@@ -9,7 +9,7 @@ function SearchBar({ history }) {
     search: '',
   });
 
-  const { setRecipes } = useContext(RecipesContext);
+  const { recipes, setRecipes } = useContext(RecipesContext);
 
   const handleChange = ({ target }) => setUserSearch({
     ...userSearch,
@@ -19,9 +19,9 @@ function SearchBar({ history }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { pathname } = history.location;
-    const TYPE = pathname.includes('foods') ? 'themealdb' : 'thecocktaildb';
-    const recipes = await fetchRecipesBy(TYPE, userSearch);
-    setRecipes(recipes);
+    const recipeType = pathname.includes('foods') ? 'meals' : 'drinks';
+    const recipesList = await fetchRecipesBy(recipeType, userSearch);
+    setRecipes({ ...recipes, [recipeType]: recipesList });
   };
 
   useEffect(() => {
@@ -34,6 +34,12 @@ function SearchBar({ history }) {
       });
     }
   }, [userSearch]);
+
+  useEffect(() => {
+    const { meals, drinks } = recipes;
+    if (meals.length === 1) history.push(`/foods/${meals[0].idMeal}`);
+    if (drinks.length === 1) history.push(`/drinks/${drinks[0].idDrink}`);
+  }, [recipes]);
 
   return (
     <div>
@@ -94,7 +100,7 @@ function SearchBar({ history }) {
 
 SearchBar.propTypes = {
   history: shape({
-    location: shape({ pathname: string }).isRequired,
+    location: shape({ pathname: string }),
   }).isRequired,
 };
 

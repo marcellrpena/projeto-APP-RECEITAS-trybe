@@ -1,26 +1,26 @@
 import React from 'react';
-import renderWithRouter from './helpers/renderWithRouter';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import LoginProvider from '../contexts/LoginProvider';
-import RecipesProvider from '../contexts/RecipesProvider';
 import App from '../App';
 import { meals } from '../../cypress/mocks/meals';
 import { drinks } from '../../cypress/mocks/drinks';
+import renderWithRouterAndContext from './helpers/renderWithRouter';
+import beefMeals from '../../cypress/mocks/beefMeals';
 
 describe('Testes da barra de pesquisa', () => {
+  beforeEach(() => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(meals),
+    });
+  })
+
   afterEach(() => jest.resetAllMocks());
 
   it('Testa se o botão "Search" está desativado quando os inputs estão vazios', () => {
     expect.assertions(1);
 
-    renderWithRouter(
-      <LoginProvider>
-        <RecipesProvider>
-          <App />
-        </RecipesProvider>
-      </LoginProvider>
-    );
+    renderWithRouterAndContext(<App />)
 
     const emailInput = screen.getByTestId('email-input');
     const passInput = screen.getByTestId('password-input');
@@ -38,19 +38,7 @@ describe('Testes da barra de pesquisa', () => {
 
   it('Testa se é chamado a API de comidas quando está na rota "/foods" e faz uma pesquisa', () => {
     expect.assertions(4);
-
-    jest.spyOn(global, 'fetch');
-    global.fetch.mockResolvedValue({
-      json: jest.fn().mockResolvedValue(meals),
-    });
-
-    renderWithRouter(
-      <LoginProvider>
-        <RecipesProvider>
-          <App />
-        </RecipesProvider>
-      </LoginProvider>
-    );
+    renderWithRouterAndContext(<App />)
 
     const emailInput = screen.getByTestId('email-input');
     const passInput = screen.getByTestId('password-input');
@@ -65,33 +53,28 @@ describe('Testes da barra de pesquisa', () => {
     const searchInput = screen.getByTestId('search-input');
     const igredientRadio = screen.getByTestId('ingredient-search-radio');
     const searchBtn = screen.getByTestId('exec-search-btn');
-    userEvent.type(searchInput, 'banana');
+    userEvent.type(searchInput, 'beef');
     userEvent.click(igredientRadio);
 
-    expect(searchInput).toHaveValue('banana');
+    expect(searchInput).toHaveValue('beef');
     expect(igredientRadio).toBeChecked();
     expect(searchBtn).toBeEnabled();
 
+    jest.resetAllMocks();
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(beefMeals),
+    });
+
     userEvent.click(searchBtn);
 
-    const URL = 'https://www.themealdb.com/api/json/v1/1/filter.php?i=banana';
+    const URL = 'https://www.themealdb.com/api/json/v1/1/filter.php?i=beef';
     expect(fetch).toHaveBeenCalledWith(URL);
   });
 
   it('Testa se é chamado a API de bebidas quando está na rota "/drinks" e faz uma pesquisa', () => {
     expect.assertions(1);
-    jest.spyOn(global, 'fetch');
-    global.fetch.mockResolvedValue({
-      json: jest.fn().mockResolvedValue(drinks),
-    });
-
-    const { history } = renderWithRouter(
-      <LoginProvider>
-        <RecipesProvider>
-          <App />
-        </RecipesProvider>
-      </LoginProvider>
-    );
+    const { history } = renderWithRouterAndContext(<App />)
 
     const emailInput = screen.getByTestId('email-input');
     const passInput = screen.getByTestId('password-input');
@@ -107,28 +90,24 @@ describe('Testes da barra de pesquisa', () => {
     const searchInput = screen.getByTestId('search-input');
     const nameRadio = screen.getByTestId('name-search-radio');
     const searchBtn = screen.getByTestId('exec-search-btn');
-    userEvent.type(searchInput, 'banana');
+    userEvent.type(searchInput, 'beef');
     userEvent.click(nameRadio);
+
+    jest.resetAllMocks();
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(beefMeals),
+    });
+
     userEvent.click(searchBtn);
 
-    const URL = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=banana';
+    const URL = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=beef';
     expect(fetch).toHaveBeenCalledWith(URL);
   });
 
   it('Testa se traz comidas pelo filtro "First-Letter"', () => {
     expect.assertions(1);
-    jest.spyOn(global, 'fetch');
-    global.fetch.mockResolvedValue({
-      json: jest.fn().mockResolvedValue(drinks),
-    });
-
-    renderWithRouter(
-      <LoginProvider>
-        <RecipesProvider>
-          <App />
-        </RecipesProvider>
-      </LoginProvider>
-    );
+    renderWithRouterAndContext(<App />)
 
     const emailInput = screen.getByTestId('email-input');
     const passInput = screen.getByTestId('password-input');
@@ -145,6 +124,13 @@ describe('Testes da barra de pesquisa', () => {
     const searchBtn = screen.getByTestId('exec-search-btn');
     userEvent.click(fistLetterRadio);
     userEvent.type(searchInput, 'b');
+    
+    jest.resetAllMocks();
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(beefMeals),
+    });
+
     userEvent.click(searchBtn);
 
     const URL = 'https://www.themealdb.com/api/json/v1/1/search.php?f=b';
@@ -155,13 +141,7 @@ describe('Testes da barra de pesquisa', () => {
     expect.assertions(2);
     global.alert = jest.fn();
 
-    renderWithRouter(
-      <LoginProvider>
-        <RecipesProvider>
-          <App />
-        </RecipesProvider>
-      </LoginProvider>
-    );
+    renderWithRouterAndContext(<App />)
 
     const emailInput = screen.getByTestId('email-input');
     const passInput = screen.getByTestId('password-input');
