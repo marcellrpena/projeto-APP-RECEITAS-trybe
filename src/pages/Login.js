@@ -61,7 +61,6 @@ function Login({ history }) {
           type="submit"
           data-testid="login-submit-btn"
           disabled={ disableBtn }
-          onClick={ () => history.push('/foods') }
         >
           Login
         </button>
