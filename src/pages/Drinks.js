@@ -4,7 +4,7 @@ import Footer from '../components/Footer';
 function Drinks() {
   return (
     <div>
-      <h1>drinks</h1>
+      <h1>Drinks</h1>
       <Footer />
     </div>
   );

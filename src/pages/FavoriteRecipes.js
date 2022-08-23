@@ -2,7 +2,9 @@ import React from 'react';
 
 function FavoriteRecipes() {
   return (
-    <div />
+    <div>
+      <h1>Favorite Recipes</h1>
+    </div>
   );
 }
 
