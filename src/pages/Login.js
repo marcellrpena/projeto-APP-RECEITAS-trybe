@@ -1,6 +1,6 @@
 import { func, shape } from 'prop-types';
 import React, { useState, useContext, useEffect } from 'react';
-import LoginContext from '../contexts/RecipeContexts';
+import { LoginContext } from '../contexts/Contexts';
 
 function Login({ history }) {
   const [password, setPassword] = useState('');
@@ -15,6 +15,7 @@ function Login({ history }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const TOKEN = 1;
+    console.log(email);
     localStorage.setItem('user', JSON.stringify({ email }));
     localStorage.setItem('mealsToken', TOKEN);
     localStorage.setItem('cocktailsToken', TOKEN);

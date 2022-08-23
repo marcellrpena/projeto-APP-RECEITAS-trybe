@@ -1,6 +1,6 @@
 import { node } from 'prop-types';
 import React, { useState } from 'react';
-import LoginContext from './RecipeContexts';
+import { LoginContext } from './Contexts';
 
 function LoginProvider({ children }) {
   const [email, setEmail] = useState('');

@@ -1,10 +1,9 @@
 import React from 'react';
+import Header from '../components/Header';
 
-function Foods() {
+function Foods(props) {
   return (
-    <div>
-      <h1>Foods</h1>
-    </div>
+    <Header name="Foods" props={ props } />
   );
 }
 
