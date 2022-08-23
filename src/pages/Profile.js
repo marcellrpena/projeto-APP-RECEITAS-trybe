@@ -1,10 +1,54 @@
 import React from 'react';
+import { shape, func } from 'prop-types';
 import Header from '../components/Header';
 
 function Profile(props) {
+  const { history } = props;
+  const email = JSON.parse(localStorage.getItem('user'));
+  const logoutApp = () => {
+    localStorage.clear();
+    history.push('/');
+  };
+
   return (
-    <Header name="Profile" props={ props } />
+    <div>
+      <Header name="Profile" props={ props } />
+      <main>
+        <h5
+          data-testid="profile-email"
+        >
+          {email.email}
+        </h5>
+        <section>
+          <button
+            type="button"
+            data-testid="profile-done-btn"
+            onClick={ () => history.push('done-recipes') }
+          >
+            Done Recipes
+          </button>
+          <button
+            type="button"
+            data-testid="profile-favorite-btn"
+            onClick={ () => history.push('/favorite-recipes') }
+          >
+            Favorite Recipes
+          </button>
+          <button
+            type="button"
+            data-testid="profile-logout-btn"
+            onClick={ logoutApp }
+          >
+            Logout
+          </button>
+        </section>
+      </main>
+    </div>
   );
 }
+
+Profile.propTypes = {
+  history: shape({ push: func }),
+}.isRequired;
 
 export default Profile;
