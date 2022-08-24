@@ -6,6 +6,10 @@ function RecipesProvider({ children }) {
   const [recipes, setRecipes] = useState({
     meals: [],
     drinks: [],
+    categories: {
+      meals: [],
+      drinks: [],
+    },
   });
 
   const context = {
