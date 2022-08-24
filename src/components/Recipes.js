@@ -1,11 +1,12 @@
 import React, { useContext, useEffect } from 'react';
-import { shape, string } from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import { RecipesContext } from '../contexts/Contexts';
-import RecipeCard from './RecipeCard';
 import { fetchRecipesDidMount } from '../services/fetchRecipes';
+import RecipeCard from './RecipeCard';
 
 const MAX_RECIPES = 12;
-function Recipes({ props: { history } }) {
+function Recipes() {
+  const history = useHistory();
   const { recipes: { meals, drinks }, setRecipes, recipes } = useContext(RecipesContext);
   const { pathname } = history.location;
 
@@ -18,33 +19,26 @@ function Recipes({ props: { history } }) {
     request();
   }, []);
 
-  const recipesToRender = pathname.includes('foods') ? meals : drinks;
+  const recipesToRender = pathname === '/foods' ? meals : drinks;
+  console.log(recipesToRender);
 
   return (
-    <main>
+    <div>
       {
         recipesToRender.length > 1
         && recipesToRender.slice(0, MAX_RECIPES)
           .map((recipe, index) => (
             <RecipeCard
-              key={ recipe.strMeal || recipe.strDrink }
-              cardTestId={ `${index}-recipe-card` }
-              imgTestId={ `${index}-card-img` }
-              nameTestId={ `${index}-card-name` }
+              key={ index }
+              cardDataTestId={ `${index}-recipe-card` }
+              imgDataTestId={ `${index}-card-img` }
+              nameDataTestId={ `${index}-card-name` }
               recipe={ recipe }
             />
           ))
       }
-    </main>
+    </div>
   );
 }
-
-Recipes.propTypes = {
-  props: shape({
-    history: shape({
-      location: shape({ pathname: string }),
-    }),
-  }).isRequired,
-};
 
 export default Recipes;

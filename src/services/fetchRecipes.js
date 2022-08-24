@@ -5,8 +5,8 @@ const getEndpoint = ({ search, filter }) => {
 };
 
 export const fetchRecipesBy = async (type, userSearch) => {
-  const recipeType = type === 'meals' ? 'themealdb' : 'thecocktaildb';
-  const ENDPOINT = `https://www.${recipeType}.com/api/json/v1/1/${getEndpoint(userSearch)}`;
+  const domain = type === 'meals' ? 'themealdb' : 'thecocktaildb';
+  const ENDPOINT = `https://www.${domain}.com/api/json/v1/1/${getEndpoint(userSearch)}`;
   try {
     const response = await fetch(ENDPOINT);
     const data = await response.json();
@@ -17,8 +17,8 @@ export const fetchRecipesBy = async (type, userSearch) => {
 };
 
 export const fetchRecipesDidMount = async (type) => {
-  const recipeType = type.includes('foods') ? 'themealdb' : 'thecocktaildb';
-  const ENDPOINT = `https://www.${recipeType}.com/api/json/v1/1/search.php?s=`;
+  const domain = type.includes('foods') ? 'themealdb' : 'thecocktaildb';
+  const ENDPOINT = `https://www.${domain}.com/api/json/v1/1/search.php?s=`;
   try {
     const response = await fetch(ENDPOINT);
     const data = await response.json();

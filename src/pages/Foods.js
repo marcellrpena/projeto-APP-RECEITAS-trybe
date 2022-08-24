@@ -1,13 +1,15 @@
 import React from 'react';
 import Header from '../components/Header';
 import Recipes from '../components/Recipes';
+import Footer from '../components/Footer';
 
-function Foods(props) {
+function Foods() {
   return (
-    <>
-      <Header name="Foods" props={ props } />
-      <Recipes props={ props } />
-    </>
+    <div>
+      <Header name="Foods" />
+      <Recipes />
+      <Footer />
+    </div>
   );
 }
 

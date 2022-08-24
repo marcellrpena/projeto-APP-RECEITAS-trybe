@@ -1,12 +1,12 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import DoneRecipes from './pages/DoneRecipes';
-import Drinks from './pages/Drinks';
-import FavoriteRecipes from './pages/FavoriteRecipes';
-import Foods from './pages/Foods';
 import Login from './pages/Login';
-import Profile from './pages/Profile';
 import RecipeDetails from './pages/RecipeDetails';
+import Foods from './pages/Foods';
+import Drinks from './pages/Drinks';
+import Profile from './pages/Profile';
+import DoneRecipes from './pages/DoneRecipes';
+import FavoriteRecipes from './pages/FavoriteRecipes';
 
 function Content() {
   return (
