@@ -24,6 +24,7 @@ function Recipes({ props: { history } }) {
   return (
     <div>
       {
+
         recipesToRender.length > 1
         && recipesToRender.slice(0, MAX_RECIPES)
           .map((recipe, index) => (
