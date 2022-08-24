@@ -9,6 +9,7 @@ function RecipeInProgress() {
   const { location } = useHistory();
   const recipe = location.pathname.includes(oneMeal.meals[0].idMeal)
     ? oneMeal.meals[0] : oneDrink.drinks[0];
+  console.log(recipe);
   const ingredients = Object.entries(recipe).reduce((acc, curr) => {
     if (curr[0].includes('strIngredient')
     && curr[1] !== '' && curr[1] !== null) {
@@ -17,12 +18,13 @@ function RecipeInProgress() {
     return acc;
   }, []);
   const measures = Object.entries(recipe).reduce((acc, curr) => {
-    if (curr[0].includes('strmeasure')
+    if (curr[0].includes('strMeasure')
     && curr[1] !== '' && curr[1] !== null) {
       acc = [...acc, curr[1]];
     }
     return acc;
   }, []);
+  console.log(measures);
   return (
     <div>
       <img
@@ -61,12 +63,11 @@ function RecipeInProgress() {
       {
         ingredients.map((ingredient, index) => (
           <div key={ index }>
-            <label htmlFor="ingredient">
+            <label data-testid={ `${index}-ingredient-step` } htmlFor={ ingredient }>
               <input
-                data-testid={ `${index}-ingredient-step` }
                 type="checkbox"
                 name={ ingredient }
-                id="ingredient"
+                id={ ingredient }
               />
               { `${ingredient} - ${measures[index]}` }
             </label>
