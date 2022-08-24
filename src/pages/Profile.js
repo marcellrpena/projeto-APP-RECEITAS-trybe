@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-function Profile(props) {
+function Profile() {
   const history = useHistory();
   const email = JSON.parse(localStorage.getItem('user'));
   const logoutApp = () => {
@@ -14,7 +14,7 @@ function Profile(props) {
 
   return (
     <div>
-      <Header name="Profile" props={ props } />
+      <Header name="Profile" />
       <main>
         <h5
           data-testid="profile-email"
