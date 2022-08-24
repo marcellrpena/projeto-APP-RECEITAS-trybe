@@ -25,11 +25,7 @@ export const fetchRecipesDidMount = async (type) => {
     const responseCategories = await fetch(ENDPOINT_CATEGORIES);
     const recipes = await responseRecipes.json();
     const categories = await responseCategories.json();
-    console.log('rodei api');
-    return ({
-      categories,
-      recipes,
-    });
+    return ({ categories, recipes });
   } catch (error) {
     return error;
   }

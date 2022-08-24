@@ -1,25 +1,34 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { RecipesContext } from '../contexts/Contexts';
-import { fetchByFilter } from '../services/fetchRecipes';
+import { fetchByFilter, fetchRecipesDidMount } from '../services/fetchRecipes';
 import CategoryButton from './CategoryButton';
 import RecipeCard from './RecipeCard';
 
 function Recipes() {
   const history = useHistory();
-  const { recipes, categories, loadRecipes, setRecipes } = useContext(RecipesContext);
+  const { recipes, categories, setRecipes, setCategories } = useContext(RecipesContext);
   const { meals, drinks } = recipes;
   const { pathname } = history.location;
   const [isFiltered, setIsFiltered] = useState(false);
+
+  const loadRecipes = async () => {
+    const response = await fetchRecipesDidMount(pathname);
+    setRecipes({ ...recipes, ...response.recipes });
+    setCategories({ ...categories, ...response.categories });
+  };
+
+  useEffect(() => {
+    loadRecipes();
+  }, []);
 
   const handleClickFilter = async (category) => {
     if (!isFiltered) {
       setIsFiltered(!isFiltered);
       const filter = await fetchByFilter(pathname, category);
-      setRecipes({ ...recipes, ...filter });
-    } else {
-      loadRecipes();
+      return setRecipes({ ...recipes, ...filter });
     }
+    loadRecipes();
   };
 
   const MAX_RECIPES = 12;
@@ -60,6 +69,7 @@ function Recipes() {
                 imgTestId={ `${index}-card-img` }
                 nameTestId={ `${index}-card-name` }
                 recipe={ recipe }
+                recipeType={ pathname }
               />
             ))}
       </main>
