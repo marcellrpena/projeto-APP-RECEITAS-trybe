@@ -1,11 +1,13 @@
 import React from 'react';
 import Header from '../components/Header';
+import Recipes from '../components/Recipes';
 import Footer from '../components/Footer';
 
-function Foods(props) {
+function Foods() {
   return (
     <div>
-      <Header name="Foods" props={ props } />
+      <Header name="Foods" />
+      <Recipes />
       <Footer />
     </div>
   );

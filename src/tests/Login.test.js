@@ -1,17 +1,12 @@
 import React from 'react';
-import renderWithRouter from './helpers/renderWithRouter';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import LoginProvider from '../contexts/LoginProvider';
 import App from '../App';
+import renderWithRouterAndContext from './helpers/renderWithRouterAndContext';
 
 describe('Testes da página de Login', () => {
   it('Testa se é redirecionado para a rota "/foods" depois de fazer login', () => {
-    const { history } = renderWithRouter(
-      <LoginProvider>
-        <App />
-      </LoginProvider>
-    );
+    const { history } = renderWithRouterAndContext(<App />)
 
     const emailInput = screen.getByTestId('email-input');
     const passInput = screen.getByTestId('password-input');
@@ -27,11 +22,7 @@ describe('Testes da página de Login', () => {
 
   describe('Testa a validação do botão de login', () => {
     it('Testa se o botão fica desativado ao abrir a página de login', () => {
-      renderWithRouter(
-          <LoginProvider>
-            <App />
-          </LoginProvider>
-      );
+      renderWithRouterAndContext(<App />)
 
       const loginButton = screen.getByRole('button', { name: /login/i });
 
@@ -39,11 +30,7 @@ describe('Testes da página de Login', () => {
     });
 
     it('Testa se o botão fica desativado se o "email" não tem um numero mínimo de caracteres', () => {
-      renderWithRouter(
-          <LoginProvider>
-            <App />
-          </LoginProvider>
-      );
+      renderWithRouterAndContext(<App />)
 
       const emailInput = screen.getByPlaceholderText(/digite seu e-mail/i);
       const loginButton = screen.getByRole('button', { name: /login/i });
@@ -56,11 +43,7 @@ describe('Testes da página de Login', () => {
     });
 
     it('Testa se o botão fica desativado se o email não possui "@"', () => {
-      renderWithRouter(
-          <LoginProvider>
-            <App />
-          </LoginProvider>
-      );
+      renderWithRouterAndContext(<App />)
 
       const emailInput = screen.getByPlaceholderText(/digite seu e-mail/i);
       const loginButton = screen.getByRole('button', { name: /login/i });
@@ -73,11 +56,7 @@ describe('Testes da página de Login', () => {
     });
 
     it('Testa se o botão fica desativado se o email não possui nada antes do "@"', () => {
-      renderWithRouter(
-          <LoginProvider>
-            <App />
-          </LoginProvider>
-      );
+      renderWithRouterAndContext(<App />)
 
       const emailInput = screen.getByPlaceholderText(/digite seu e-mail/i);
       const loginButton = screen.getByRole('button', { name: /login/i });
@@ -90,11 +69,7 @@ describe('Testes da página de Login', () => {
     });
 
     it('Testa se o botão fica desativado se o email não possui nada depois do "@"', () => {
-      renderWithRouter(
-          <LoginProvider>
-            <App />
-          </LoginProvider>
-      );
+      renderWithRouterAndContext(<App />)
 
       const emailInput = screen.getByPlaceholderText(/digite seu e-mail/i);
       const loginButton = screen.getByRole('button', { name: /login/i });
@@ -107,11 +82,7 @@ describe('Testes da página de Login', () => {
     });
 
     it('Testa se o botão fica desativado se o email não possui ".com"', () => {
-      renderWithRouter(
-          <LoginProvider>
-            <App />
-          </LoginProvider>
-      );
+      renderWithRouterAndContext(<App />)
 
       const emailInput = screen.getByPlaceholderText(/digite seu e-mail/i);
       const loginButton = screen.getByRole('button', { name: /login/i });
@@ -124,11 +95,7 @@ describe('Testes da página de Login', () => {
     });
 
     it('Testa se o botão fica desativado se o email não possui nada antes do ".com"', () => {
-      renderWithRouter(
-          <LoginProvider>
-            <App />
-          </LoginProvider>
-      );
+      renderWithRouterAndContext(<App />)
 
       const emailInput = screen.getByPlaceholderText(/digite seu e-mail/i);
       const loginButton = screen.getByRole('button', { name: /login/i });
@@ -141,11 +108,7 @@ describe('Testes da página de Login', () => {
     });
 
     it('Testa se o botão fica desativado se a senha não tem um numero mínimo de caracteres', () => {
-      renderWithRouter(
-          <LoginProvider>
-            <App />
-          </LoginProvider>
-      );
+      renderWithRouterAndContext(<App />)
 
       const emailInput = screen.getByPlaceholderText(/digite seu e-mail/i);
       const loginButton = screen.getByRole('button', { name: /login/i });
@@ -158,11 +121,7 @@ describe('Testes da página de Login', () => {
     });
 
     it('Testa se o botão é ativado se o email e a senha seguem o formato padrão', () => {
-      renderWithRouter(
-          <LoginProvider>
-            <App />
-          </LoginProvider>
-      );
+      renderWithRouterAndContext(<App />)
 
       const emailInput = screen.getByPlaceholderText(/digite seu e-mail/i);
       const loginButton = screen.getByRole('button', { name: /login/i });

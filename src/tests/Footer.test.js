@@ -1,17 +1,12 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import renderWithRouter from './helpers/renderWith';
-import LoginProvider from '../contexts/LoginProvider';
+import renderWithRouterAndContext from './helpers/renderWithRouterAndContext';
 import Foods from '../pages/Foods';
 
 describe('Testes do Footer', () => {
   it('Testa se o footer é renderizado', () => {
-    renderWithRouter(
-      <LoginProvider>
-        <Foods />
-      </LoginProvider>
-    );
+    renderWithRouterAndContext(<Foods />);
 
     const foods = screen.getByRole('heading', { name: /foods/i, level: 1 });
 
@@ -19,11 +14,7 @@ describe('Testes do Footer', () => {
   });
 
   it('Testa se o footer renderiza os botões de Drinks e Meals', () => {
-    renderWithRouter(
-      <LoginProvider>
-        <Foods />
-      </LoginProvider>
-    );
+    renderWithRouterAndContext(<Foods />);
 
     const drinksButton = screen.getByTestId('drinks-bottom-btn');
     const mealsButton = screen.getByTestId('food-bottom-btn');
@@ -33,11 +24,7 @@ describe('Testes do Footer', () => {
   });
 
   it('Testa se, ao clicar no botão de Drinks renderiza a página de Drinks', () => {
-    const { history } = renderWithRouter(
-      <LoginProvider>
-        <Foods />
-      </LoginProvider>
-    );
+    const { history } = renderWithRouterAndContext(<Foods />);
 
     const drinksButton = screen.getByTestId('drinks-footer-btn');
 
@@ -48,11 +35,7 @@ describe('Testes do Footer', () => {
   });
 
   it('Testa se, ao clicar no botão de Foods renderiza a página de Foods', () => {
-    const { history } = renderWithRouter(
-      <LoginProvider>
-        <Foods />
-      </LoginProvider>
-    );
+    const { history } = renderWithRouterAndContext(<Foods />);
 
     const mealsButton = screen.getByTestId('meals-footer-btn');
 

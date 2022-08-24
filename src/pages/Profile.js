@@ -2,10 +2,12 @@ import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-function Profile(props) {
+function Profile() {
   return (
-    <Header name="Profile" props={ props } />
-    <Footer />
+    <div>
+      <Header name="Profile" />
+      <Footer />
+    </div>
   );
 }
 

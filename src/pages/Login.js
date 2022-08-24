@@ -1,8 +1,9 @@
-import { func, shape } from 'prop-types';
 import React, { useState, useContext, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { LoginContext } from '../contexts/Contexts';
 
-function Login({ history }) {
+function Login() {
+  const history = useHistory();
   const [password, setPassword] = useState('');
   const [disableBtn, setDisableBtn] = useState(true);
   const { email, setEmail } = useContext(LoginContext);
@@ -69,9 +70,5 @@ function Login({ history }) {
     </main>
   );
 }
-
-Login.propTypes = {
-  history: shape({ push: func }).isRequired,
-};
 
 export default Login;
