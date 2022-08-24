@@ -60,18 +60,16 @@ function Recipes() {
       </nav>
       {recipesToRender.length >= 1 && (
         <main>
-          {
-            recipesToRender.slice(0, MAX_RECIPES).map((recipe, index) => (
-              <RecipeCard
-                key={ `${index}-recipe` }
-                cardTestId={ `${index}-recipe-card` }
-                imgTestId={ `${index}-card-img` }
-                nameTestId={ `${index}-card-name` }
-                recipe={ recipe }
-                recipeType={ pathname }
-              />
-            ))
-          }
+          {recipesToRender.slice(0, MAX_RECIPES).map((recipe, index) => (
+            <RecipeCard
+              key={ `${index}-recipe` }
+              cardTestId={ `${index}-recipe-card` }
+              imgTestId={ `${index}-card-img` }
+              nameTestId={ `${index}-card-name` }
+              recipe={ recipe }
+              recipeType={ pathname }
+            />
+          ))}
         </main>
       )}
     </div>
