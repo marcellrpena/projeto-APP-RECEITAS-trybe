@@ -1,5 +1,5 @@
 import React from 'react';
-import renderWithRouter from './helpers/renderWithRouter';
+import renderWithRouterAndContext from './helpers/renderWithRouterAndContext';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import LoginProvider from '../contexts/LoginProvider';
@@ -7,11 +7,7 @@ import App from '../App';
 
 describe('Testes da página de Profile', () => {
   it('Testa se ao clicar no icone de Profile é redirecionado para a tela de Profile', () => {
-    renderWithRouter(
-      <LoginProvider>
-        <App />
-      </LoginProvider>
-    );
+  renderWithRouterAndContext(<App />);
 
     const emailInput = screen.getByTestId('email-input');
     const passInput = screen.getByTestId('password-input');
@@ -26,11 +22,8 @@ describe('Testes da página de Profile', () => {
     expect(userEmail).toHaveTextContent("test@test.com")
   });
   it('Testa se ao clicar no botão Done Recipes ele muda para a página /done-recipes', () => {
-    const { history } = renderWithRouter(
-      <LoginProvider>
-        <App />
-      </LoginProvider>
-    );
+    const { history } = renderWithRouterAndContext(<App />);
+
     const emailInput = screen.getByTestId('email-input');
     const passInput = screen.getByTestId('password-input');
     const loginBtn = screen.getByTestId('login-submit-btn');
@@ -46,11 +39,8 @@ describe('Testes da página de Profile', () => {
     expect(pathname).toBe('/done-recipes');
   });
   it('Testa se ao clicar no botão Favorite Recipes ele muda para a página /favorite-recipes', () => {
-    const { history } = renderWithRouter(
-      <LoginProvider>
-        <App />
-      </LoginProvider>
-    );
+    const { history } = renderWithRouterAndContext(<App />);
+
     const emailInput = screen.getByTestId('email-input');
     const passInput = screen.getByTestId('password-input');
     const loginBtn = screen.getByTestId('login-submit-btn');
@@ -66,11 +56,8 @@ describe('Testes da página de Profile', () => {
     expect(pathname).toBe('/favorite-recipes');
   });
   it('Testa se ao clicar no botão Logout ele muda para a página "/" ', () => {
-    const { history } = renderWithRouter(
-      <LoginProvider>
-        <App />
-      </LoginProvider>
-    );
+    const { history } = renderWithRouterAndContext(<App />);
+
     const emailInput = screen.getByTestId('email-input');
     const passInput = screen.getByTestId('password-input');
     const loginBtn = screen.getByTestId('login-submit-btn');

@@ -1,11 +1,13 @@
 import React, { useContext, useEffect } from 'react';
 import { shape, string } from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import { RecipesContext } from '../contexts/Contexts';
 import RecipeCard from './RecipeCard';
 import { fetchRecipesDidMount } from '../services/fetchRecipes';
 
 const MAX_RECIPES = 12;
-function Recipes({ props: { history } }) {
+function Recipes() {
+  const history = useHistory();
   const { recipes: { meals, drinks }, setRecipes, recipes } = useContext(RecipesContext);
   const { pathname } = history.location;
 
