@@ -1,7 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { RecipesContext } from '../contexts/Contexts';
-import { fetchRecipesDidMount } from '../services/fetchRecipes';
+import { fetchByFilter, fetchRecipesDidMount } from '../services/fetchRecipes';
+import CategoryButton from './CategoryButton';
 import RecipeCard from './RecipeCard';
 
 function Recipes() {
@@ -25,6 +26,23 @@ function Recipes() {
     request();
   }, []);
 
+  const handleClickFilter = async (category) => {
+    const filter = await fetchByFilter(pathname, category);
+    console.log(filter);
+    setRecipes({
+      ...recipes,
+      ...filter,
+    });
+  };
+
+  const handleClickAll = async () => {
+    const response = await fetchRecipesDidMount(pathname);
+    setRecipes({
+      ...recipes,
+      ...response.recipes,
+    });
+  };
+
   const MAX_RECIPES = 12;
   const MAX_CATEGORIES = 5;
   const recipesToRender = pathname.includes('foods') ? meals : drinks;
@@ -35,19 +53,23 @@ function Recipes() {
   return (
     <div>
       <nav>
-        {categoriesToRender.length > 1
+        {categoriesToRender.length > 0
           && categoriesToRender.slice(0, MAX_CATEGORIES).map(({ strCategory }) => (
-            <button
-              type="button"
+            <CategoryButton
               key={ strCategory }
-              data-testid={ `${strCategory}-category-filter` }
-            >
-              {strCategory}
-            </button>
+              onClick={ () => handleClickFilter(strCategory) }
+              categoryType={ strCategory }
+              dataTestid={ `${strCategory}-category-filter` }
+            />
           ))}
+        <CategoryButton
+          categoryType="All"
+          onClick={ () => handleClickAll() }
+          dataTestid="All-category-filter"
+        />
       </nav>
       <main>
-        {recipesToRender.length > 1
+        {recipesToRender.length > 0
           && recipesToRender
             .slice(0, MAX_RECIPES)
             .map((recipe, index) => (

@@ -33,3 +33,16 @@ export const fetchRecipesDidMount = async (type) => {
     return error;
   }
 };
+
+export const fetchByFilter = async (type, category) => {
+  const domain = type.includes('foods') ? 'themealdb' : 'thecocktaildb';
+  const ENDPOINT = `https://www.${domain}.com/api/json/v1/1/filter.php?c=${category}`;
+
+  try {
+    const requestFilterCategory = await fetch(ENDPOINT);
+    const response = await requestFilterCategory.json();
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
