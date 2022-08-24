@@ -19,14 +19,8 @@ function RecipesProvider({ children }) {
 
   const loadRecipes = async () => {
     const response = await fetchRecipesDidMount(pathname);
-    setRecipes({
-      ...recipes,
-      ...response.recipes,
-    });
-    setCategories({
-      ...categories,
-      ...response.categories,
-    });
+    setRecipes({ ...recipes, ...response.recipes });
+    setCategories({ ...categories, ...response.categories });
   };
 
   useEffect(() => {

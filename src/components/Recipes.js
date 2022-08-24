@@ -1,17 +1,26 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { RecipesContext } from '../contexts/Contexts';
+import { fetchByFilter } from '../services/fetchRecipes';
 import CategoryButton from './CategoryButton';
 import RecipeCard from './RecipeCard';
 
 function Recipes() {
   const history = useHistory();
-  const {
-    recipes,
-    categories,
-  } = useContext(RecipesContext);
+  const { recipes, categories, loadRecipes, setRecipes } = useContext(RecipesContext);
   const { meals, drinks } = recipes;
   const { pathname } = history.location;
+  const [isFiltered, setIsFiltered] = useState(false);
+
+  const handleClickFilter = async (category) => {
+    if (!isFiltered) {
+      setIsFiltered(!isFiltered);
+      const filter = await fetchByFilter(pathname, category);
+      setRecipes({ ...recipes, ...filter });
+    } else {
+      loadRecipes();
+    }
+  };
 
   const MAX_RECIPES = 12;
   const MAX_CATEGORIES = 5;
@@ -23,15 +32,25 @@ function Recipes() {
   return (
     <div>
       <nav>
-        {categoriesToRender.length > 1
+        {categoriesToRender.length > 0
           && categoriesToRender
             .slice(0, MAX_CATEGORIES)
             .map(({ strCategory }) => (
-              <CategoryButton key={ strCategory } categoryType={ strCategory } />
+              <CategoryButton
+                key={ strCategory }
+                onClick={ () => handleClickFilter(strCategory) }
+                categoryType={ strCategory }
+                dataTestid={ `${strCategory}-category-filter` }
+              />
             ))}
+        <CategoryButton
+          categoryType="All"
+          onClick={ () => loadRecipes() }
+          dataTestid="All-category-filter"
+        />
       </nav>
       <main>
-        {recipesToRender.length > 1
+        {recipesToRender.length > 0
           && recipesToRender
             .slice(0, MAX_RECIPES)
             .map((recipe, index) => (

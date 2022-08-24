@@ -1,24 +1,12 @@
-import { string } from 'prop-types';
-import React, { useContext, useEffect, useState } from 'react';
-import { RecipesContext } from '../contexts/Contexts';
+import { func, string } from 'prop-types';
+import React from 'react';
 
-function CategoryButton({ categoryType }) {
-  const [click, setClick] = useState(false);
-  const { loadRecipes } = useContext(RecipesContext);
-
-  const handleClick = () => {
-    setClick(!click);
-  };
-
-  useEffect(() => {
-    if (click) loadRecipes();
-  }, [click]);
-
+function CategoryButton({ categoryType, onClick }) {
   return (
     <button
       type="button"
       data-testid={ `${categoryType}-category-filter` }
-      onClick={ handleClick }
+      onClick={ onClick }
     >
       {categoryType}
     </button>
@@ -26,6 +14,9 @@ function CategoryButton({ categoryType }) {
 }
 
 CategoryButton.defaultProps = { categoryType: '' };
-CategoryButton.propTypes = { categoryType: string };
+CategoryButton.propTypes = {
+  categoryType: string,
+  onClick: func.isRequired,
+};
 
 export default CategoryButton;
