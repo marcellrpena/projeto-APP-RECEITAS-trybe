@@ -41,12 +41,12 @@ function Recipes() {
   return (
     <div>
       <nav>
-        {categoriesToRender.length > 0
+        {categoriesToRender.length >= 1
           && categoriesToRender
             .slice(0, MAX_CATEGORIES)
-            .map(({ strCategory }) => (
+            .map(({ strCategory }, index) => (
               <CategoryButton
-                key={ strCategory }
+                key={ `${index}-category` }
                 onClick={ () => handleClickFilter(strCategory) }
                 categoryType={ strCategory }
                 dataTestid={ `${strCategory}-category-filter` }
@@ -58,21 +58,22 @@ function Recipes() {
           dataTestid="All-category-filter"
         />
       </nav>
-      <main>
-        {recipesToRender.length > 0
-          && recipesToRender
-            .slice(0, MAX_RECIPES)
-            .map((recipe, index) => (
+      {recipesToRender.length >= 1 && (
+        <main>
+          {
+            recipesToRender.slice(0, MAX_RECIPES).map((recipe, index) => (
               <RecipeCard
-                key={ recipe.strMeal || recipe.strDrink }
+                key={ `${index}-recipe` }
                 cardTestId={ `${index}-recipe-card` }
                 imgTestId={ `${index}-card-img` }
                 nameTestId={ `${index}-card-name` }
                 recipe={ recipe }
                 recipeType={ pathname }
               />
-            ))}
-      </main>
+            ))
+          }
+        </main>
+      )}
     </div>
   );
 }
