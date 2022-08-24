@@ -50,8 +50,4 @@ function Profile() {
   );
 }
 
-Profile.propTypes = {
-  history: shape({ push: func }),
-}.isRequired;
-
 export default Profile;
