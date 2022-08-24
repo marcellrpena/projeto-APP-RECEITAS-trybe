@@ -16,6 +16,7 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const TOKEN = 1;
+    console.log(email);
     localStorage.setItem('user', JSON.stringify({ email }));
     localStorage.setItem('mealsToken', TOKEN);
     localStorage.setItem('cocktailsToken', TOKEN);

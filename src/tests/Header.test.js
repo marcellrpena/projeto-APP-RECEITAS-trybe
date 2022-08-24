@@ -1,8 +1,8 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
+import { meals } from '../../cypress/mocks/meals';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
-import { meals } from '../../cypress/mocks/meals';
 import renderWithRouterAndContext from './helpers/renderWithRouterAndContext';
 
 describe('Testes do componente Header', () => {
@@ -28,8 +28,14 @@ describe('Testes do componente Header', () => {
       const { pathname } = history.location;
       expect(pathname).toBe('/profile');
     });
+
     it('Testa se ao clicar no icone de Seach uma barra de busca aparece', () => {
-      renderWithRouterAndContext(<App />)
+      renderWithRouterAndContext(<App />);
+      renderWithRouter(
+        <LoginProvider>
+          <App />
+        </LoginProvider>
+      );
       const emailInput = screen.getByTestId('email-input');
       const passInput = screen.getByTestId('password-input');
       const loginBtn = screen.getByTestId('login-submit-btn');

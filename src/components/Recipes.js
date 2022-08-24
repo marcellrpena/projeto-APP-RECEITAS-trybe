@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { RecipesContext } from '../contexts/Contexts';
-import RecipeCard from './RecipeCard';
 import { fetchRecipesDidMount } from '../services/fetchRecipes';
+import RecipeCard from './RecipeCard';
 
 function Recipes() {
   const history = useHistory();
