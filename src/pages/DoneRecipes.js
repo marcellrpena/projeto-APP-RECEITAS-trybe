@@ -60,7 +60,7 @@ function DoneRecipes() {
                     width="100"
                   />
                   <h1 data-testid={ `${index}-horizontal-name` }>
-                    nome da receita
+                    nome da receita pronta
                   </h1>
                   <h2 data-testid={ `${index}-horizontal-top-text` }>
                     {recipe.strMeal}
