@@ -1,12 +1,13 @@
 import React, { useContext, useEffect } from 'react';
-import { shape, string } from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import { RecipesContext } from '../contexts/Contexts';
-import RecipeCard from './RecipeCard';
 import { fetchRecipesDidMount } from '../services/fetchRecipes';
+import RecipeCard from './RecipeCard';
 
-const MAX_RECIPES = 12;
-function Recipes({ props: { history } }) {
-  const { recipes: { meals, drinks }, setRecipes, recipes } = useContext(RecipesContext);
+function Recipes() {
+  const history = useHistory();
+  const { recipes, setRecipes } = useContext(RecipesContext);
+  const { meals, drinks } = recipes;
   const { pathname } = history.location;
 
   useEffect(() => {
@@ -18,6 +19,7 @@ function Recipes({ props: { history } }) {
     request();
   }, []);
 
+  const MAX_RECIPES = 12;
   const recipesToRender = pathname.includes('foods') ? meals : drinks;
 
   return (
@@ -38,13 +40,5 @@ function Recipes({ props: { history } }) {
     </main>
   );
 }
-
-Recipes.propTypes = {
-  props: shape({
-    history: shape({
-      location: shape({ pathname: string }),
-    }),
-  }).isRequired,
-};
 
 export default Recipes;

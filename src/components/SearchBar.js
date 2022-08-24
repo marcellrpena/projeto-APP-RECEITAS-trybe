@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { shape, string } from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import { RecipesContext } from '../contexts/Contexts';
 import { fetchRecipesBy } from '../services/fetchRecipes';
 
-function SearchBar({ history }) {
+function SearchBar() {
+  const history = useHistory();
   const [userSearch, setUserSearch] = useState({
     filter: '',
     search: '',
@@ -21,7 +22,9 @@ function SearchBar({ history }) {
     const { pathname } = history.location;
     const recipeType = pathname.includes('foods') ? 'meals' : 'drinks';
     const recipesList = await fetchRecipesBy(recipeType, userSearch);
-    setRecipes({ ...recipes, [recipeType]: recipesList });
+    if (!recipesList) {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
+    } else setRecipes({ ...recipes, [recipeType]: recipesList });
   };
 
   useEffect(() => {
@@ -97,11 +100,5 @@ function SearchBar({ history }) {
     </div>
   );
 }
-
-SearchBar.propTypes = {
-  history: shape({
-    location: shape({ pathname: string }),
-  }).isRequired,
-};
 
 export default SearchBar;

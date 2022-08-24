@@ -1,6 +1,7 @@
 import React from 'react';
 import { shape, func } from 'prop-types';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 function Profile(props) {
   const { history } = props;
@@ -43,6 +44,7 @@ function Profile(props) {
           </button>
         </section>
       </main>
+      <Footer />
     </div>
   );
 }
