@@ -1,12 +1,9 @@
 import React from 'react';
-import renderWithRouter from './helpers/renderWithRouter';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import LoginProvider from '../contexts/LoginProvider';
 import App from '../App';
 import { meals } from '../../cypress/mocks/meals';
-import RecipesProvider from '../contexts/RecipesProvider';
-import renderWithRouterAndContext from './helpers/renderWithRouter';
+import renderWithRouterAndContext from './helpers/renderWithRouterAndContext';
 
 describe('Testes do componente Header', () => {
   describe('Testa o clique no icone Profile do header', () => {

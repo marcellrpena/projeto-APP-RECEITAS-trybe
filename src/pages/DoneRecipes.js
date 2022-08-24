@@ -1,9 +1,9 @@
 import React from 'react';
 import Header from '../components/Header';
 
-function DoneRecipes(props) {
+function DoneRecipes() {
   return (
-    <Header name="Done Recipes" props={ props } />
+    <Header name="Done Recipes" />
   );
 }
 

@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import { string } from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import searchIcon from '../images/searchIcon.svg';
 import profileIcon from '../images/profileIcon.svg';
 import SearchBar from './SearchBar';
 
-function Header({ name, props: { history } }) {
+function Header({ name }) {
+  const history = useHistory();
+
   const [isSearching, setIsSearching] = useState(false);
   const names = ['Profile', 'Done Recipes', 'Favorite Recipes'];
   return (
@@ -39,8 +42,8 @@ function Header({ name, props: { history } }) {
   );
 }
 
-Header.propTypes = {
-  name: PropTypes.string,
-}.isRequired;
+Header.defaultProps = { name: '' };
+
+Header.propTypes = { name: string };
 
 export default Header;
