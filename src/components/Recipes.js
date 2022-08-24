@@ -25,6 +25,7 @@ function Recipes() {
   return (
     <main>
       {
+
         recipesToRender.length > 1
         && recipesToRender.slice(0, MAX_RECIPES)
           .map((recipe, index) => (
