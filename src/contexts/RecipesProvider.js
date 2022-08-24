@@ -1,8 +1,11 @@
 import { node } from 'prop-types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { fetchRecipesDidMount } from '../services/fetchRecipes';
 import { RecipesContext } from './Contexts';
 
 function RecipesProvider({ children }) {
+  const history = useHistory();
   const [recipes, setRecipes] = useState({
     meals: [],
     drinks: [],
@@ -12,11 +15,30 @@ function RecipesProvider({ children }) {
     drinks: [],
   });
 
+  const { pathname } = history.location;
+
+  const loadRecipes = async () => {
+    const response = await fetchRecipesDidMount(pathname);
+    setRecipes({
+      ...recipes,
+      ...response.recipes,
+    });
+    setCategories({
+      ...categories,
+      ...response.categories,
+    });
+  };
+
+  useEffect(() => {
+    loadRecipes();
+  }, []);
+
   const context = {
     recipes,
     setRecipes,
     categories,
     setCategories,
+    loadRecipes,
   };
 
   return (

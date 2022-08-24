@@ -1,9 +1,18 @@
-import React from 'react';
+import { string } from 'prop-types';
+import React, { useContext, useEffect, useState } from 'react';
+import { RecipesContext } from '../contexts/Contexts';
 
 function CategoryButton({ categoryType }) {
+  const [click, setClick] = useState(false);
+  const { loadRecipes } = useContext(RecipesContext);
+
   const handleClick = () => {
-    console.log('asd');
+    setClick(!click);
   };
+
+  useEffect(() => {
+    if (click) loadRecipes();
+  }, [click]);
 
   return (
     <button

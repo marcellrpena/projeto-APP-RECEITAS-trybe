@@ -1,30 +1,17 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { RecipesContext } from '../contexts/Contexts';
-import { fetchRecipesDidMount } from '../services/fetchRecipes';
 import CategoryButton from './CategoryButton';
 import RecipeCard from './RecipeCard';
 
 function Recipes() {
   const history = useHistory();
-  const { recipes, setRecipes, categories, setCategories } = useContext(RecipesContext);
+  const {
+    recipes,
+    categories,
+  } = useContext(RecipesContext);
   const { meals, drinks } = recipes;
   const { pathname } = history.location;
-
-  useEffect(() => {
-    const request = async () => {
-      const response = await fetchRecipesDidMount(pathname);
-      setRecipes({
-        ...recipes,
-        ...response.recipes,
-      });
-      setCategories({
-        ...categories,
-        ...response.categories,
-      });
-    };
-    request();
-  }, []);
 
   const MAX_RECIPES = 12;
   const MAX_CATEGORIES = 5;
