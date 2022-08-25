@@ -1,7 +1,13 @@
 import React from 'react';
-import { shape, string } from 'prop-types';
+import { bool, shape, string } from 'prop-types';
 
-function RecipeCard({ cardTestId, imgTestId, nameTestId, recipe }) {
+function RecipeCard({
+  cardTestId,
+  imgTestId,
+  nameTestId,
+  recipe,
+  showCategory,
+}) {
   return (
     <div data-testid={ cardTestId }>
       <h2 data-testid={ nameTestId }>{recipe.strMeal || recipe.strDrink}</h2>
@@ -11,14 +17,27 @@ function RecipeCard({ cardTestId, imgTestId, nameTestId, recipe }) {
         data-testid={ imgTestId }
         style={ { width: '125px' } }
       />
+      {showCategory && (
+        <p data-testid="recipe-category">
+          {recipe.strAlcoholic || recipe.strCategory}
+        </p>
+      )}
     </div>
   );
 }
 
+RecipeCard.defaultProps = {
+  cardTestId: '',
+  imgTestId: '',
+  nameTestId: '',
+  showCategory: false,
+};
+
 RecipeCard.propTypes = {
-  cardTestId: string.isRequired,
-  imgTestId: string.isRequired,
-  nameTestId: string.isRequired,
+  cardTestId: string,
+  imgTestId: string,
+  nameTestId: string,
+  showCategory: bool,
   recipe: shape({
     strMeal: string,
     strMealThumb: string,
