@@ -2,7 +2,6 @@ import React from 'react';
 import renderWithRouterAndContext from './helpers/renderWithRouterAndContext';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import LoginProvider from '../contexts/LoginProvider';
 import App from '../App';
 
 describe('Testes da página de Profile', () => {
