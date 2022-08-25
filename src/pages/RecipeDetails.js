@@ -141,6 +141,17 @@ function RecipeDetails({ match }) {
               )) }
             </div>
           ) }
+
+          <button
+            type="button"
+            data-testid="start-recipe-btn"
+            style={ {
+              position: 'fixed',
+              bottom: 0,
+            } }
+          >
+            Start Recipe
+          </button>
         </section>)}
     </main>
   );
