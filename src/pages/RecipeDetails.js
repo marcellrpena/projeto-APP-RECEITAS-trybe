@@ -1,16 +1,20 @@
 import { shape, string } from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 function RecipeDetails({ match }) {
   const [recipeDetail, setRecipeDetail] = useState({});
   const [recipeRecommends, setRecipeRecommends] = useState([]);
   const [fetchDetail, setFetchDetail] = useState(false);
   const [fetchRecommend, setFetchRecommend] = useState(false);
+  const [isStartedRecipe, setIsStartedRecipe] = useState(false);
+  const [isFinishedRecipe, setIsFinishedRecipe] = useState(false);
 
-  console.log(recipeRecommends);
-
+  const history = useHistory();
   const recipeId = match.params.id;
   const pagePath = match.path;
+
+  console.log(`${match.url}/in-progress`);
 
   const fetchRecipeDetails = async (domain) => {
     try {
@@ -48,6 +52,19 @@ function RecipeDetails({ match }) {
     }
   };
 
+  const questIsStartedRecipe = () => {
+    const localInProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    setIsStartedRecipe(
+      !(localInProgressRecipes === null
+        || Object.keys(localInProgressRecipes).length === 0),
+    );
+  };
+
+  const questIsFinishedRecipe = () => {
+    const localDoneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+    setIsFinishedRecipe(!(localDoneRecipes === null || localDoneRecipes.length === 0));
+  };
+
   useEffect(() => {
     if (pagePath.includes('/food')) {
       fetchRecipeDetails('themealdb');
@@ -56,6 +73,9 @@ function RecipeDetails({ match }) {
       fetchRecipeDetails('thecocktaildb');
       fetchRecommendations('themealdb');
     }
+
+    questIsStartedRecipe();
+    questIsFinishedRecipe();
   }, []);
 
   const ingredientList = Object.entries(recipeDetail)
@@ -78,10 +98,14 @@ function RecipeDetails({ match }) {
             src={ recipeDetail.strMealThumb || recipeDetail.strDrinkThumb }
             alt={ recipeDetail.strMeal || recipeDetail.strDrink }
           />
+          <div>
+            <h1 data-testid="recipe-title">
+              { recipeDetail.strMeal || recipeDetail.strDrink }
+            </h1>
 
-          <h1 data-testid="recipe-title">
-            { recipeDetail.strMeal || recipeDetail.strDrink }
-          </h1>
+            <button type="button" data-testid="share-btn">Share</button>
+            <button type="button" data-testid="favorite-btn">Favorite</button>
+          </div>
 
           <p
             data-testid="recipe-category"
@@ -106,7 +130,6 @@ function RecipeDetails({ match }) {
               data-testid="video"
               width="320"
               height="144"
-              x-frame-options="sameorigin"
               src={ recipeDetail.strYoutube }
             />)}
 
@@ -145,12 +168,16 @@ function RecipeDetails({ match }) {
           <button
             type="button"
             data-testid="start-recipe-btn"
+            disabled={ isFinishedRecipe }
+            onClick={
+              () => !isStartedRecipe && history.push(`${match.url}/in-progress`)
+            }
             style={ {
               position: 'fixed',
               bottom: 0,
             } }
           >
-            Start Recipe
+            { isStartedRecipe ? 'Continue Recipe' : 'Start Recipe' }
           </button>
         </section>)}
     </main>
