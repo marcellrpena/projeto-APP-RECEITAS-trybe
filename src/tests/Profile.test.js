@@ -2,7 +2,6 @@ import React from 'react';
 import renderWithRouterAndContext from './helpers/renderWithRouterAndContext';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import LoginProvider from '../contexts/LoginProvider';
 import App from '../App';
 
 describe('Testes da página de Profile', () => {
@@ -16,7 +15,8 @@ describe('Testes da página de Profile', () => {
     userEvent.type(emailInput, 'test@test.com');
     userEvent.type(passInput, '1234567');
     userEvent.click(loginBtn);
-    const iconProfile = screen.getByTestId("profile-top-btn");
+    const iconProfile = screen.queryByTestId("profile-top-btn");
+    expect(iconProfile).toBeInTheDocument()
     userEvent.click(iconProfile);
     const userEmail = screen.getByTestId('profile-email')
     expect(userEmail).toHaveTextContent("test@test.com")
@@ -34,6 +34,7 @@ describe('Testes da página de Profile', () => {
     const iconProfile = screen.getByTestId("profile-top-btn");
     userEvent.click(iconProfile);
     const doneRecipesButton = screen.getByTestId('profile-done-btn');
+    expect(doneRecipesButton).toBeInTheDocument()
     userEvent.click(doneRecipesButton)
     const { pathname } = history.location;
     expect(pathname).toBe('/done-recipes');
@@ -50,7 +51,8 @@ describe('Testes da página de Profile', () => {
     userEvent.click(loginBtn);
     const iconProfile = screen.getByTestId("profile-top-btn");
     userEvent.click(iconProfile);
-    const favoriteButton = screen.getByTestId('profile-favorite-btn');
+    const favoriteButton = screen.queryByTestId('profile-favorite-btn');
+    expect(favoriteButton).toBeInTheDocument()
     userEvent.click(favoriteButton)
     const { pathname } = history.location;
     expect(pathname).toBe('/favorite-recipes');
@@ -68,6 +70,7 @@ describe('Testes da página de Profile', () => {
     const iconProfile = screen.getByTestId("profile-top-btn");
     userEvent.click(iconProfile);
     const logOutButton = screen.getByTestId('profile-logout-btn');
+    expect(logOutButton).toBeInTheDocument()
     userEvent.click(logOutButton)
     const { pathname } = history.location;
     expect(pathname).toBe('/');
