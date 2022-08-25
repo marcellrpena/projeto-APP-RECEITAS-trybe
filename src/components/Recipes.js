@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { shape, string } from 'prop-types';
+/* import { shape, string } from 'prop-types'; */
 import { useHistory } from 'react-router-dom';
 import { RecipesContext } from '../contexts/Contexts';
 import RecipeCard from './RecipeCard';
@@ -42,12 +42,12 @@ function Recipes() {
   );
 }
 
-Recipes.propTypes = {
+/* Recipes.propTypes = {
   props: shape({
     history: shape({
       location: shape({ pathname: string }),
     }),
   }).isRequired,
-};
+}; */
 
 export default Recipes;

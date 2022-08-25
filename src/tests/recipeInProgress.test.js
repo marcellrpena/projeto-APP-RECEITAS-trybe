@@ -16,7 +16,7 @@ describe('Testes da pagina de receitas em progresso', () => {
 
   afterEach(() => jest.resetAllMocks()); */
 
-  it('Testa se, após navegar para receitas em progresso do id 52771 a página é renderizada', async () => {
+  it('Testa se, após navegar para receitas em progresso com um id de receita a página é renderizada para aquela receita', async () => {
     //expect.assertions(2);
     const { history } = renderWithRouterAndContext(<App />);
     const emailInput = screen.getByTestId('email-input');
@@ -32,63 +32,4 @@ describe('Testes da pagina de receitas em progresso', () => {
     const drinkImg = screen.getByTestId("recipe-photo");
     expect(drinkImg).toHaveAttribute('src', 'https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg');
   });
-
-  /* it('Testa se, são renderizados "cards" de bebidas', async () => {
-    expect.assertions(2);
-    jest.spyOn(global, 'fetch');
-    global.fetch.mockResolvedValue({
-      json: jest.fn().mockResolvedValue(drinks),
-    });
-
-    const { history } = renderWithRouterAndContext(<App />);
-
-    const emailInput = screen.getByTestId('email-input');
-    const passInput = screen.getByTestId('password-input');
-    const loginBtn = screen.getByTestId('login-submit-btn');
-    userEvent.type(emailInput, 'test@test.com');
-    userEvent.type(passInput, '1234567');
-    userEvent.click(loginBtn);
-    history.push('/drinks');
-
-    await waitFor(() => expect(fetch).toHaveBeenCalled());
-    const ggDrink = screen.getByRole('heading', { name: 'GG' });
-    expect(ggDrink).toBeInTheDocument();
-  });
-
-  it('Testa se os cards não são renderizados caso a requisição falhe', async () => {
-    expect.assertions(4);
-    jest.spyOn(global, 'fetch').mockImplementation(async () => {
-      return Promise.reject([]);
-    });
-
-    renderWithRouterAndContext(<App />);
-
-    const emailInput = screen.getByTestId('email-input');
-    const passInput = screen.getByTestId('password-input');
-    const loginBtn = screen.getByTestId('login-submit-btn');
-    userEvent.type(emailInput, 'test@test.com');
-    userEvent.type(passInput, '1234567');
-    userEvent.click(loginBtn);
-
-    await waitFor(() => expect(fetch).toHaveBeenCalled());
-    const corba = screen.queryByRole('heading', { name: /corba/i });
-    expect(corba).not.toBeInTheDocument();
-
-    const openSearchBtn = screen.getByTestId('search-top-btn');
-    userEvent.click(openSearchBtn);
-
-    const searchInput = screen.getByTestId('search-input');
-    const radio = screen.getByTestId('ingredient-search-radio');
-    const searchBtn = screen.getByTestId('exec-search-btn');
-    userEvent.type(searchInput, 'beef');
-    userEvent.click(radio);
-    userEvent.click(searchBtn);
-
-    await waitFor(() => expect(fetch).toHaveBeenCalled());
-
-    const beef = screen.queryByRole('heading', {
-      name: /Beef and Mustard Pie/i,
-    });
-    expect(beef).not.toBeInTheDocument();
-  }); */
 });
