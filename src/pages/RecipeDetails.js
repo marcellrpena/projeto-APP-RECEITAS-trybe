@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
 import { shape, string } from 'prop-types';
+import React, { useEffect, useState } from 'react';
 
 function RecipeDetails({ match }) {
   const [recipeDetail, setRecipeDetail] = useState({});
   const [recipeRecommends, setRecipeRecommends] = useState([]);
-  const [isFetch, setIsFetch] = useState({ fetchDetail: false, fetchRecommend: false });
+  const [fetchDetail, setFetchDetail] = useState(false);
+  const [fetchRecommend, setFetchRecommend] = useState(false);
 
   console.log(recipeRecommends);
 
@@ -16,7 +17,7 @@ function RecipeDetails({ match }) {
       const response = await fetch(`https://www.${domain}.com/api/json/v1/1/lookup.php?i=${recipeId}`);
       const data = await response.json();
       setRecipeDetail(data.meals ? data.meals[0] : data.drinks[0]);
-      setIsFetch({ fetchDetail: true });
+      setFetchDetail(true);
     } catch (error) {
       console.log(error);
     }
@@ -26,8 +27,22 @@ function RecipeDetails({ match }) {
     try {
       const response = await fetch(`https://www.${domain}.com/api/json/v1/1/search.php?s=`);
       const data = await response.json();
-      setRecipeRecommends(data.meals ? [...data.meals] : [...data.drinks]);
-      setIsFetch({ fetchRecommend: true });
+      setRecipeRecommends(data.meals ? [
+        data.meals[0],
+        data.meals[1],
+        data.meals[2],
+        data.meals[3],
+        data.meals[4],
+        data.meals[5],
+      ] : [
+        data.drinks[0],
+        data.drinks[1],
+        data.drinks[2],
+        data.drinks[3],
+        data.drinks[4],
+        data.drinks[5],
+      ]);
+      setFetchRecommend(true);
     } catch (error) {
       console.log(error);
     }
@@ -55,9 +70,10 @@ function RecipeDetails({ match }) {
 
   return (
     <main>
-      { isFetch.fetchDetail && (
+      { fetchDetail && (
         <section>
           <img
+            style={ { width: '250px' } }
             data-testid="recipe-photo"
             src={ recipeDetail.strMealThumb || recipeDetail.strDrinkThumb }
             alt={ recipeDetail.strMeal || recipeDetail.strDrink }
@@ -86,12 +102,45 @@ function RecipeDetails({ match }) {
           { pagePath.includes('/food') && (
             <iframe
               title={ recipeDetail.strMeal }
+              frameBorder="0"
               data-testid="video"
+              width="320"
+              height="144"
               x-frame-options="sameorigin"
               src={ recipeDetail.strYoutube }
             />)}
 
-          <p data-testid="0-recomendation-card">Recomendações</p>
+          { fetchRecommend && (
+            <div
+              style={ {
+                display: 'flex',
+                width: '200px',
+                border: '1px solid red',
+                overflow: 'scroll',
+              } }
+            >
+              { recipeRecommends.map((item, index) => (
+                <div
+                  key={ index }
+                  data-testid={ `${index}-recomendation-card` }
+                  style={ {
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    minWidth: '100px',
+                    border: '1px solid red',
+                    padding: '10px',
+                  } }
+                >
+                  <p
+                    data-testid={ `${index}-recomendation-title` }
+                  >
+                    { item.strDrink || item.strMeal }
+                  </p>
+                </div>
+              )) }
+            </div>
+          ) }
         </section>)}
     </main>
   );
