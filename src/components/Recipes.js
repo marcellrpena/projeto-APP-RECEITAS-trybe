@@ -76,7 +76,6 @@ function Recipes() {
   );
 }
 
-
 /* Recipes.propTypes = {
   props: shape({
     history: shape({
