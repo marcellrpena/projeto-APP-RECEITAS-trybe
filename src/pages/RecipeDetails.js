@@ -1,6 +1,6 @@
+import React, { useEffect, useState } from 'react';
 import clipboardCopy from 'clipboard-copy';
 import { shape, string } from 'prop-types';
-import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import RecipeCard from '../components/RecipeCard';
 import { addToFavorites } from '../services/saveStorage';
@@ -24,6 +24,7 @@ function RecipeDetails({ match }) {
         `https://www.${domain}.com/api/json/v1/1/lookup.php?i=${recipeId}`,
       );
       const data = await response.json();
+      console.log(data);
       setRecipeDetail(data.meals ? data.meals[0] : data.drinks[0]);
       setFetchDetail(true);
     } catch (error) {
