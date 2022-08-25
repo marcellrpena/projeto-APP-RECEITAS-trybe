@@ -5,6 +5,14 @@ import userEvent from '@testing-library/user-event';
 import App from '../App';
 
 describe('Testes da página de Profile', () => {
+  it('Testa se a pagina Profile é renderizada', () => {
+    const { history } = renderWithRouterAndContext(<App />);
+      history.push('/profile');
+      const profileTitle = screen.queryByTestId('page-title')
+      expect(profileTitle).toBeInTheDocument()
+      const userEmail = screen.queryByTestId('profile-email')
+      expect(userEmail).toHaveTextContent("")
+    });
   it('Testa se ao clicar no icone de Profile é redirecionado para a tela de Profile', () => {
   renderWithRouterAndContext(<App />);
 
@@ -15,7 +23,7 @@ describe('Testes da página de Profile', () => {
     userEvent.type(emailInput, 'test@test.com');
     userEvent.type(passInput, '1234567');
     userEvent.click(loginBtn);
-    const iconProfile = screen.queryByTestId("profile-top-btn");
+    const iconProfile = screen.getByTestId("profile-top-btn");
     expect(iconProfile).toBeInTheDocument()
     userEvent.click(iconProfile);
     const userEmail = screen.getByTestId('profile-email')
@@ -51,7 +59,7 @@ describe('Testes da página de Profile', () => {
     userEvent.click(loginBtn);
     const iconProfile = screen.getByTestId("profile-top-btn");
     userEvent.click(iconProfile);
-    const favoriteButton = screen.queryByTestId('profile-favorite-btn');
+    const favoriteButton = screen.getByTestId('profile-favorite-btn');
     expect(favoriteButton).toBeInTheDocument()
     userEvent.click(favoriteButton)
     const { pathname } = history.location;
