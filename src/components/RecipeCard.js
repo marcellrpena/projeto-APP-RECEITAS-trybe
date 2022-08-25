@@ -18,9 +18,7 @@ function RecipeCard({
         style={ { width: '125px' } }
       />
       {showCategory && (
-        <p data-testid="recipe-category">
-          {recipe.strAlcoholic || recipe.strCategory}
-        </p>
+        <p data-testid="recipe-category">{recipe.strCategory}</p>
       )}
     </div>
   );

@@ -20,7 +20,6 @@ function Recipes() {
   }, []);
 
   const recipesToRender = pathname === '/foods' ? meals : drinks;
-  console.log(recipesToRender);
 
   return (
     <div>

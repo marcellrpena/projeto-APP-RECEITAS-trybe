@@ -3,6 +3,7 @@ import { shape, string } from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import RecipeCard from '../components/RecipeCard';
+import { addToFavorites } from '../services/saveStorage';
 
 function RecipeDetails({ match }) {
   const [recipeDetail, setRecipeDetail] = useState({});
@@ -122,15 +123,15 @@ function RecipeDetails({ match }) {
             {copiedToClipboard ? (
               <span>Link copied!</span>
             ) : (
-              <button
-                type="button"
-                data-testid="share-btn"
-                onClick={ copyLink }
-              >
+              <button type="button" data-testid="share-btn" onClick={ copyLink }>
                 Share
               </button>
             )}
-            <button type="button" data-testid="favorite-btn">
+            <button
+              type="button"
+              data-testid="favorite-btn"
+              onClick={ () => addToFavorites(recipeDetail) }
+            >
               Favorite
             </button>
           </div>

@@ -23,8 +23,6 @@ describe('Testa a Requisição à API ao abrir a tela de Detalhes da Receita', (
         global.fetch.mockResolvedValue({
           json: jest.fn().mockResolvedValue(meals),
         });
-        console.log(meals.meals[1].idMeal);
-        
         const { history } = renderWithRouterAndContext(<App />);
         history.push(`/foods/${meals.meals[1].idMeal}`);        
         await waitFor(() => expect(fetch).toHaveBeenCalled());
@@ -36,8 +34,6 @@ describe('Testa a Requisição à API ao abrir a tela de Detalhes da Receita', (
         global.fetch.mockResolvedValue({
           json: jest.fn().mockResolvedValue(drinks),
         });
-        console.log(drinks.drinks[1].idDrink);
-        
         const { history } = renderWithRouterAndContext(<App />);
         history.push(`/foods/${drinks.drinks[1].idDrink}`);        
         await waitFor(() => expect(fetch).toHaveBeenCalled());
