@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import clipboardCopy from 'clipboard-copy';
 import { shape, string } from 'prop-types';
-import { useHistory } from 'react-router-dom';
-import RecipeCard from '../components/RecipeCard';
+import { useHistory, useLocation } from 'react-router-dom';
+import RecipeCardDetails from '../components/RecipeCardDetails';
 import { addToFavorites } from '../services/saveStorage';
+import shareIcon from '../images/shareIcon.svg';
+import '../styles/Recipes.css';
+import { fetchRecipeDetails } from '../services/fetchRecipes';
 
 function RecipeDetails({ match }) {
   const [recipeDetail, setRecipeDetail] = useState({});
@@ -15,47 +18,36 @@ function RecipeDetails({ match }) {
   const [copiedToClipboard, setCopiedToClipboard] = useState(false);
 
   const history = useHistory();
+  const location = useLocation();
   const recipeId = match.params.id;
   const pagePath = match.path;
 
-  const fetchRecipeDetails = async (domain) => {
+  const fetchRecommendations = async (domain) => {
+    const type = domain.includes('foods') ? 'cocktail' : 'meal';
     try {
       const response = await fetch(
-        `https://www.${domain}.com/api/json/v1/1/lookup.php?i=${recipeId}`,
+        `https://www.the${type}db.com/api/json/v1/1/search.php?s=`,
       );
       const data = await response.json();
       console.log(data);
-      setRecipeDetail(data.meals ? data.meals[0] : data.drinks[0]);
-      setFetchDetail(true);
-    } catch (error) {
-      return error;
-    }
-  };
-
-  const fetchRecommendations = async (domain) => {
-    try {
-      const response = await fetch(
-        `https://www.${domain}.com/api/json/v1/1/search.php?s=`,
-      );
-      const data = await response.json();
       setRecipeRecommends(
-        data.meals
-          ? [
-            data.meals[0],
-            data.meals[1],
-            data.meals[2],
-            data.meals[3],
-            data.meals[4],
-            data.meals[5],
-          ]
-          : [
-            data.drinks[0],
-            data.drinks[1],
-            data.drinks[2],
-            data.drinks[3],
-            data.drinks[4],
-            data.drinks[5],
-          ],
+        data.meals ? data.meals.slice(0, 5) : data.drinks.slice(0, 5),
+        // ? [
+        //   data.meals[0],
+        //   data.meals[1],
+        //   data.meals[2],
+        //   data.meals[3],
+        //   data.meals[4],
+        //   data.meals[5],
+        // ]
+        // : [
+        //   data.drinks[0],
+        //   data.drinks[1],
+        //   data.drinks[2],
+        //   data.drinks[3],
+        //   data.drinks[4],
+        //   data.drinks[5],
+        // ],
       );
       setFetchRecommend(true);
     } catch (error) {
@@ -82,15 +74,15 @@ function RecipeDetails({ match }) {
     );
   };
 
-  useEffect(() => {
-    if (pagePath.includes('/food')) {
-      fetchRecipeDetails('themealdb');
-      fetchRecommendations('thecocktaildb');
-    } else {
-      fetchRecipeDetails('thecocktaildb');
-      fetchRecommendations('themealdb');
-    }
+  const getRecipeDetail = async () => {
+    const recipe = await fetchRecipeDetails(location.pathname, recipeId);
+    setRecipeDetail(recipe);
+    fetchRecommendations(location.pathname);
+    setFetchDetail(true);
+  };
 
+  useEffect(() => {
+    getRecipeDetail();
     questIsStartedRecipe();
     questIsFinishedRecipe();
   }, []);
@@ -112,9 +104,9 @@ function RecipeDetails({ match }) {
 
   return (
     <main>
-      {fetchDetail && (
+      { fetchDetail && (
         <section>
-          <RecipeCard
+          <RecipeCardDetails
             imgTestId="recipe-photo"
             nameTestId="recipe-title"
             recipe={ recipeDetail }
@@ -125,7 +117,7 @@ function RecipeDetails({ match }) {
               <span>Link copied!</span>
             ) : (
               <button type="button" data-testid="share-btn" onClick={ copyLink }>
-                Share
+                <img src={ shareIcon } alt="Share icon" />
               </button>
             )}
             <button
@@ -153,26 +145,12 @@ function RecipeDetails({ match }) {
             />
           )}
           {fetchRecommend && (
-            <div
-              style={ {
-                display: 'flex',
-                width: '200px',
-                border: '1px solid red',
-                overflow: 'scroll',
-              } }
-            >
+            <div className="Recommendations-Container">
               {recipeRecommends.map((item, index) => (
                 <div
                   key={ index }
                   data-testid={ `${index}-recomendation-card` }
-                  style={ {
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    minWidth: '100px',
-                    border: '1px solid red',
-                    padding: '10px',
-                  } }
+                  className="Recommended-Recipe"
                 >
                   <p data-testid={ `${index}-recomendation-title` }>
                     {item.strDrink || item.strMeal}
@@ -186,10 +164,7 @@ function RecipeDetails({ match }) {
             data-testid="start-recipe-btn"
             disabled={ isFinishedRecipe }
             onClick={ () => !isStartedRecipe && history.push(`${match.url}/in-progress`) }
-            style={ {
-              position: 'fixed',
-              bottom: 0,
-            } }
+            className="Start-Recipe-Btn"
           >
             {isStartedRecipe ? 'Continue Recipe' : 'Start Recipe'}
           </button>

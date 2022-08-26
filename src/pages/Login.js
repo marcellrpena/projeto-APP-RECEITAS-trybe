@@ -48,7 +48,7 @@ function Login() {
           />
         </label>
         <label htmlFor="password-input">
-          Senha
+          Password
           <input
             type="password"
             name="password"

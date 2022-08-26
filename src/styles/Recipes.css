@@ -1,0 +1,20 @@
+.Recommendations-Container {
+  border: 1px solid red;
+  display: flex;
+  overflow: scroll;
+  width: 200px;
+}
+
+.Recommended-Recipe {
+  align-items: center;
+  border: 1px solidred;
+  display: flex;
+  justify-content: center;
+  min-width: 100px;
+  padding: 10px;
+}
+
+.Start-Recipe-Btn {
+  bottom: 0;
+  position: fixed;
+}
