@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import clipboardCopy from 'clipboard-copy';
 import oneMeal from '../Mocks/oneMeal';
 import oneDrink from '../Mocks/oneDrinks';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
+import blackHeart from '../images/blackHeartIcon.svg';
 
 function RecipeInProgress() {
   const history = useHistory();
   const { pathname } = history.location;
+  const INTERVAL_COPY_TAG = 4000;
   const [checkSaved, setCheckSaved] = useState([]);
+  const [favorite, setFavorite] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
   const [refresh, setRefresh] = useState(true);
 
   const recipe = pathname.includes(oneMeal.meals[0].idMeal)
@@ -32,21 +37,54 @@ function RecipeInProgress() {
     return acc;
   }, []);
 
-  const progress = ({ target }) => (target.checked
+  const setProgressRecipe = ({ target }) => (target.checked
     ? setCheckSaved([...checkSaved, target.name])
     : setCheckSaved([...checkSaved.filter((element) => element !== target.name)]));
 
-  useEffect(() => {
+  const checkIfFavoriteRecipe = () => {
+    const storageFavoriteRecipe = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    if (!storageFavoriteRecipe) {
+      localStorage.setItem('favoriteRecipes', JSON.stringify([]));
+    } else {
+      setFavorite(storageFavoriteRecipe.find((element) => element.id === recipeID));
+    }
+  };
+
+  const markOrNotAsFavorite = (isFavorite) => {
+    const storageFavoriteRecipe = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    // console.log(isFavorite);
+    if (isFavorite) {
+      setFavorite(isFavorite);
+      localStorage.setItem('favoriteRecipes', JSON
+        .stringify(storageFavoriteRecipe.concat({
+          id: recipeID,
+          type: pathname.includes('foods') ? 'food' : 'drink',
+          nationality: recipe.strArea || '',
+          category: recipe.strCategory || '',
+          alcoholicOrNot: recipe.strAlcoholic || '',
+          name: recipe.strMeal || recipe.strDrink,
+          image: recipe.strMealThumb || recipe.strDrinkThumb,
+        })));
+      // console.log(JSON.parse(localStorage.getItem('favoriteRecipes')));
+    }
+    if (!isFavorite) {
+      setFavorite(isFavorite);
+      localStorage.setItem('favoriteRecipes', JSON
+        .stringify(storageFavoriteRecipe.filter((element) => element.id !== recipeID)));
+    }
+  };
+
+  const getAndSetProgressRecipes = () => {
     const storageData = JSON.parse(localStorage.getItem('inProgressRecipes'));
     // console.log(storageData === null);
     if (!storageData) {
       localStorage.setItem('inProgressRecipes', JSON
         .stringify({ meals: {}, cocktails: {} }));
-      console.log('set new localStorage');
+      // console.log('set new localStorage');
       setRefresh(false);
     } else if (refresh && Object.keys(storageData[recipeType]).includes(recipeID)) {
       setCheckSaved([...storageData[recipeType][recipeID]]);
-      console.log('setCheckedSaved');
+      // console.log('setCheckedSaved');
       setRefresh(false);
     } else {
       localStorage.setItem('inProgressRecipes', JSON
@@ -57,8 +95,23 @@ function RecipeInProgress() {
             [recipeID]: [...checkSaved],
           },
         }));
-      console.log('set localStorage');
+      // console.log('set localStorage');
     }
+  };
+
+  const shareRecipe = () => {
+    setLinkCopied(true);
+    const typeRecipe = pathname.includes('foods')
+      ? `http://localhost:3000/foods/${recipeID}`
+      : `http://localhost:3000/drinks/${recipeID}`;
+    clipboardCopy(typeRecipe);
+    setTimeout(() => setLinkCopied(false), INTERVAL_COPY_TAG);
+    clearTimeout();
+  };
+
+  useEffect(() => {
+    checkIfFavoriteRecipe();
+    getAndSetProgressRecipes();
   }, [checkSaved]);
 
   return (
@@ -77,17 +130,22 @@ function RecipeInProgress() {
             data-testid="share-btn"
             src={ shareIcon }
             alt="Share icon"
+            onClick={ () => shareRecipe() }
           >
             <img src={ shareIcon } alt="Share icon" />
           </button>
           <button
             type="button"
             data-testid="favorite-btn"
-            src={ whiteHeart }
+            src={ favorite ? blackHeart : whiteHeart }
             alt="Share icon"
+            onClick={ () => markOrNotAsFavorite(!favorite) }
           >
-            <img src={ whiteHeart } alt="Share icon" />
+            <img src={ favorite ? blackHeart : whiteHeart } alt="Share icon" />
           </button>
+          {
+            linkCopied && <span>Link copied!</span>
+          }
         </div>
         <h6
           data-testid="recipe-category"
@@ -105,7 +163,7 @@ function RecipeInProgress() {
                 name={ ingredient }
                 id={ ingredient }
                 checked={ checkSaved.includes(ingredient) }
-                onChange={ (e) => progress(e) }
+                onChange={ (e) => setProgressRecipe(e) }
               />
               { `${ingredient} - ${measures[index]}` }
             </label>
