@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import clipboardCopy from 'clipboard-copy';
-import { shape, string } from 'prop-types';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { fetchRecipeDetails, fetchRecipes } from '../services/fetchRecipes';
 import { addToFavorites } from '../services/saveStorage';
 import RecipeCardDetails from '../components/RecipeCardDetails';
 import shareIcon from '../images/shareIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 import '../styles/Recipes.css';
 
-function RecipeDetails({ match }) {
+function RecipeDetails() {
   const [recipeDetail, setRecipeDetail] = useState({});
   const [recipeRecommends, setRecipeRecommends] = useState([]);
   const [fetchDetail, setFetchDetail] = useState(false);
@@ -16,15 +17,15 @@ function RecipeDetails({ match }) {
   const [isStartedRecipe, setIsStartedRecipe] = useState(false);
   const [isFinishedRecipe, setIsFinishedRecipe] = useState(false);
   const [copiedToClipboard, setCopiedToClipboard] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const history = useHistory();
-  const location = useLocation();
-  const recipeId = match.params.id;
-  const pagePath = match.path;
+  const { pathname } = useLocation();
+  const { id } = useParams();
 
   const fetchRecommendations = async () => {
     const MAX_RECIPES = 6;
-    const domain = location.pathname.includes('foods') ? 'drinks' : 'foods';
+    const domain = pathname.includes('foods') ? 'drinks' : 'foods';
     const data = await fetchRecipes(domain);
     setRecipeRecommends(
       data.meals
@@ -40,7 +41,7 @@ function RecipeDetails({ match }) {
     );
     setIsStartedRecipe(
       !(
-        localInProgressRecipes === null
+        !localInProgressRecipes
         || Object.keys(localInProgressRecipes).length === 0
       ),
     );
@@ -48,33 +49,31 @@ function RecipeDetails({ match }) {
 
   const questIsFinishedRecipe = () => {
     const localDoneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
-    setIsFinishedRecipe(
-      !(localDoneRecipes === null || localDoneRecipes.length === 0),
-    );
+    setIsFinishedRecipe(!(!localDoneRecipes || localDoneRecipes.length === 0));
   };
 
   const getRecipeDetail = async () => {
-    const recipe = await fetchRecipeDetails(location.pathname, recipeId);
+    const recipe = await fetchRecipeDetails(pathname, id);
     setRecipeDetail(recipe);
     fetchRecommendations();
     setFetchDetail(true);
+  };
+
+  const getFavorites = () => {
+    const { idMeal, idDrink } = recipeDetail;
+    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+    const favorite = favoriteRecipes.some(
+      (recipe) => recipe.id === idMeal || idDrink,
+    );
+    setIsFavorite(favorite);
   };
 
   useEffect(() => {
     getRecipeDetail();
     questIsStartedRecipe();
     questIsFinishedRecipe();
-  }, []);
-
-  const ingredientList = Object.entries(recipeDetail)
-    .filter((item) => item[0].includes('strIngredient') && item[1] !== null)
-    .filter((ingredient) => ingredient[1] !== '')
-    .map((ingredient) => ingredient[1]);
-
-  const measureList = Object.entries(recipeDetail)
-    .filter((item) => item[0].includes('strMeasure') && item[1] !== null)
-    .filter((measure) => measure[1] !== '')
-    .map((measure) => measure[1]);
+    getFavorites();
+  }, [fetchDetail]);
 
   const copyLink = () => {
     clipboardCopy(window.location.href);
@@ -85,17 +84,32 @@ function RecipeDetails({ match }) {
     if (fetchDetail) return recipeDetail.strYoutube.split('watch?v=')[1];
   };
 
+  const ingredientList = Object.entries(recipeDetail)
+    .filter((item) => item[0].includes('strIngredient') && item[1])
+    .filter((ingredient) => ingredient[1])
+    .map((ingredient) => ingredient[1]);
+
+  const measureList = Object.entries(recipeDetail)
+    .filter((item) => item[0].includes('strMeasure') && item[1])
+    .filter((measure) => measure[1])
+    .map((measure) => measure[1]);
+
+  const addRecipeToFavorites = (recipe) => {
+    addToFavorites(recipe);
+    setIsFavorite(!isFavorite);
+  };
+
   return (
-    <main>
+    <main className="Recipe-Details-Container">
       {fetchDetail && (
-        <section>
+        <section className="Recipe-Container">
           <RecipeCardDetails
             imgTestId="recipe-photo"
             nameTestId="recipe-title"
             recipe={ recipeDetail }
             showCategory
           />
-          <div>
+          <div className="Recipe-Buttons-Container">
             {copiedToClipboard ? (
               <span>Link copied!</span>
             ) : (
@@ -106,19 +120,31 @@ function RecipeDetails({ match }) {
             <button
               type="button"
               data-testid="favorite-btn"
-              onClick={ () => addToFavorites(recipeDetail) }
+              onClick={ () => addRecipeToFavorites(recipeDetail) }
+              src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
             >
-              Favorite
+              {isFavorite ? (
+                <img src={ blackHeartIcon } alt="White heart icon" />
+              ) : (
+                <img src={ whiteHeartIcon } alt="White heart icon" />
+              )}
             </button>
           </div>
-          {ingredientList.map((item, index) => (
-            <p key={ index } data-testid={ `${index}-ingredient-name-and-measure` }>
-              {`${item}: ${measureList[index]}`}
-            </p>
-          ))}
-          <p data-testid="instructions">{recipeDetail.strInstructions}</p>
-          {pagePath.includes('/food') && (
-            <div>
+          <div className="Ingredients-Container">
+            {ingredientList.map((item, index) => (
+              <p
+                key={ index }
+                data-testid={ `${index}-ingredient-name-and-measure` }
+              >
+                {`${item}: ${measureList[index]}`}
+              </p>
+            ))}
+          </div>
+          <div className="Instructions-Container">
+            <p data-testid="instructions">{recipeDetail.strInstructions}</p>
+          </div>
+          {pathname.includes('/food') && (
+            <div className="Video-Container">
               <iframe
                 title={ recipeDetail.strMeal }
                 frameBorder="0"
@@ -149,7 +175,7 @@ function RecipeDetails({ match }) {
             type="button"
             data-testid="start-recipe-btn"
             disabled={ isFinishedRecipe }
-            onClick={ () => !isStartedRecipe && history.push(`${match.url}/in-progress`) }
+            onClick={ () => !isStartedRecipe && history.push(`${pathname}/in-progress`) }
             className="Start-Recipe-Btn"
           >
             {isStartedRecipe ? 'Continue Recipe' : 'Start Recipe'}
@@ -159,12 +185,5 @@ function RecipeDetails({ match }) {
     </main>
   );
 }
-
-RecipeDetails.propTypes = {
-  match: shape({
-    params: shape({ id: string }),
-    path: string,
-  }).isRequired,
-};
 
 export default RecipeDetails;
