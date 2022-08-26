@@ -56,7 +56,7 @@ describe('Testes da barra de pesquisa', () => {
 
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
-      json: jest.fn().mockResolvedValue([]),
+      json: jest.fn().mockResolvedValue(null),
     });
     global.alert = jest.fn();
 

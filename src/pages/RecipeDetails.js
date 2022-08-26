@@ -23,31 +23,17 @@ function RecipeDetails({ match }) {
   const pagePath = match.path;
 
   const fetchRecommendations = async (domain) => {
+    const MAX_RECIPES = 5;
     const type = domain.includes('foods') ? 'cocktail' : 'meal';
     try {
       const response = await fetch(
         `https://www.the${type}db.com/api/json/v1/1/search.php?s=`,
       );
       const data = await response.json();
-      console.log(data);
       setRecipeRecommends(
-        data.meals ? data.meals.slice(0, 5) : data.drinks.slice(0, 5),
-        // ? [
-        //   data.meals[0],
-        //   data.meals[1],
-        //   data.meals[2],
-        //   data.meals[3],
-        //   data.meals[4],
-        //   data.meals[5],
-        // ]
-        // : [
-        //   data.drinks[0],
-        //   data.drinks[1],
-        //   data.drinks[2],
-        //   data.drinks[3],
-        //   data.drinks[4],
-        //   data.drinks[5],
-        // ],
+        data.meals
+          ? data.meals.slice(0, MAX_RECIPES)
+          : data.drinks.slice(0, MAX_RECIPES),
       );
       setFetchRecommend(true);
     } catch (error) {
@@ -104,7 +90,7 @@ function RecipeDetails({ match }) {
 
   return (
     <main>
-      { fetchDetail && (
+      {fetchDetail && (
         <section>
           <RecipeCardDetails
             imgTestId="recipe-photo"

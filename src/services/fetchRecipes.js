@@ -6,7 +6,9 @@ const getEndpoint = ({ search, filter }) => {
 
 export const fetchRecipesBy = async (type, userSearch) => {
   const domain = type === 'meals' ? 'themealdb' : 'thecocktaildb';
-  const ENDPOINT = `https://www.${domain}.com/api/json/v1/1/${getEndpoint(userSearch)}`;
+  const ENDPOINT = `https://www.${domain}.com/api/json/v1/1/${getEndpoint(
+    userSearch,
+  )}`;
   try {
     const response = await fetch(ENDPOINT);
     const data = await response.json();
@@ -25,7 +27,7 @@ export const fetchRecipesDidMount = async (type) => {
     const responseCategories = await fetch(ENDPOINT_CATEGORIES);
     const recipes = await responseRecipes.json();
     const categories = await responseCategories.json();
-    return ({ categories, recipes });
+    return { categories, recipes };
   } catch (error) {
     return error;
   }
@@ -40,6 +42,39 @@ export const fetchByFilter = async (type, category) => {
     return response;
   } catch (error) {
     return error;
+  }
+};
+
+const getFilter = (filter) => {
+  if (filter === 'ingredient') return 'filter';
+  if (filter === 'details') return 'lookup';
+  if (filter === 'category') return 'list';
+  return 'search';
+};
+
+const getType = (type) => {
+  if (type === 'byDetails' || type === 'byIngredient') return 'i';
+  if (type === 'byCategory' || type === 'byFilter') return 'c';
+  if (type === 'byFirstLetter') return 'f';
+  return 's';
+};
+
+export const fetchRecipes = async (
+  domain,
+  filterBy = 'search',
+  type = 's',
+  search = '',
+) => {
+  domain = domain.includes('foods') ? 'meal' : 'cocktail';
+  filterBy = getFilter(filterBy);
+  type = getType(type);
+  const ENDPOINT = `https://www.the${domain}db.com/api/json/v1/1/${filterBy}.php?${type}=${search}`;
+  try {
+    const response = await fetch(ENDPOINT);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    return null;
   }
 };
 

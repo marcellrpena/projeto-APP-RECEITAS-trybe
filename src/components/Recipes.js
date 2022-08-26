@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { RecipesContext } from '../contexts/Contexts';
-import { fetchByFilter, fetchRecipesDidMount } from '../services/fetchRecipes';
+import { fetchRecipes } from '../services/fetchRecipes';
 import CategoryButton from './CategoryButton';
 import RecipeCard from './RecipeCard';
 
@@ -13,9 +13,16 @@ function Recipes() {
   const [isFiltered, setIsFiltered] = useState(false);
 
   const loadRecipes = async () => {
-    const response = await fetchRecipesDidMount(pathname);
-    setRecipes({ ...recipes, ...response.recipes });
-    setCategories({ ...categories, ...response.categories });
+    // const response = await fetchRecipesDidMount(pathname);
+    const dataRecipes = await fetchRecipes(pathname);
+    const dataCategories = await fetchRecipes(
+      pathname,
+      'category',
+      'byCategory',
+      'list',
+    );
+    setRecipes({ ...recipes, ...dataRecipes });
+    setCategories({ ...categories, ...dataCategories });
   };
 
   useEffect(() => {
@@ -25,7 +32,13 @@ function Recipes() {
   const handleClickFilter = async (category) => {
     if (!isFiltered) {
       setIsFiltered(!isFiltered);
-      const filter = await fetchByFilter(pathname, category);
+      // const filter = await fetchByFilter(pathname, category);
+      const filter = await fetchRecipes(
+        pathname,
+        'ingredient',
+        'byCategory',
+        category,
+      );
       return setRecipes({ ...recipes, ...filter });
     }
     loadRecipes();
