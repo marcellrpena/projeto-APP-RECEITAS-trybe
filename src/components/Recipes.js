@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
 import clipboardCopy from 'clipboard-copy';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
@@ -18,11 +19,20 @@ function RecipeDetails() {
   const [isFinishedRecipe, setIsFinishedRecipe] = useState(false);
   const [copiedToClipboard, setCopiedToClipboard] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+=======
+import React, { useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { RecipesContext } from '../contexts/Contexts';
+import { fetchRecipesDidMount, fetchByFilter } from '../services/fetchRecipes';
+import CategoryButton from './CategoryButton';
+import RecipeCard from './RecipeCard';
+>>>>>>> 622be4eaabf42e7e15370998935e9997b0f40299
 
   const history = useHistory();
   const { pathname } = useLocation();
   const { id } = useParams();
 
+<<<<<<< HEAD
   const fetchRecommendations = async () => {
     const MAX_RECIPES = 6;
     const domain = pathname.includes('foods') ? 'drinks' : 'foods';
@@ -66,6 +76,12 @@ function RecipeDetails() {
       (recipe) => recipe.id === idMeal || idDrink,
     );
     setIsFavorite(favorite);
+=======
+  const loadRecipes = async () => {
+    const response = await fetchRecipesDidMount(pathname);
+    setRecipes({ ...recipes, ...response.recipes });
+    setCategories({ ...categories, ...response.categories });
+>>>>>>> 622be4eaabf42e7e15370998935e9997b0f40299
   };
 
   useEffect(() => {
@@ -75,9 +91,19 @@ function RecipeDetails() {
     getFavorites();
   }, [fetchDetail]);
 
+<<<<<<< HEAD
   const copyLink = () => {
     clipboardCopy(window.location.href);
     setCopiedToClipboard(!copiedToClipboard);
+=======
+  const handleClickFilter = async (category) => {
+    if (!isFiltered) {
+      setIsFiltered(!isFiltered);
+      const filter = await fetchByFilter(pathname, category);
+      return setRecipes({ ...recipes, ...filter });
+    }
+    loadRecipes();
+>>>>>>> 622be4eaabf42e7e15370998935e9997b0f40299
   };
 
   const getEmbedId = () => {

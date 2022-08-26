@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import clipboardCopy from 'clipboard-copy';
 import { shape, string } from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
-import RecipeCardDetails from '../components/RecipeCardDetails';
+import { fetchRecipeDetails } from '../services/fetchRecipes';
 import { addToFavorites } from '../services/saveStorage';
+import RecipeCardDetails from '../components/RecipeCardDetails';
 import shareIcon from '../images/shareIcon.svg';
 import '../styles/Recipes.css';
-import { fetchRecipeDetails } from '../services/fetchRecipes';
 
 function RecipeDetails({ match }) {
   const [recipeDetail, setRecipeDetail] = useState({});
@@ -23,7 +23,7 @@ function RecipeDetails({ match }) {
   const pagePath = match.path;
 
   const fetchRecommendations = async (domain) => {
-    const MAX_RECIPES = 5;
+    const MAX_RECIPES = 6;
     const type = domain.includes('foods') ? 'cocktail' : 'meal';
     try {
       const response = await fetch(

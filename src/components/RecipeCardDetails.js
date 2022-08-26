@@ -11,7 +11,9 @@ function RecipeCardDetails({ imgTestId, nameTestId, recipe }) {
         data-testid={ imgTestId }
         style={ { width: '125px' } }
       />
-      <p data-testid="recipe-category">{recipe.strCategory}</p>
+      <p data-testid="recipe-category">
+        {recipe.strAlcoholic || recipe.strCategory}
+      </p>
     </section>
   );
 }
