@@ -6,11 +6,12 @@ import shareIcon from '../images/shareIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
 
 function RecipeInProgress() {
-  const { location } = useHistory();
+  const history = useHistory();
+  const { pathname } = history.location;
   const [checkSaved, setCheckSaved] = useState([]);
   const [refresh, setRefresh] = useState(true);
 
-  const recipe = location.pathname.includes(oneMeal.meals[0].idMeal)
+  const recipe = pathname.includes(oneMeal.meals[0].idMeal)
     ? oneMeal.meals[0] : oneDrink.drinks[0];
 
   const recipeID = recipe.idDrink || recipe.idMeal;
@@ -118,6 +119,8 @@ function RecipeInProgress() {
       <button
         type="button"
         data-testid="finish-recipe-btn"
+        disabled={ ingredients.length !== checkSaved.length }
+        onClick={ () => history.push('/done-recipes') }
       >
         Finish Recipe
       </button>
