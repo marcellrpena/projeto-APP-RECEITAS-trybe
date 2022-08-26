@@ -1,47 +1,35 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { RecipesContext } from '../contexts/Contexts';
-import { fetchRecipes } from '../services/fetchRecipes';
+import { fetchRecipesBy } from '../services/fetchRecipes';
 
 function SearchBar() {
   const history = useHistory();
   const [userSearch, setUserSearch] = useState({
     filter: '',
     search: '',
-    type: '',
   });
 
   const { recipes, setRecipes } = useContext(RecipesContext);
 
-  const handleChange = ({ target }) => {
-    if (target.type === 'radio') {
-      setUserSearch({
-        ...userSearch,
-        filter: target.value,
-        type: target.id,
-      });
-    } else {
-      setUserSearch({ ...userSearch, search: target.value });
-    }
-  };
+  const handleChange = ({ target }) => setUserSearch({
+    ...userSearch,
+    [target.name]: target.value,
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { filter, search, type } = userSearch;
     const { pathname } = history.location;
     const recipeType = pathname.includes('foods') ? 'meals' : 'drinks';
-    const data = await fetchRecipes(pathname, type, filter, search);
-    if (!data) {
+    const recipesList = await fetchRecipesBy(recipeType, userSearch);
+    if (!recipesList) {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
-    } else {
-      const recipesList = data.meals ? data.meals : data.drinks;
-      setRecipes({ ...recipes, [recipeType]: recipesList });
-    }
+    } else setRecipes({ ...recipes, [recipeType]: recipesList });
   };
 
   useEffect(() => {
     const { filter, search } = userSearch;
-    if (filter === 'byFirstLetter' && search.length > 1) {
+    if (filter === 'first-letter' && search.length > 1) {
       global.alert('Your search must have only 1 (one) character');
       setUserSearch({
         ...userSearch,
@@ -68,34 +56,34 @@ function SearchBar() {
           data-testid="search-input"
           onChange={ handleChange }
         />
-        <label htmlFor="ingredient">
+        <label htmlFor="ingredient-radio">
           <input
             type="radio"
             name="filter"
-            value="byIngredient"
-            id="ingredient"
+            value="ingredient"
+            id="ingredient-radio"
             data-testid="ingredient-search-radio"
             onChange={ handleChange }
           />
           Ingredients
         </label>
-        <label htmlFor="search">
+        <label htmlFor="search-radio">
           <input
             type="radio"
             name="filter"
-            value="bySearch"
-            id="search"
+            value="search"
+            id="search-radio"
             data-testid="name-search-radio"
             onChange={ handleChange }
           />
           Name
         </label>
-        <label htmlFor="first-letter">
+        <label htmlFor="first-letter-radio">
           <input
             type="radio"
             name="filter"
-            value="byFirstLetter"
-            id="first-letter"
+            value="first-letter"
+            id="first-letter-radio"
             data-testid="first-letter-search-radio"
             onChange={ handleChange }
           />

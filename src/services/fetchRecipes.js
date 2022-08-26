@@ -45,39 +45,6 @@ export const fetchByFilter = async (type, category) => {
   }
 };
 
-const getFilter = (filter) => {
-  if (filter === 'ingredient') return 'filter';
-  if (filter === 'details') return 'lookup';
-  if (filter === 'category') return 'list';
-  return 'search';
-};
-
-const getType = (type) => {
-  if (type === 'byDetails' || type === 'byIngredient') return 'i';
-  if (type === 'byCategory' || type === 'byFilter') return 'c';
-  if (type === 'byFirstLetter') return 'f';
-  return 's';
-};
-
-export const fetchRecipes = async (
-  domain,
-  filterBy = 'search',
-  type = 's',
-  search = '',
-) => {
-  domain = domain.includes('foods') ? 'meal' : 'cocktail';
-  filterBy = getFilter(filterBy);
-  type = getType(type);
-  const ENDPOINT = `https://www.the${domain}db.com/api/json/v1/1/${filterBy}.php?${type}=${search}`;
-  try {
-    const response = await fetch(ENDPOINT);
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    return null;
-  }
-};
-
 export const fetchRecipeDetails = async (type, id) => {
   const domain = type.includes('foods') ? 'meal' : 'cocktail';
   const ENDPOINT = `https://www.the${domain}db.com/api/json/v1/1/lookup.php?i=${id}`;
