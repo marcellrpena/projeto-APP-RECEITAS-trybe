@@ -101,10 +101,7 @@ function RecipeInProgress() {
 
   const shareRecipe = () => {
     setLinkCopied(true);
-    const typeRecipe = pathname.includes('foods')
-      ? `http://localhost:3000/foods/${recipeID}`
-      : `http://localhost:3000/drinks/${recipeID}`;
-    clipboardCopy(typeRecipe);
+    clipboardCopy(window.location.href.split('/in-progress')[0]);
     setTimeout(() => setLinkCopied(false), INTERVAL_COPY_TAG);
     clearTimeout();
   };
