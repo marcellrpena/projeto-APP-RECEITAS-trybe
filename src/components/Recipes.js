@@ -1,7 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { RecipesContext } from '../contexts/Contexts';
-import { fetchRecipesDidMount, fetchByFilter } from '../services/fetchRecipes';
+import {
+  fetchByFilter,
+  fetchRecipes,
+  fetchCategories,
+} from '../services/fetchRecipes';
 import CategoryButton from './CategoryButton';
 import RecipeCard from './RecipeCard';
 
@@ -13,9 +17,10 @@ function Recipes() {
   const [isFiltered, setIsFiltered] = useState(false);
 
   const loadRecipes = async () => {
-    const response = await fetchRecipesDidMount(pathname);
-    setRecipes({ ...recipes, ...response.recipes });
-    setCategories({ ...categories, ...response.categories });
+    const recipesData = await fetchRecipes(pathname);
+    const categoriesData = await fetchCategories(pathname);
+    setRecipes({ ...recipes, ...recipesData });
+    setCategories({ ...categories, ...categoriesData });
   };
 
   useEffect(() => {

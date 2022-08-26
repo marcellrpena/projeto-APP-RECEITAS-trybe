@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import clipboardCopy from 'clipboard-copy';
 import { shape, string } from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
-import { fetchRecipeDetails } from '../services/fetchRecipes';
+import { fetchRecipeDetails, fetchRecipes } from '../services/fetchRecipes';
 import { addToFavorites } from '../services/saveStorage';
 import RecipeCardDetails from '../components/RecipeCardDetails';
 import shareIcon from '../images/shareIcon.svg';
@@ -22,23 +22,16 @@ function RecipeDetails({ match }) {
   const recipeId = match.params.id;
   const pagePath = match.path;
 
-  const fetchRecommendations = async (domain) => {
+  const fetchRecommendations = async () => {
     const MAX_RECIPES = 6;
-    const type = domain.includes('foods') ? 'cocktail' : 'meal';
-    try {
-      const response = await fetch(
-        `https://www.the${type}db.com/api/json/v1/1/search.php?s=`,
-      );
-      const data = await response.json();
-      setRecipeRecommends(
-        data.meals
-          ? data.meals.slice(0, MAX_RECIPES)
-          : data.drinks.slice(0, MAX_RECIPES),
-      );
-      setFetchRecommend(true);
-    } catch (error) {
-      return error;
-    }
+    const domain = location.pathname.includes('foods') ? 'drinks' : 'foods';
+    const data = await fetchRecipes(domain);
+    setRecipeRecommends(
+      data.meals
+        ? data.meals.slice(0, MAX_RECIPES)
+        : data.drinks.slice(0, MAX_RECIPES),
+    );
+    setFetchRecommend(true);
   };
 
   const questIsStartedRecipe = () => {
@@ -63,7 +56,7 @@ function RecipeDetails({ match }) {
   const getRecipeDetail = async () => {
     const recipe = await fetchRecipeDetails(location.pathname, recipeId);
     setRecipeDetail(recipe);
-    fetchRecommendations(location.pathname);
+    fetchRecommendations();
     setFetchDetail(true);
   };
 
@@ -86,6 +79,10 @@ function RecipeDetails({ match }) {
   const copyLink = () => {
     clipboardCopy(window.location.href);
     setCopiedToClipboard(!copiedToClipboard);
+  };
+
+  const getEmbedId = () => {
+    if (fetchDetail) return recipeDetail.strYoutube.split('watch?v=')[1];
   };
 
   return (
@@ -121,14 +118,17 @@ function RecipeDetails({ match }) {
           ))}
           <p data-testid="instructions">{recipeDetail.strInstructions}</p>
           {pagePath.includes('/food') && (
-            <iframe
-              title={ recipeDetail.strMeal }
-              frameBorder="0"
-              data-testid="video"
-              width="320"
-              height="144"
-              src={ recipeDetail.strYoutube }
-            />
+            <div>
+              <iframe
+                title={ recipeDetail.strMeal }
+                frameBorder="0"
+                data-testid="video"
+                width="320"
+                height="144"
+                allowFullScreen
+                src={ `https://www.youtube.com/embed/${getEmbedId()}` }
+              />
+            </div>
           )}
           {fetchRecommend && (
             <div className="Recommendations-Container">

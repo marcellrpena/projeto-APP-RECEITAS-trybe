@@ -21,7 +21,7 @@ function SearchBar() {
     e.preventDefault();
     const { pathname } = history.location;
     const recipeType = pathname.includes('foods') ? 'meals' : 'drinks';
-    const recipesList = await fetchRecipesBy(recipeType, userSearch);
+    const recipesList = await fetchRecipesBy(pathname, userSearch);
     if (!recipesList) {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
     } else setRecipes({ ...recipes, [recipeType]: recipesList });
