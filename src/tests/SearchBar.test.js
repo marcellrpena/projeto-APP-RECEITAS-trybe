@@ -56,7 +56,7 @@ describe('Testes da barra de pesquisa', () => {
 
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValue({
-      json: jest.fn().mockResolvedValue(null),
+      json: jest.fn().mockResolvedValue([]),
     });
     global.alert = jest.fn();
 
@@ -174,7 +174,7 @@ describe('Testes da barra de pesquisa', () => {
       const searchBtn = screen.getByTestId('exec-search-btn');
       userEvent.type(searchInput, 'Spicy Arrabiata Penne');
       userEvent.click(nameRadio);
-      
+
       jest.restoreAllMocks();
       jest.spyOn(global, 'fetch');
       global.fetch.mockResolvedValue({
@@ -200,7 +200,7 @@ describe('Testes da barra de pesquisa', () => {
       const searchBtn = screen.getByTestId('exec-search-btn');
       userEvent.type(searchInput, 'Aquamarine');
       userEvent.click(nameRadio);
-      
+
       jest.restoreAllMocks();
       jest.spyOn(global, 'fetch');
       global.fetch.mockResolvedValue({

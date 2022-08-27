@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import clipboardCopy from 'clipboard-copy';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { fetchRecipeDetails, fetchRecipes } from '../services/fetchRecipes';
-import { addToFavorites } from '../services/saveStorage';
+import { addToFavorites, getFavoritesRecipes } from '../services/saveStorage';
 import RecipeCardDetails from '../components/RecipeCardDetails';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
@@ -61,8 +60,7 @@ function RecipeDetails() {
 
   const getFavorites = () => {
     const { idMeal, idDrink } = recipeDetail;
-    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
-    const favorite = favoriteRecipes.some(
+    const favorite = getFavoritesRecipes().some(
       (recipe) => recipe.id === idMeal || idDrink,
     );
     setIsFavorite(favorite);
@@ -76,7 +74,7 @@ function RecipeDetails() {
   }, [fetchDetail]);
 
   const copyLink = () => {
-    clipboardCopy(window.location.href);
+    window.navigator.clipboard.writeText(window.location.href);
     setCopiedToClipboard(!copiedToClipboard);
   };
 
