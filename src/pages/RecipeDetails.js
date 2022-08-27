@@ -1,194 +1,187 @@
-import { shape, string } from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { fetchRecipeDetails, fetchRecipes } from '../services/fetchRecipes';
+import { addToFavorites, getFavoritesRecipes } from '../services/saveStorage';
+import RecipeCardDetails from '../components/RecipeCardDetails';
+import shareIcon from '../images/shareIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
+import '../styles/Recipes.css';
 
-function RecipeDetails({ match }) {
+function RecipeDetails() {
   const [recipeDetail, setRecipeDetail] = useState({});
   const [recipeRecommends, setRecipeRecommends] = useState([]);
   const [fetchDetail, setFetchDetail] = useState(false);
   const [fetchRecommend, setFetchRecommend] = useState(false);
   const [isStartedRecipe, setIsStartedRecipe] = useState(false);
   const [isFinishedRecipe, setIsFinishedRecipe] = useState(false);
+  const [copiedToClipboard, setCopiedToClipboard] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const history = useHistory();
-  const recipeId = match.params.id;
-  const pagePath = match.path;
+  const { pathname } = useLocation();
+  const { id } = useParams();
 
-  console.log(`${match.url}/in-progress`);
-
-  const fetchRecipeDetails = async (domain) => {
-    try {
-      const response = await fetch(`https://www.${domain}.com/api/json/v1/1/lookup.php?i=${recipeId}`);
-      const data = await response.json();
-      setRecipeDetail(data.meals ? data.meals[0] : data.drinks[0]);
-      setFetchDetail(true);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchRecommendations = async (domain) => {
-    try {
-      const response = await fetch(`https://www.${domain}.com/api/json/v1/1/search.php?s=`);
-      const data = await response.json();
-      setRecipeRecommends(data.meals ? [
-        data.meals[0],
-        data.meals[1],
-        data.meals[2],
-        data.meals[3],
-        data.meals[4],
-        data.meals[5],
-      ] : [
-        data.drinks[0],
-        data.drinks[1],
-        data.drinks[2],
-        data.drinks[3],
-        data.drinks[4],
-        data.drinks[5],
-      ]);
-      setFetchRecommend(true);
-    } catch (error) {
-      console.log(error);
-    }
+  const fetchRecommendations = async () => {
+    const MAX_RECIPES = 6;
+    const domain = pathname.includes('foods') ? 'drinks' : 'foods';
+    const data = await fetchRecipes(domain);
+    setRecipeRecommends(
+      data.meals
+        ? data.meals.slice(0, MAX_RECIPES)
+        : data.drinks.slice(0, MAX_RECIPES),
+    );
+    setFetchRecommend(true);
   };
 
   const questIsStartedRecipe = () => {
-    const localInProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    const localInProgressRecipes = JSON.parse(
+      localStorage.getItem('inProgressRecipes'),
+    );
     setIsStartedRecipe(
-      !(localInProgressRecipes === null
-        || Object.keys(localInProgressRecipes).length === 0),
+      !(
+        !localInProgressRecipes
+        || Object.keys(localInProgressRecipes).length === 0
+      ),
     );
   };
 
   const questIsFinishedRecipe = () => {
     const localDoneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
-    setIsFinishedRecipe(!(localDoneRecipes === null || localDoneRecipes.length === 0));
+    setIsFinishedRecipe(!(!localDoneRecipes || localDoneRecipes.length === 0));
+  };
+
+  const getRecipeDetail = async () => {
+    const recipe = await fetchRecipeDetails(pathname, id);
+    setRecipeDetail(recipe);
+    fetchRecommendations();
+    setFetchDetail(true);
+  };
+
+  const getFavorites = () => {
+    const { idMeal, idDrink } = recipeDetail;
+    const favorite = getFavoritesRecipes().some(
+      (recipe) => recipe.id === idMeal || idDrink,
+    );
+    setIsFavorite(favorite);
   };
 
   useEffect(() => {
-    if (pagePath.includes('/food')) {
-      fetchRecipeDetails('themealdb');
-      fetchRecommendations('thecocktaildb');
-    } else {
-      fetchRecipeDetails('thecocktaildb');
-      fetchRecommendations('themealdb');
-    }
-
+    getRecipeDetail();
     questIsStartedRecipe();
     questIsFinishedRecipe();
-  }, []);
+    getFavorites();
+  }, [fetchDetail]);
+
+  const copyLink = () => {
+    window.navigator.clipboard.writeText(window.location.href);
+    setCopiedToClipboard(!copiedToClipboard);
+  };
+
+  const getEmbedId = () => {
+    if (fetchDetail) return recipeDetail.strYoutube.split('watch?v=')[1];
+  };
 
   const ingredientList = Object.entries(recipeDetail)
-    .filter((item) => item[0].includes('strIngredient') && item[1] !== null)
-    .filter((ingredient) => ingredient[1] !== '')
+    .filter((item) => item[0].includes('strIngredient') && item[1])
+    .filter((ingredient) => ingredient[1])
     .map((ingredient) => ingredient[1]);
 
   const measureList = Object.entries(recipeDetail)
-    .filter((item) => item[0].includes('strMeasure') && item[1] !== null)
-    .filter((measure) => measure[1] !== '')
+    .filter((item) => item[0].includes('strMeasure') && item[1])
+    .filter((measure) => measure[1])
     .map((measure) => measure[1]);
 
+  const addRecipeToFavorites = (recipe) => {
+    addToFavorites(recipe);
+    setIsFavorite(!isFavorite);
+  };
+
   return (
-    <main>
-      { fetchDetail && (
-        <section>
-          <img
-            style={ { width: '250px' } }
-            data-testid="recipe-photo"
-            src={ recipeDetail.strMealThumb || recipeDetail.strDrinkThumb }
-            alt={ recipeDetail.strMeal || recipeDetail.strDrink }
+    <main className="Recipe-Details-Container">
+      {fetchDetail && (
+        <section className="Recipe-Container">
+          <RecipeCardDetails
+            imgTestId="recipe-photo"
+            nameTestId="recipe-title"
+            recipe={ recipeDetail }
+            showCategory
           />
-          <div>
-            <h1 data-testid="recipe-title">
-              { recipeDetail.strMeal || recipeDetail.strDrink }
-            </h1>
-
-            <button type="button" data-testid="share-btn">Share</button>
-            <button type="button" data-testid="favorite-btn">Favorite</button>
+          <div className="Recipe-Buttons-Container">
+            {copiedToClipboard ? (
+              <span>Link copied!</span>
+            ) : (
+              <button type="button" data-testid="share-btn" onClick={ copyLink }>
+                <img src={ shareIcon } alt="Share icon" />
+              </button>
+            )}
+            <button
+              type="button"
+              data-testid="favorite-btn"
+              onClick={ () => addRecipeToFavorites(recipeDetail) }
+              src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
+            >
+              {isFavorite ? (
+                <img src={ blackHeartIcon } alt="White heart icon" />
+              ) : (
+                <img src={ whiteHeartIcon } alt="White heart icon" />
+              )}
+            </button>
           </div>
-
-          <p
-            data-testid="recipe-category"
-          >
-            { recipeDetail.strAlcoholic || recipeDetail.strCategory }
-          </p>
-
-          { ingredientList.map((item, index) => (
-            <p
-              key={ index }
-              data-testid={ `${index}-ingredient-name-and-measure` }
-            >
-              { `${item}: ${measureList[index]}` }
-            </p>)) }
-
-          <p data-testid="instructions">{ recipeDetail.strInstructions }</p>
-
-          { pagePath.includes('/food') && (
-            <iframe
-              title={ recipeDetail.strMeal }
-              frameBorder="0"
-              data-testid="video"
-              width="320"
-              height="144"
-              src={ recipeDetail.strYoutube }
-            />)}
-
-          { fetchRecommend && (
-            <div
-              style={ {
-                display: 'flex',
-                width: '200px',
-                border: '1px solid red',
-                overflow: 'scroll',
-              } }
-            >
-              { recipeRecommends.map((item, index) => (
+          <div className="Ingredients-Container">
+            {ingredientList.map((item, index) => (
+              <p
+                key={ index }
+                data-testid={ `${index}-ingredient-name-and-measure` }
+              >
+                {`${item}: ${measureList[index]}`}
+              </p>
+            ))}
+          </div>
+          <div className="Instructions-Container">
+            <p data-testid="instructions">{recipeDetail.strInstructions}</p>
+          </div>
+          {pathname.includes('/food') && (
+            <div className="Video-Container">
+              <iframe
+                title={ recipeDetail.strMeal }
+                frameBorder="0"
+                data-testid="video"
+                width="320"
+                height="144"
+                allowFullScreen
+                src={ `https://www.youtube.com/embed/${getEmbedId()}` }
+              />
+            </div>
+          )}
+          {fetchRecommend && (
+            <div className="Recommendations-Container">
+              {recipeRecommends.map((item, index) => (
                 <div
                   key={ index }
                   data-testid={ `${index}-recomendation-card` }
-                  style={ {
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    minWidth: '100px',
-                    border: '1px solid red',
-                    padding: '10px',
-                  } }
+                  className="Recommended-Recipe"
                 >
-                  <p
-                    data-testid={ `${index}-recomendation-title` }
-                  >
-                    { item.strDrink || item.strMeal }
+                  <p data-testid={ `${index}-recomendation-title` }>
+                    {item.strDrink || item.strMeal}
                   </p>
                 </div>
-              )) }
+              ))}
             </div>
-          ) }
-
+          )}
           <button
             type="button"
             data-testid="start-recipe-btn"
             disabled={ isFinishedRecipe }
-            onClick={
-              () => !isStartedRecipe && history.push(`${match.url}/in-progress`)
-            }
-            style={ {
-              position: 'fixed',
-              bottom: 0,
-            } }
+            onClick={ () => !isStartedRecipe && history.push(`${pathname}/in-progress`) }
+            className="Start-Recipe-Btn"
           >
-            { isStartedRecipe ? 'Continue Recipe' : 'Start Recipe' }
+            {isStartedRecipe ? 'Continue Recipe' : 'Start Recipe'}
           </button>
-        </section>)}
+        </section>
+      )}
     </main>
   );
 }
-
-RecipeDetails.propTypes = {
-  match: shape({
-    params: shape({ id: string }),
-    path: string,
-  }).isRequired,
-};
 
 export default RecipeDetails;
