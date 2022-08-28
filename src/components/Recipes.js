@@ -81,4 +81,12 @@ function Recipes() {
   );
 }
 
+/* Recipes.propTypes = {
+  props: shape({
+    history: shape({
+      location: shape({ pathname: string }),
+    }),
+  }).isRequired,
+}; */
+
 export default Recipes;

@@ -5,6 +5,14 @@ import userEvent from '@testing-library/user-event';
 import App from '../App';
 
 describe('Testes da página de Profile', () => {
+  it('Testa se a pagina Profile é renderizada', () => {
+    const { history } = renderWithRouterAndContext(<App />);
+      history.push('/profile');
+      const profileTitle = screen.queryByTestId('page-title')
+      expect(profileTitle).toBeInTheDocument()
+      const userEmail = screen.queryByTestId('profile-email')
+      expect(userEmail).toHaveTextContent("")
+    });
   it('Testa se ao clicar no icone de Profile é redirecionado para a tela de Profile', () => {
   renderWithRouterAndContext(<App />);
 
@@ -16,6 +24,7 @@ describe('Testes da página de Profile', () => {
     userEvent.type(passInput, '1234567');
     userEvent.click(loginBtn);
     const iconProfile = screen.getByTestId("profile-top-btn");
+    expect(iconProfile).toBeInTheDocument()
     userEvent.click(iconProfile);
     const userEmail = screen.getByTestId('profile-email')
     expect(userEmail).toHaveTextContent("test@test.com")
@@ -33,6 +42,7 @@ describe('Testes da página de Profile', () => {
     const iconProfile = screen.getByTestId("profile-top-btn");
     userEvent.click(iconProfile);
     const doneRecipesButton = screen.getByTestId('profile-done-btn');
+    expect(doneRecipesButton).toBeInTheDocument()
     userEvent.click(doneRecipesButton)
     const { pathname } = history.location;
     expect(pathname).toBe('/done-recipes');
@@ -50,6 +60,7 @@ describe('Testes da página de Profile', () => {
     const iconProfile = screen.getByTestId("profile-top-btn");
     userEvent.click(iconProfile);
     const favoriteButton = screen.getByTestId('profile-favorite-btn');
+    expect(favoriteButton).toBeInTheDocument()
     userEvent.click(favoriteButton)
     const { pathname } = history.location;
     expect(pathname).toBe('/favorite-recipes');
@@ -67,6 +78,7 @@ describe('Testes da página de Profile', () => {
     const iconProfile = screen.getByTestId("profile-top-btn");
     userEvent.click(iconProfile);
     const logOutButton = screen.getByTestId('profile-logout-btn');
+    expect(logOutButton).toBeInTheDocument()
     userEvent.click(logOutButton)
     const { pathname } = history.location;
     expect(pathname).toBe('/');

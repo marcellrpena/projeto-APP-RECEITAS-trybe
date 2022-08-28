@@ -1,38 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { fetchRecipeDetails, fetchRecipes } from '../services/fetchRecipes';
-import { addToFavorites, getFavoritesRecipes } from '../services/saveStorage';
+import { fetchRecipeDetails } from '../services/fetchRecipes';
 import RecipeCardDetails from '../components/RecipeCardDetails';
+import useSuggestions from '../hooks/useSuggestions';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
+import useFavorites from '../hooks/useFavorites';
 import '../styles/Recipes.css';
 
 function RecipeDetails() {
-  const [recipeDetail, setRecipeDetail] = useState({});
-  const [recipeRecommends, setRecipeRecommends] = useState([]);
-  const [fetchDetail, setFetchDetail] = useState(false);
-  const [fetchRecommend, setFetchRecommend] = useState(false);
-  const [isStartedRecipe, setIsStartedRecipe] = useState(false);
-  const [isFinishedRecipe, setIsFinishedRecipe] = useState(false);
-  const [copiedToClipboard, setCopiedToClipboard] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
-
   const history = useHistory();
   const { pathname } = useLocation();
   const { id } = useParams();
-
-  const fetchRecommendations = async () => {
-    const MAX_RECIPES = 6;
-    const domain = pathname.includes('foods') ? 'drinks' : 'foods';
-    const data = await fetchRecipes(domain);
-    setRecipeRecommends(
-      data.meals
-        ? data.meals.slice(0, MAX_RECIPES)
-        : data.drinks.slice(0, MAX_RECIPES),
-    );
-    setFetchRecommend(true);
-  };
+  const { suggestedRecipes, fetchSuggestions } = useSuggestions([], pathname);
+  const { isFavorite, addRecipeToFavorites } = useFavorites(
+    false,
+    id,
+    pathname,
+  );
+  const [recipeDetail, setRecipeDetail] = useState({});
+  const [fetchDetail, setFetchDetail] = useState(false);
+  const [isStartedRecipe, setIsStartedRecipe] = useState(false);
+  const [isFinishedRecipe, setIsFinishedRecipe] = useState(false);
+  const [copiedToClipboard, setCopiedToClipboard] = useState(false);
 
   const questIsStartedRecipe = () => {
     const localInProgressRecipes = JSON.parse(
@@ -54,23 +45,13 @@ function RecipeDetails() {
   const getRecipeDetail = async () => {
     const recipe = await fetchRecipeDetails(pathname, id);
     setRecipeDetail(recipe);
-    fetchRecommendations();
     setFetchDetail(true);
-  };
-
-  const getFavorites = () => {
-    const { idMeal, idDrink } = recipeDetail;
-    const favorite = getFavoritesRecipes().some(
-      (recipe) => recipe.id === idMeal || idDrink,
-    );
-    setIsFavorite(favorite);
   };
 
   useEffect(() => {
     getRecipeDetail();
     questIsStartedRecipe();
     questIsFinishedRecipe();
-    getFavorites();
   }, [fetchDetail]);
 
   const copyLink = () => {
@@ -82,20 +63,19 @@ function RecipeDetails() {
     if (fetchDetail) return recipeDetail.strYoutube.split('watch?v=')[1];
   };
 
-  const ingredientList = Object.entries(recipeDetail)
-    .filter((item) => item[0].includes('strIngredient') && item[1])
-    .filter((ingredient) => ingredient[1])
-    .map((ingredient) => ingredient[1]);
+  const ingredientList = Object.entries(recipeDetail).reduce((acc, curr) => {
+    if (curr[0].includes('strIngredient') && curr[1]) {
+      acc = [...acc, curr[1]];
+    }
+    return acc;
+  }, []);
 
-  const measureList = Object.entries(recipeDetail)
-    .filter((item) => item[0].includes('strMeasure') && item[1])
-    .filter((measure) => measure[1])
-    .map((measure) => measure[1]);
-
-  const addRecipeToFavorites = (recipe) => {
-    addToFavorites(recipe);
-    setIsFavorite(!isFavorite);
-  };
+  const measureList = Object.entries(recipeDetail).reduce((acc, curr) => {
+    if (curr[0].includes('strMeasure') && curr[1]) {
+      acc = [...acc, curr[1]];
+    }
+    return acc;
+  }, []);
 
   return (
     <main className="Recipe-Details-Container">
@@ -154,9 +134,9 @@ function RecipeDetails() {
               />
             </div>
           )}
-          {fetchRecommend && (
+          {fetchSuggestions && (
             <div className="Recommendations-Container">
-              {recipeRecommends.map((item, index) => (
+              {suggestedRecipes.map((item, index) => (
                 <div
                   key={ index }
                   data-testid={ `${index}-recomendation-card` }
