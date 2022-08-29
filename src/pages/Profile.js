@@ -1,11 +1,11 @@
 import React from 'react';
-import { shape, func } from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-function Profile(props) {
-  const { history } = props;
-  const email = JSON.parse(localStorage.getItem('user'));
+function Profile() {
+  const history = useHistory();
+  const email = JSON.parse(localStorage.getItem('user')) || '';
   const logoutApp = () => {
     localStorage.clear();
     history.push('/');
@@ -13,7 +13,7 @@ function Profile(props) {
 
   return (
     <div>
-      <Header name="Profile" props={ props } />
+      <Header name="Profile" />
       <main>
         <h5
           data-testid="profile-email"
@@ -48,9 +48,5 @@ function Profile(props) {
     </div>
   );
 }
-
-Profile.propTypes = {
-  history: shape({ push: func }),
-}.isRequired;
 
 export default Profile;
