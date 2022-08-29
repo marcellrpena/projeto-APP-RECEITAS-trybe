@@ -1,86 +1,150 @@
-import React from 'react';
-import Button from '../components/Button';
-import Header from '../components/Header';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import clipboardCopy from 'clipboard-copy';
 
-const dessertMeals = [
-  {
-    strMeal: 'Apple & Blackberry Crumble',
-    strMealThumb: 'https://www.themealdb.com/images/media/meals/xvsurr1511719182.jpg',
-    idMeal: '52893',
-    tag: 'pasta',
-  },
-  {
-    strMeal: 'Apple Frangipan Tart',
-    strMealThumb: 'https://www.themealdb.com/images/media/meals/wxywrq1468235067.jpg',
-    idMeal: '52768',
-    tag: '1',
-  },
-  {
-    strMeal: 'Bakewell tart',
-    strMealThumb: 'https://www.themealdb.com/images/media/meals/wyrqqq1468233628.jpg',
-    idMeal: '52767',
-    tag: '1',
-  },
-  {
-    strMeal: 'Banana Pancakes',
-    strMealThumb: 'https://www.themealdb.com/images/media/meals/sywswr1511383814.jpg',
-    idMeal: '52855',
-    tag: '1',
-  },
-];
+import Header from '../components/Header';
+import shareIcon from '../images/shareIcon.svg';
+
 function DoneRecipes() {
+  const [copyed, setCopyed] = useState(false);
+  const [recipesList, setRecipesList] = useState([]);
+
+  const history = useHistory();
+
+  const localDoneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+
+  const shareRecipe = (type, id) => {
+    const link = `http://localhost:3000/${type === 'food' ? 'foods' : 'drinks'}/${id}`;
+    clipboardCopy(link);
+    setCopyed(true);
+  };
+
+  const filterRecipes = (filter) => {
+    switch (filter) {
+    case 'all':
+      setRecipesList(localDoneRecipes);
+      break;
+    case 'food':
+      setRecipesList(localDoneRecipes.filter((recipe) => recipe.type === 'food'));
+      break;
+    case 'drink':
+      setRecipesList(localDoneRecipes.filter((recipe) => recipe.type === 'drink'));
+      break;
+    default:
+      setRecipesList(localDoneRecipes);
+      break;
+    }
+  };
+
+  const ToRecipePage = (type, id) => history.push(
+    `/${type === 'food' ? 'foods' : 'drinks'}/${id}`,
+  );
+
+  useEffect(() => {
+    filterRecipes(undefined);
+  }, []);
+
   return (
     <>
       <Header name="Done Recipes" />
       <nav>
-        <Button
-          text="All"
-          dataTestid="filter-by-all-btn"
-          onClick={ () => {} }
-        />
-        <Button
-          text="Food"
-          dataTestid="filter-by-food-btn"
-          onClick={ () => {} }
-        />
-        <Button
-          text="Drinks"
-          dataTestid="filter-by-drink-btn"
-          onClick={ () => {} }
-        />
+        <button
+          type="button"
+          data-testid="filter-by-all-btn"
+          onClick={ () => filterRecipes('all') }
+        >
+          All
+        </button>
+        <button
+          type="button"
+          data-testid="filter-by-food-btn"
+          onClick={ () => filterRecipes('food') }
+        >
+          Food
+        </button>
+        <button
+          type="button"
+          data-testid="filter-by-drink-btn"
+          onClick={ () => filterRecipes('drink') }
+        >
+          Drink
+        </button>
         <main>
           <ul>
             {
-              dessertMeals.map((recipe, index) => (
-                <li key={ recipe.idMeal }>
-                  <img
-                    src={ recipe.strMealThumb }
-                    alt={ recipe.strMeal }
-                    data-testid={ `${index}-horizontal-image` }
-                    width="100"
-                  />
-                  <h1 data-testid={ `${index}-horizontal-name` }>
-                    nome da receita pronta
-                  </h1>
-                  <h2 data-testid={ `${index}-horizontal-top-text` }>
-                    {recipe.strMeal}
-                  </h2>
-                  <h4 data-testid={ `${index}-horizontal-done-date` }>
-                    data que a receita foi feita
-                  </h4>
+              recipesList.map(({
+                id,
+                image,
+                name,
+                category,
+                nationality,
+                alcoholicOrNot,
+                type,
+                doneDate,
+                tags },
+              index) => (
+                <li key={ id }>
+                  <button
+                    type="button"
+                    onClick={ () => ToRecipePage(type, id) }
+                  >
+                    <img
+                      src={ image }
+                      alt={ name }
+                      data-testid={ `${index}-horizontal-image` }
+                      width="100"
+                    />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={ () => ToRecipePage(type, id) }
+                  >
+                    <h1 data-testid={ `${index}-horizontal-name` }>
+                      { name }
+                    </h1>
+                  </button>
+
+                  <p data-testid={ `${index}-horizontal-top-text` }>
+                    {`${type === 'food' ? nationality : alcoholicOrNot} - ${category}`}
+                  </p>
+
+                  <p data-testid={ `${index}-horizontal-done-date` }>
+                    { doneDate }
+                  </p>
+
                   <button
                     type="button"
                     data-testid={ `${index}-horizontal-share-btn` }
+                    src={ shareIcon }
+                    onClick={ () => shareRecipe(type, id) }
                   >
-                    elemento que compartilha a receita
+                    <img src={ shareIcon } alt="search icon" />
                   </button>
-                  <h2 data-testid={ `${index}-${recipe.tag}-horizontal-tag ` }>
-                    tag
-                  </h2>
+
+                  { tags.map((tag) => (
+                    <p
+                      key={ tag }
+                      data-testid={ `${index}-${tag}-horizontal-tag` }
+                    >
+                      { tag }
+                    </p>
+                  ))}
                 </li>
               ))
             }
           </ul>
+          {copyed && (
+            <div style={ { display: 'flex' } }>
+              <p>Link copied!</p>
+              <button
+                type="button"
+                onClick={ () => setCopyed(false) }
+              >
+                x
+              </button>
+            </div>
+          )}
         </main>
       </nav>
     </>

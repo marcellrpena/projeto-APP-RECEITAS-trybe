@@ -1,9 +1,10 @@
 import { string, func } from 'prop-types';
 import React from 'react';
 
-function Button({ text, dataTestid, onClick }) {
+function Button({ text, dataTestid, onClick, name }) {
   return (
     <button
+      name={ name }
       type="button"
       onClick={ onClick }
       data-testid={ dataTestid }
