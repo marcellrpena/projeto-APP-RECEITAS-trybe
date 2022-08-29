@@ -74,4 +74,47 @@ describe('Testes da pagina de receitas em progresso', () => {
     userEvent.click(checkProgress);
     expect(checkProgress).not.toBeChecked();
   });
+  it('Testa se, após marca todos os ingredientes o botão de concluido é habilitado', async () => {
+    const localData = {
+      "meals": {
+          "52771": []
+      },
+      "cocktails": {
+          "178319": [
+              "Hpnotiq",
+              "Pineapple Juice",
+              "Banana Liqueur"
+          ]
+      }
+  };
+  global.fetch = jest.fn(() => Promise.resolve({
+    json: () => Promise.resolve(meals),
+  }));
+    expect.assertions(4);
+    const { history } = renderWithRouterAndContext(<App />);    
+    history.push('/foods/52771/in-progress');    
+    const checkProgress = await screen.findAllByRole("checkbox");
+    const finishButton = screen.getByRole("button", { name: /finish recipe/i });
+    checkProgress.forEach((element) => {
+      userEvent.click(element);
+    });
+    expect(finishButton).not.toBeDisabled();
+    userEvent.click(finishButton);
+    const { pathname } = history.location;
+    expect(pathname).toBe('/done-recipes');
+
+    global.fetch = jest.fn(() => Promise.resolve({
+      json: () => Promise.resolve(drinks),
+    }));
+
+    history.push('/drinks/178319/in-progress');
+    localStorage.setItem('inProgressRecipes', JSON.stringify(localData));
+    const checkDrinkProgress = await screen.findAllByRole("checkbox");
+    checkDrinkProgress.forEach((element) => {
+      userEvent.click(element);
+    });
+    expect(finishButton).not.toBeDisabled();
+    userEvent.click(finishButton);
+    expect(pathname).toBe('/done-recipes');
+  });
 });
