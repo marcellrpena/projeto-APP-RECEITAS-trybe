@@ -9,43 +9,35 @@ function DoneRecipes() {
   const [copyed, setCopyed] = useState(false);
   const [recipesList, setRecipesList] = useState([]);
 
+  const getPath = (type) => (type === 'food' ? 'foods' : 'drinks');
+
   const history = useHistory();
-
-  const localDoneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
-
   const shareRecipe = (type, id) => {
-    const link = `http://localhost:3000/${type === 'food' ? 'foods' : 'drinks'}/${id}`;
+    const domain = window.location.href.split('/done-recipes')[0];
+    const link = `${domain}${getPath(type)}/${id}`;
     clipboardCopy(link);
     setCopyed(true);
   };
 
   const filterRecipes = (filter) => {
-    switch (filter) {
-    case 'all':
-      setRecipesList(localDoneRecipes);
-      break;
-    case 'food':
-      setRecipesList(localDoneRecipes.filter((recipe) => recipe.type === 'food'));
-      break;
-    case 'drink':
-      setRecipesList(localDoneRecipes.filter((recipe) => recipe.type === 'drink'));
-      break;
-    default:
-      setRecipesList(localDoneRecipes);
-      break;
+    const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes')) || [];
+    if (filter === 'food') {
+      setRecipesList(doneRecipes.filter(({ type }) => type === 'food'));
     }
+    if (filter === 'drink') {
+      setRecipesList(doneRecipes.filter(({ type }) => type === 'drink'));
+    }
+    return setRecipesList(doneRecipes);
   };
 
-  const ToRecipePage = (type, id) => history.push(
-    `/${type === 'food' ? 'foods' : 'drinks'}/${id}`,
-  );
+  const toRecipePage = (type, id) => history.push(`/${getPath(type)}/${id}`);
 
   useEffect(() => {
-    filterRecipes(undefined);
+    filterRecipes();
   }, []);
 
   return (
-    <>
+    <div>
       <Header name="Done Recipes" />
       <nav>
         <button
@@ -71,23 +63,23 @@ function DoneRecipes() {
         </button>
         <main>
           <ul>
-            {
-              recipesList.map(({
-                id,
-                image,
-                name,
-                category,
-                nationality,
-                alcoholicOrNot,
-                type,
-                doneDate,
-                tags },
-              index) => (
+            {recipesList.map(
+              (
+                {
+                  id,
+                  image,
+                  name,
+                  category,
+                  nationality,
+                  alcoholicOrNot,
+                  type,
+                  doneDate,
+                  tags,
+                },
+                index,
+              ) => (
                 <li key={ id }>
-                  <button
-                    type="button"
-                    onClick={ () => ToRecipePage(type, id) }
-                  >
+                  <button type="button" onClick={ () => toRecipePage(type, id) }>
                     <img
                       src={ image }
                       alt={ name }
@@ -96,21 +88,18 @@ function DoneRecipes() {
                     />
                   </button>
 
-                  <button
-                    type="button"
-                    onClick={ () => ToRecipePage(type, id) }
-                  >
-                    <h1 data-testid={ `${index}-horizontal-name` }>
-                      { name }
-                    </h1>
+                  <button type="button" onClick={ () => toRecipePage(type, id) }>
+                    <h1 data-testid={ `${index}-horizontal-name` }>{name}</h1>
                   </button>
 
                   <p data-testid={ `${index}-horizontal-top-text` }>
-                    {`${type === 'food' ? nationality : alcoholicOrNot} - ${category}`}
+                    {`${
+                      type === 'food' ? nationality : alcoholicOrNot
+                    } - ${category}`}
                   </p>
 
                   <p data-testid={ `${index}-horizontal-done-date` }>
-                    { doneDate }
+                    {doneDate}
                   </p>
 
                   <button
@@ -122,32 +111,26 @@ function DoneRecipes() {
                     <img src={ shareIcon } alt="search icon" />
                   </button>
 
-                  { tags.map((tag) => (
-                    <p
-                      key={ tag }
-                      data-testid={ `${index}-${tag}-horizontal-tag` }
-                    >
-                      { tag }
+                  {tags.map((tag) => (
+                    <p key={ tag } data-testid={ `${index}-${tag}-horizontal-tag` }>
+                      {tag}
                     </p>
                   ))}
                 </li>
-              ))
-            }
+              ),
+            )}
           </ul>
           {copyed && (
             <div style={ { display: 'flex' } }>
               <p>Link copied!</p>
-              <button
-                type="button"
-                onClick={ () => setCopyed(false) }
-              >
+              <button type="button" onClick={ () => setCopyed(false) }>
                 x
               </button>
             </div>
           )}
         </main>
       </nav>
-    </>
+    </div>
   );
 }
 
