@@ -11,6 +11,7 @@ function FavoriteRecipes() {
         props={ {
           key: 'favoriteRecipes',
           useTags: false,
+          favoriteBtn: true,
         } }
       />
     </>

@@ -6,7 +6,7 @@ import { bool, shape, string } from 'prop-types';
 import shareIcon from '../images/shareIcon.svg';
 import favoriteIcon from '../images/blackHeartIcon.svg';
 
-function RecipesList({ props: { key, useTags } }) {
+function RecipesList({ props: { key, useTags, favoriteBtn } }) {
   const [copyed, setCopyed] = useState(false);
   const [recipesList, setRecipesList] = useState([]);
 
@@ -35,6 +35,13 @@ function RecipesList({ props: { key, useTags } }) {
       setRecipesList(localRecipes);
       break;
     }
+  };
+
+  const removeFavorite = (id) => {
+    const newLocalRecipes = recipesList.filter((recipe) => recipe.id !== id);
+    console.log(newLocalRecipes);
+    setRecipesList(newLocalRecipes);
+    localStorage.setItem(key, JSON.stringify(newLocalRecipes));
   };
 
   const ToRecipePage = (type, id) => history.push(
@@ -124,13 +131,16 @@ function RecipesList({ props: { key, useTags } }) {
                   <img src={ shareIcon } alt="Search icon" />
                 </button>
 
-                <button
-                  type="button"
-                  data-testid={ `${index}-horizontal-favorite-btn` }
-                  src={ favoriteIcon }
-                >
-                  <img src={ favoriteIcon } alt="Favorite icon" />
-                </button>
+                { favoriteBtn && (
+                  <button
+                    type="button"
+                    data-testid={ `${index}-horizontal-favorite-btn` }
+                    src={ favoriteIcon }
+                    onClick={ () => removeFavorite(id) }
+                  >
+                    <img src={ favoriteIcon } alt="Favorite icon" />
+                  </button>
+                )}
 
                 { useTags && tags.map((tag) => (
                   <p
@@ -164,6 +174,7 @@ RecipesList.propTypes = {
   props: shape({
     key: string,
     useTags: bool,
+    favoriteBtn: bool,
   }).isRequired,
 };
 

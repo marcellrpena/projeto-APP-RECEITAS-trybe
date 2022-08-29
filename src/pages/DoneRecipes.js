@@ -11,6 +11,7 @@ function DoneRecipes() {
         props={ {
           key: 'doneRecipes',
           useTags: true,
+          favoriteBtn: false,
         } }
       />
     </>
