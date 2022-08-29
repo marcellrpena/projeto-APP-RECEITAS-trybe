@@ -88,7 +88,7 @@ function RecipeDetails() {
               src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
             >
               {isFavorite ? (
-                <img src={ blackHeartIcon } alt="White heart icon" />
+                <img src={ blackHeartIcon } alt="Black heart icon" />
               ) : (
                 <img src={ whiteHeartIcon } alt="White heart icon" />
               )}
