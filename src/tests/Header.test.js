@@ -30,11 +30,6 @@ describe('Testes do componente Header', () => {
 
     it('Testa se ao clicar no icone de Seach uma barra de busca aparece', () => {
       renderWithRouterAndContext(<App />);
-      renderWithRouter(
-        <LoginProvider>
-          <App />
-        </LoginProvider>
-      );
       const emailInput = screen.getByTestId('email-input');
       const passInput = screen.getByTestId('password-input');
       const loginBtn = screen.getByTestId('login-submit-btn');
