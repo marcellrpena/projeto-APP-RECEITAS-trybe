@@ -4,7 +4,7 @@ const getEndpoint = ({ search, filter }) => {
   return `search.php?f=${search}`;
 };
 
-const domain = (type) => (type.includes('foods') ? 'meal' : 'cocktail');
+export const domain = (type) => (type.includes('foods') ? 'meal' : 'cocktail');
 
 export const fetchRecipesBy = async (type, userSearch) => {
   const ENDPOINT = `https://www.the${domain(

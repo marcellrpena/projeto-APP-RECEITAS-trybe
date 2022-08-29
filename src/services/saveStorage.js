@@ -21,9 +21,9 @@ export const addToFavorites = (recipeInfo) => {
     image: recipeInfo.strMealThumb || recipeInfo.strDrinkThumb,
   };
   if (validateFavs(newRecipe, favStorage)) {
-    const index = favorites.indexOf(newRecipe);
-    favorites.splice(index, 1);
-    return localStorage.setItem('favoriteRecipes', JSON.stringify(favorites));
+    const index = favStorage.indexOf(newRecipe);
+    favStorage.splice(index, 1);
+    return localStorage.setItem('favoriteRecipes', JSON.stringify(favStorage));
   }
   localStorage.setItem(
     'favoriteRecipes',

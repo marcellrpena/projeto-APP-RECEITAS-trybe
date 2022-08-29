@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
+import clipboardCopy from 'clipboard-copy';
 import { fetchRecipeDetails } from '../services/fetchRecipes';
 import RecipeCardDetails from '../components/RecipeCardDetails';
 import useSuggestions from '../hooks/useSuggestions';
@@ -56,7 +57,7 @@ function RecipeDetails() {
   }, [fetchDetail]);
 
   const copyLink = () => {
-    window.navigator.clipboard.writeText(window.location.href);
+    clipboardCopy(window.location.href);
     setCopiedToClipboard(!copiedToClipboard);
   };
 
