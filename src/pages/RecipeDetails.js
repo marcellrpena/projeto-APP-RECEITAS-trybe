@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import clipboardCopy from 'clipboard-copy';
-import { fetchRecipeDetails } from '../services/fetchRecipes';
+import { startRecipe } from '../services/saveStorage';
 import RecipeCardDetails from '../components/RecipeCardDetails';
 import useSuggestions from '../hooks/useSuggestions';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import useFavorites from '../hooks/useFavorites';
+import useRecipe from '../hooks/useRecipe';
 import '../styles/Recipes.css';
-import { startRecipe } from '../services/saveStorage';
 
 function RecipeDetails() {
   const history = useHistory();
@@ -21,8 +21,7 @@ function RecipeDetails() {
     id,
     pathname,
   );
-  const [recipeDetail, setRecipeDetail] = useState({});
-  const [fetchDetail, setFetchDetail] = useState(false);
+  const { recipe, isFetched, ingredients, measures } = useRecipe(pathname, id);
   const [isStartedRecipe, setIsStartedRecipe] = useState(false);
   const [isFinishedRecipe, setIsFinishedRecipe] = useState(false);
   const [copiedToClipboard, setCopiedToClipboard] = useState(false);
@@ -44,17 +43,10 @@ function RecipeDetails() {
     setIsFinishedRecipe(!(!localDoneRecipes || localDoneRecipes.length === 0));
   };
 
-  const getRecipeDetail = async () => {
-    const recipe = await fetchRecipeDetails(pathname, id);
-    setRecipeDetail(recipe);
-    setFetchDetail(true);
-  };
-
   useEffect(() => {
-    getRecipeDetail();
     questIsStartedRecipe();
     questIsFinishedRecipe();
-  }, [fetchDetail]);
+  }, []);
 
   const copyLink = () => {
     clipboardCopy(window.location.href);
@@ -62,22 +54,8 @@ function RecipeDetails() {
   };
 
   const getEmbedId = () => {
-    if (fetchDetail) return recipeDetail.strYoutube.split('watch?v=')[1];
+    if (isFetched) return recipe.strYoutube.split('watch?v=')[1];
   };
-
-  const ingredientList = Object.entries(recipeDetail).reduce((acc, curr) => {
-    if (curr[0].includes('strIngredient') && curr[1]) {
-      acc = [...acc, curr[1]];
-    }
-    return acc;
-  }, []);
-
-  const measureList = Object.entries(recipeDetail).reduce((acc, curr) => {
-    if (curr[0].includes('strMeasure') && curr[1]) {
-      acc = [...acc, curr[1]];
-    }
-    return acc;
-  }, []);
 
   const startNewRecipe = () => {
     const recipeType = pathname.includes('foods') ? 'meals' : 'cocktails';
@@ -87,12 +65,12 @@ function RecipeDetails() {
 
   return (
     <main className="Recipe-Details-Container">
-      {fetchDetail && (
+      {isFetched && (
         <section className="Recipe-Container">
           <RecipeCardDetails
             imgTestId="recipe-photo"
             nameTestId="recipe-title"
-            recipe={ recipeDetail }
+            recipe={ recipe }
             showCategory
           />
           <div className="Recipe-Buttons-Container">
@@ -106,7 +84,7 @@ function RecipeDetails() {
             <button
               type="button"
               data-testid="favorite-btn"
-              onClick={ () => addRecipeToFavorites(recipeDetail) }
+              onClick={ () => addRecipeToFavorites(recipe) }
               src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
             >
               {isFavorite ? (
@@ -117,22 +95,22 @@ function RecipeDetails() {
             </button>
           </div>
           <div className="Ingredients-Container">
-            {ingredientList.map((item, index) => (
+            {ingredients.map((item, index) => (
               <p
                 key={ index }
                 data-testid={ `${index}-ingredient-name-and-measure` }
               >
-                {`${item}: ${measureList[index]}`}
+                {`${item}: ${measures[index]}`}
               </p>
             ))}
           </div>
           <div className="Instructions-Container">
-            <p data-testid="instructions">{recipeDetail.strInstructions}</p>
+            <p data-testid="instructions">{recipe.strInstructions}</p>
           </div>
           {pathname.includes('/food') && (
             <div className="Video-Container">
               <iframe
-                title={ recipeDetail.strMeal }
+                title={ recipe.strMeal }
                 frameBorder="0"
                 data-testid="video"
                 width="320"
