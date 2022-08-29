@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import clipboardCopy from 'clipboard-copy';
+import { bool, shape, string } from 'prop-types';
 
 import shareIcon from '../images/shareIcon.svg';
 import favoriteIcon from '../images/blackHeartIcon.svg';
@@ -158,5 +159,12 @@ function RecipesList({ props: { key, useTags } }) {
     </>
   );
 }
+
+RecipesList.propTypes = {
+  props: shape({
+    key: string,
+    useTags: bool,
+  }).isRequired,
+};
 
 export default RecipesList;
