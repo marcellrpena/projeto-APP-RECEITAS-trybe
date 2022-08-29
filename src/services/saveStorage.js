@@ -33,7 +33,6 @@ export const addToFavorites = (recipeInfo) => {
 
 export const startRecipe = (recipeId, recipeType, ingredients = []) => {
   const recipesStorage = getRecipesInProgress();
-  console.log(ingredients);
   localStorage.setItem(
     'inProgressRecipes',
     JSON.stringify({

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { getRecipesInProgress, startRecipe } from '../services/saveStorage';
 import oneMeal from '../Mocks/oneMeal';
 import oneDrink from '../Mocks/oneDrinks';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
 import blackHeart from '../images/blackHeartIcon.svg';
 import useFavorites from '../hooks/useFavorites';
+import { getRecipesInProgress, startRecipe } from '../services/saveStorage';
 
 function RecipeInProgress() {
   const history = useHistory();
