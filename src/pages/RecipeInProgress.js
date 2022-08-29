@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { getRecipesInProgress, startRecipe } from '../services/saveStorage';
 import oneMeal from '../Mocks/oneMeal';
 import oneDrink from '../Mocks/oneDrinks';
 import shareIcon from '../images/shareIcon.svg';
@@ -43,38 +44,22 @@ function RecipeInProgress() {
     return acc;
   }, []);
 
-  const setProgressRecipe = ({ target }) => (target.checked
-    ? setCheckSaved([...checkSaved, target.name])
-    : setCheckSaved([
-      ...checkSaved.filter((element) => element !== target.name),
-    ]));
+  const setProgressRecipe = ({ target }) => {
+    const type = pathname.includes('foods') ? 'meals' : 'cocktails';
+    let doneIngredients = [...checkSaved, target.name];
+    if (target.checked) setCheckSaved(doneIngredients);
+    else {
+      doneIngredients = checkSaved.filter((element) => element !== target.name);
+      setCheckSaved(doneIngredients);
+    }
+    startRecipe(id, type, doneIngredients);
+  };
 
   const getAndSetProgressRecipes = () => {
-    const storageData = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    if (!storageData) {
-      localStorage.setItem(
-        'inProgressRecipes',
-        JSON.stringify({ meals: {}, cocktails: {} }),
-      );
-      setRefresh(false);
-    } else if (
-      refresh
-      && Object.keys(storageData[recipeType]).includes(recipeID)
-    ) {
-      setCheckSaved([...storageData[recipeType][recipeID]]);
-      setRefresh(false);
-    } else {
-      localStorage.setItem(
-        'inProgressRecipes',
-        JSON.stringify({
-          ...storageData,
-          [recipeType]: {
-            ...storageData[recipeType],
-            [recipeID]: [...checkSaved],
-          },
-        }),
-      );
-    }
+    const storageData = getRecipesInProgress();
+    const ingredientList = storageData[recipeType][recipeID] || [];
+    setCheckSaved([...ingredientList]);
+    setRefresh(false);
   };
 
   const shareRecipe = () => {
@@ -88,7 +73,7 @@ function RecipeInProgress() {
 
   useEffect(() => {
     getAndSetProgressRecipes();
-  }, [checkSaved]);
+  }, []);
 
   return (
     <div>

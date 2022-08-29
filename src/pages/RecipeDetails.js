@@ -8,6 +8,7 @@ import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import useFavorites from '../hooks/useFavorites';
 import '../styles/Recipes.css';
+import { startRecipe } from '../services/saveStorage';
 
 function RecipeDetails() {
   const history = useHistory();
@@ -76,6 +77,12 @@ function RecipeDetails() {
     }
     return acc;
   }, []);
+
+  const startNewRecipe = () => {
+    const recipeType = pathname.includes('foods') ? 'meals' : 'cocktails';
+    startRecipe(id, recipeType);
+    history.push(`${pathname}/in-progress`);
+  };
 
   return (
     <main className="Recipe-Details-Container">
@@ -153,7 +160,7 @@ function RecipeDetails() {
             type="button"
             data-testid="start-recipe-btn"
             disabled={ isFinishedRecipe }
-            onClick={ () => !isStartedRecipe && history.push(`${pathname}/in-progress`) }
+            onClick={ startNewRecipe }
             className="Start-Recipe-Btn"
           >
             {isStartedRecipe ? 'Continue Recipe' : 'Start Recipe'}

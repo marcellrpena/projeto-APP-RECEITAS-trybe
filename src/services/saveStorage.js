@@ -1,10 +1,16 @@
 export const getFavoritesRecipes = () => (
   JSON.parse(localStorage.getItem('favoriteRecipes')) || []);
 
-const validateFavs = (recipe) => getFavoritesRecipes()
-  .some(({ id }) => id === recipe.id);
+export const getRecipesInProgress = () => (
+  JSON.parse(localStorage.getItem('inProgressRecipes')) || {
+    meals: {},
+    cocktails: {},
+  });
+
+const validateFavs = (recipe, storage) => storage.some(({ id }) => id === recipe.id);
 
 export const addToFavorites = (recipeInfo) => {
+  const favStorage = getFavoritesRecipes();
   const newRecipe = {
     id: recipeInfo.idMeal || recipeInfo.idDrink,
     type: recipeInfo.idMeal ? 'food' : 'drink',
@@ -14,14 +20,28 @@ export const addToFavorites = (recipeInfo) => {
     name: recipeInfo.strMeal || recipeInfo.strDrink,
     image: recipeInfo.strMealThumb || recipeInfo.strDrinkThumb,
   };
-  if (validateFavs(newRecipe)) {
-    const favorites = getFavoritesRecipes();
+  if (validateFavs(newRecipe, favStorage)) {
     const index = favorites.indexOf(newRecipe);
     favorites.splice(index, 1);
     return localStorage.setItem('favoriteRecipes', JSON.stringify(favorites));
   }
   localStorage.setItem(
     'favoriteRecipes',
-    JSON.stringify([...getFavoritesRecipes(), newRecipe]),
+    JSON.stringify([...favStorage, newRecipe]),
+  );
+};
+
+export const startRecipe = (recipeId, recipeType, ingredients = []) => {
+  const recipesStorage = getRecipesInProgress();
+  console.log(ingredients);
+  localStorage.setItem(
+    'inProgressRecipes',
+    JSON.stringify({
+      ...recipesStorage,
+      [recipeType]: {
+        ...recipesStorage[recipeType],
+        [recipeId]: [...ingredients],
+      },
+    }),
   );
 };
