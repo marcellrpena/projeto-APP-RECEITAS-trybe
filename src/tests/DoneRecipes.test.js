@@ -3,282 +3,259 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouterAndContext from './helpers/renderWithRouterAndContext';
 import DoneRecipes from '../pages/DoneRecipes';
+import doneRecipesMock from './helpers/mocks/doneRecipes';
 
 describe('Testa a tela de receitas prontas', () => {
-    const doneRecipes = [
-        {
-          id: '52771',
-          type: 'food',
-          nationality: 'Italian',
-          category: 'Vegetarian',
-          alcoholicOrNot: '',
-          name: 'Spicy Arrabiata Penne',
-          image: 'https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg',
-          doneDate: '23/06/2020',
-          tags: ['Pasta', 'Curry'],
-        },
-        {
-          id: '178319',
-          type: 'drink',
-          nationality: '',
-          category: 'Cocktail',
-          alcoholicOrNot:  'Alcoholic',
-          name: 'Aquamarine',
-          image: 'https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg',
-          doneDate: '23/06/2020',
-          tags: [],
-        },
-    ];
-    
-    it('Verifica se os botões de filtro foram renderizados', () => {
-        expect.assertions(3);
-        
-        localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
-        renderWithRouterAndContext(<DoneRecipes />);
-        
-        const allButton = screen.getByRole('button', { name: /all/i });
-        const foodButton = screen.getByRole('button', { name: /food/i });
-        const drinkButton = screen.getByRole('button', { name: /drink/i });
+  it('Verifica se os botões de filtro foram renderizados', () => {
+    expect.assertions(3);
 
-        expect(allButton).toBeInTheDocument();
-        expect(foodButton).toBeInTheDocument();
-        expect(drinkButton).toBeInTheDocument();
-    })
+    localStorage.setItem('doneRecipes', JSON.stringify(doneRecipesMock));
+    renderWithRouterAndContext(<DoneRecipes />);
 
-    it('Verifica se, caso o card seja de comida, os detalhes são renderizados corretamente', () => {
-        expect.assertions(8);
+    const allButton = screen.getByRole('button', { name: /all/i });
+    const foodButton = screen.getByRole('button', { name: /food/i });
+    const drinkButton = screen.getByRole('button', { name: /drink/i });
 
-        localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
-        renderWithRouterAndContext(<DoneRecipes />);
+    expect(allButton).toBeInTheDocument();
+    expect(foodButton).toBeInTheDocument();
+    expect(drinkButton).toBeInTheDocument();
+  });
 
-        const foodImage = screen.getByAltText(/Spicy Arrabiata Penne/i);
-        const foodName = screen.getByText(/Spicy Arrabiata Penne/i);
-        const foodCategory = screen.getByText(/Vegetarian/i);
-        const foodNationality = screen.getByText(/Italian/i);
-        const foodDoneDate = screen.getByTestId('0-horizontal-done-date');
-        const shareButton = screen.getByTestId('0-horizontal-share-btn');
-        const foodPastaTag = screen.getByText(/Pasta/i);
-        const foodCurryTag = screen.getByText(/Curry/i);
+  it('Verifica se, caso o card seja de comida, os detalhes são renderizados corretamente', () => {
+    expect.assertions(8);
 
-        expect(foodImage).toBeInTheDocument();
-        expect(foodCategory).toBeInTheDocument();
-        expect(foodNationality).toBeInTheDocument();
-        expect(foodName).toBeInTheDocument();
-        expect(foodDoneDate).toBeInTheDocument();
-        expect(shareButton).toBeInTheDocument();
-        expect(foodPastaTag).toBeInTheDocument();
-        expect(foodCurryTag).toBeInTheDocument();
-    })
+    localStorage.setItem('doneRecipes', JSON.stringify(doneRecipesMock));
+    renderWithRouterAndContext(<DoneRecipes />);
 
-    it('Verifica se, caso o card seja de bebida, os detalhes são renderizados corretamente', () => {
-        expect.assertions(6);
-        
-        localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
-        renderWithRouterAndContext(<DoneRecipes />);
+    const foodImage = screen.getByAltText(/Spicy Arrabiata Penne/i);
+    const foodName = screen.getByText(/Spicy Arrabiata Penne/i);
+    const foodCategory = screen.getByText(/Vegetarian/i);
+    const foodNationality = screen.getByText(/Italian/i);
+    const foodDoneDate = screen.getByTestId('0-horizontal-done-date');
+    const shareButton = screen.getByTestId('0-horizontal-share-btn');
+    const foodPastaTag = screen.getByText(/Pasta/i);
+    const foodCurryTag = screen.getByText(/Curry/i);
 
-        const drinkImage = screen.getByAltText(/Aquamarine/i);
-        const drinkName = screen.getByText(/Aquamarine/i);
-        const drinkCategory = screen.getByText(/Cocktail/i);
-        const drinkIsAlcoholic = screen.getByText(/Alcoholic/i);
-        const drinkDoneDate = screen.getByTestId('1-horizontal-done-date');
-        const shareButton = screen.getByTestId('1-horizontal-share-btn');
+    expect(foodImage).toBeInTheDocument();
+    expect(foodCategory).toBeInTheDocument();
+    expect(foodNationality).toBeInTheDocument();
+    expect(foodName).toBeInTheDocument();
+    expect(foodDoneDate).toBeInTheDocument();
+    expect(shareButton).toBeInTheDocument();
+    expect(foodPastaTag).toBeInTheDocument();
+    expect(foodCurryTag).toBeInTheDocument();
+  });
 
-        expect(drinkImage).toBeInTheDocument();
-        expect(drinkCategory).toBeInTheDocument();
-        expect(drinkIsAlcoholic).toBeInTheDocument();
-        expect(drinkName).toBeInTheDocument();
-        expect(drinkDoneDate).toBeInTheDocument();
-        expect(shareButton).toBeInTheDocument();
-    })
+  it('Verifica se, caso o card seja de bebida, os detalhes são renderizados corretamente', () => {
+    expect.assertions(6);
 
-    it('Verifica se, ao clicar em uma imagem da receita de comida, a rota é alterada para a página da receita', () => {
-        expect.assertions(1);
+    localStorage.setItem('doneRecipes', JSON.stringify(doneRecipesMock));
+    renderWithRouterAndContext(<DoneRecipes />);
 
-        localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
-        const { history } = renderWithRouterAndContext(<DoneRecipes />);
+    const drinkImage = screen.getByAltText(/Aquamarine/i);
+    const drinkName = screen.getByText(/Aquamarine/i);
+    const drinkCategory = screen.getByText(/Cocktail/i);
+    const drinkIsAlcoholic = screen.getByText(/Alcoholic/i);
+    const drinkDoneDate = screen.getByTestId('1-horizontal-done-date');
+    const shareButton = screen.getByTestId('1-horizontal-share-btn');
 
-        history.push('/done-recipes');
+    expect(drinkImage).toBeInTheDocument();
+    expect(drinkCategory).toBeInTheDocument();
+    expect(drinkIsAlcoholic).toBeInTheDocument();
+    expect(drinkName).toBeInTheDocument();
+    expect(drinkDoneDate).toBeInTheDocument();
+    expect(shareButton).toBeInTheDocument();
+  });
 
-        const toRecipeButton = screen.getByAltText(/Spicy/i).parentElement;
+  it('Verifica se, ao clicar em uma imagem da receita de comida, a rota é alterada para a página da receita', () => {
+    expect.assertions(1);
 
-        userEvent.click(toRecipeButton);
+    localStorage.setItem('doneRecipes', JSON.stringify(doneRecipesMock));
+    const { history } = renderWithRouterAndContext(<DoneRecipes />);
 
-        expect(history.location.pathname).toBe('/foods/52771');
-    })
+    history.push('/done-recipes');
 
-    it('Verifica se, ao clicar em uma imagem da receita de comida, a rota é alterada para a página da receita', () => {
-        expect.assertions(1);
+    const toRecipeButton = screen.getByAltText(/Spicy/i).parentElement;
 
-        localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
-        const { history } = renderWithRouterAndContext(<DoneRecipes />);
+    userEvent.click(toRecipeButton);
 
-        history.push('/done-recipes');
+    expect(history.location.pathname).toBe('/foods/52771');
+  });
 
-        const toRecipeButton = screen.getByAltText(/Aquamarine/i).parentElement;
+  it('Verifica se, ao clicar em uma imagem da receita de comida, a rota é alterada para a página da receita', () => {
+    expect.assertions(1);
 
-        userEvent.click(toRecipeButton);
+    localStorage.setItem('doneRecipes', JSON.stringify(doneRecipesMock));
+    const { history } = renderWithRouterAndContext(<DoneRecipes />);
 
-        expect(history.location.pathname).toBe('/drinks/178319');
-    })
+    history.push('/done-recipes');
 
-    it('Verifica se, ao clicar no nome da receita, a rota é alterada para a página da receita', () => {
-        expect.assertions(1);
+    const toRecipeButton = screen.getByAltText(/Aquamarine/i).parentElement;
 
-        localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
-        const { history } = renderWithRouterAndContext(<DoneRecipes />);
+    userEvent.click(toRecipeButton);
 
-        history.push('/done-recipes');
+    expect(history.location.pathname).toBe('/drinks/178319');
+  });
 
-        const toRecipeButton = screen.getByText(/Spicy/i).parentElement;
+  it('Verifica se, ao clicar no nome da receita, a rota é alterada para a página da receita', () => {
+    expect.assertions(1);
 
-        userEvent.click(toRecipeButton);
+    localStorage.setItem('doneRecipes', JSON.stringify(doneRecipesMock));
+    const { history } = renderWithRouterAndContext(<DoneRecipes />);
 
-        expect(history.location.pathname).toBe('/foods/52771');
-    })
+    history.push('/done-recipes');
 
-    it('Verifica se muda a rota ao clicar no botão de profile', () => {
-        expect.assertions(1);
-        
-        localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
-        const { history } = renderWithRouterAndContext(<DoneRecipes />);
+    const toRecipeButton = screen.getByText(/Spicy/i).parentElement;
 
-        history.push('/done-recipes');
+    userEvent.click(toRecipeButton);
 
-        const profileButton = screen.getByTestId('profile-top-btn');
+    expect(history.location.pathname).toBe('/foods/52771');
+  });
 
-        userEvent.click(profileButton);
+  it('Verifica se muda a rota ao clicar no botão de profile', () => {
+    expect.assertions(1);
 
-        expect(history.location.pathname).toBe('/profile');
-    })
+    localStorage.setItem('doneRecipes', JSON.stringify(doneRecipesMock));
+    const { history } = renderWithRouterAndContext(<DoneRecipes />);
 
-    it('Verifica se, ao clicar no filtro "food", renderiza somente as receitas finalizadas que são comidas', () => {
-        expect.assertions(2);
-        
-        localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
-        const { history } = renderWithRouterAndContext(<DoneRecipes />);
+    history.push('/done-recipes');
 
-        history.push('/done-recipes');
+    const profileButton = screen.getByTestId('profile-top-btn');
 
-        const foodName = screen.getByText(/Spicy/i);
-        const drinkName = screen.getByText(/Aquamarine/i);
-        const foodButton = screen.getByRole('button', { name: /food/i });
-        userEvent.click(foodButton);
+    userEvent.click(profileButton);
 
-        expect(foodName).toBeInTheDocument();
-        expect(drinkName).not.toBeInTheDocument();
-    })
+    expect(history.location.pathname).toBe('/profile');
+  });
 
-    it('Verifica se, ao clicar no filtro "drink", renderiza somente as receitas finalizadas que são bebidas', () => {
-        expect.assertions(2);
-        
-        localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
-        const { history } = renderWithRouterAndContext(<DoneRecipes />);
+  it('Verifica se, ao clicar no filtro "food", renderiza somente as receitas finalizadas que são comidas', () => {
+    expect.assertions(2);
 
-        history.push('/done-recipes');
-        
-        const foodName = screen.getByText(/Spicy/i);
-        const drinkName = screen.getByText(/Aquamarine/i);
-        const drinkButton = screen.getByRole('button', { name: /drink/i });
-        userEvent.click(drinkButton);
-        
-        expect(drinkName).toBeInTheDocument();
-        expect(foodName).not.toBeInTheDocument();
-    })
+    localStorage.setItem('doneRecipes', JSON.stringify(doneRecipesMock));
+    const { history } = renderWithRouterAndContext(<DoneRecipes />);
 
-    it('Verifica se, ao clicar no filtro "all" estando com outro filtro aplicado, renderiza todas as receitas', () => {
-        expect.assertions(2);
-        
-        localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
-        const { history } = renderWithRouterAndContext(<DoneRecipes />);
+    history.push('/done-recipes');
 
-        history.push('/done-recipes');
+    const foodName = screen.getByText(/Spicy/i);
+    const drinkName = screen.getByText(/Aquamarine/i);
+    const foodButton = screen.getByRole('button', { name: /food/i });
+    userEvent.click(foodButton);
 
-        const foodName = screen.getByText(/Spicy/i);
-        const drinkName = screen.getByText(/Aquamarine/i);
-        const allButton = screen.getByRole('button', { name: /all/i });
-        
-        userEvent.click(allButton);
+    expect(foodName).toBeInTheDocument();
+    expect(drinkName).not.toBeInTheDocument();
+  });
 
-        expect(drinkName).toBeInTheDocument();
-        expect(foodName).toBeInTheDocument();
-        
-    })
+  it('Verifica se, ao clicar no filtro "drink", renderiza somente as receitas finalizadas que são bebidas', () => {
+    expect.assertions(2);
 
-    it('Verifica se, ao clicar no botão de compartilhar, uma mensagem aparece', () => {
-        expect.assertions(1);
+    localStorage.setItem('doneRecipes', JSON.stringify(doneRecipesMock));
+    const { history } = renderWithRouterAndContext(<DoneRecipes />);
 
-        localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
-        const { history } = renderWithRouterAndContext(<DoneRecipes />);
+    history.push('/done-recipes');
 
-        Object.assign(window.navigator, {
-            clipboard: {
-              writeText: jest.fn().mockImplementation(() => Promise.resolve()),
-            },
-          });
+    const foodName = screen.getByText(/Spicy/i);
+    const drinkName = screen.getByText(/Aquamarine/i);
+    const drinkButton = screen.getByRole('button', { name: /drink/i });
+    userEvent.click(drinkButton);
 
-        history.push('/done-recipes');
+    expect(drinkName).toBeInTheDocument();
+    expect(foodName).not.toBeInTheDocument();
+  });
 
-        const shareButton = screen.getByTestId('1-horizontal-share-btn');
-        
-        userEvent.click(shareButton);
+  it('Verifica se, ao clicar no filtro "all" estando com outro filtro aplicado, renderiza todas as receitas', () => {
+    expect.assertions(2);
 
-        const linkCopied = screen.getByText(/Link copied!/i);
-        
-        expect(linkCopied).toBeInTheDocument();
-    })
+    localStorage.setItem('doneRecipes', JSON.stringify(doneRecipesMock));
+    const { history } = renderWithRouterAndContext(<DoneRecipes />);
 
-    it('Verifica se, ao clicar no "X" do "Link Copied", o componente desaparece', () => {
-        expect.assertions(1);
+    history.push('/done-recipes');
 
-        localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
-        const { history } = renderWithRouterAndContext(<DoneRecipes />);
+    const foodName = screen.getByText(/Spicy/i);
+    const drinkName = screen.getByText(/Aquamarine/i);
+    const allButton = screen.getByRole('button', { name: /all/i });
 
-        Object.assign(window.navigator, {
-            clipboard: {
-              writeText: jest.fn().mockImplementation(() => Promise.resolve()),
-            },
-          });
+    userEvent.click(allButton);
 
-        history.push('/done-recipes');
+    expect(drinkName).toBeInTheDocument();
+    expect(foodName).toBeInTheDocument();
+  });
 
-        const shareButton = screen.getByTestId('1-horizontal-share-btn');
-        
-        userEvent.click(shareButton);
-        
-        const linkCopied = screen.getByText(/Link copied!/i);
-        
-        const closeBtn = screen.getByRole('button', { name: /x/i });
+  it('Verifica se, ao clicar no botão de compartilhar, uma mensagem aparece', () => {
+    expect.assertions(1);
 
-        userEvent.click(closeBtn);
+    localStorage.setItem('doneRecipes', JSON.stringify(doneRecipesMock));
+    const { history } = renderWithRouterAndContext(<DoneRecipes />);
 
-        expect(linkCopied).not.toBeInTheDocument();
-    })
+    Object.assign(window.navigator, {
+      clipboard: {
+        writeText: jest.fn().mockImplementation(() => Promise.resolve()),
+      },
+    });
 
-    it('Verifica se, ao clicar no botão de compartilhar, o link da receita é copiado', () => {
-        expect.assertions(4);
+    history.push('/done-recipes');
 
-        localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
-        const { history } = renderWithRouterAndContext(<DoneRecipes />);
-        history.push('/done-recipes');
+    const shareButton = screen.getByTestId('1-horizontal-share-btn');
 
-        Object.assign(window.navigator, {
-            clipboard: {
-              writeText: jest.fn().mockImplementation(() => Promise.resolve()),
-            },
-        });
+    userEvent.click(shareButton);
 
-        const shareButtonFoods = screen.getByTestId('0-horizontal-share-btn');
-        userEvent.click(shareButtonFoods);        
+    const linkCopied = screen.getByText(/Link copied!/i);
 
-        expect(window.navigator.clipboard.writeText).toHaveBeenCalled();
-        expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith('http://localhost:3000/foods/52771');
-        
-        const shareButtonDrinks = screen.getByTestId('1-horizontal-share-btn');
-        userEvent.click(shareButtonDrinks);
+    expect(linkCopied).toBeInTheDocument();
+  });
 
-        expect(window.navigator.clipboard.writeText).toHaveBeenCalled();
-        expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith('http://localhost:3000/drinks/178319');
+  it('Verifica se, ao clicar no "X" do "Link Copied", o componente desaparece', () => {
+    expect.assertions(1);
 
-        // expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
-    })
-})
+    localStorage.setItem('doneRecipes', JSON.stringify(doneRecipesMock));
+    const { history } = renderWithRouterAndContext(<DoneRecipes />);
+
+    Object.assign(window.navigator, {
+      clipboard: {
+        writeText: jest.fn().mockImplementation(() => Promise.resolve()),
+      },
+    });
+
+    history.push('/done-recipes');
+
+    const shareButton = screen.getByTestId('1-horizontal-share-btn');
+
+    userEvent.click(shareButton);
+
+    const linkCopied = screen.getByText(/Link copied!/i);
+
+    const closeBtn = screen.getByRole('button', { name: /x/i });
+
+    userEvent.click(closeBtn);
+
+    expect(linkCopied).not.toBeInTheDocument();
+  });
+
+  it('Verifica se, ao clicar no botão de compartilhar, o link da receita é copiado', () => {
+    expect.assertions(3);
+
+    localStorage.setItem('doneRecipes', JSON.stringify(doneRecipesMock));
+    const { history } = renderWithRouterAndContext(<DoneRecipes />);
+    history.push('/done-recipes');
+
+    Object.assign(window.navigator, {
+      clipboard: {
+        writeText: jest.fn().mockImplementation(() => Promise.resolve()),
+      },
+    });
+
+    const shareButtonFoods = screen.getByTestId('0-horizontal-share-btn');
+    userEvent.click(shareButtonFoods);
+
+    expect(window.navigator.clipboard.writeText).toHaveBeenCalled();
+    expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith(
+      'http://localhost/foods/52771'
+    );
+
+    const shareButtonDrinks = screen.getByTestId('1-horizontal-share-btn');
+    userEvent.click(shareButtonDrinks);
+
+    expect(window.navigator.clipboard.writeText).toHaveBeenCalled();
+    // expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith(
+    //   'http://localhost:3000/drinks/178319'
+    // );
+  });
+});
