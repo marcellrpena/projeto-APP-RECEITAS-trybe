@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import searchIcon from '../images/searchIcon.svg';
 import profileIcon from '../images/profileIcon.svg';
 import SearchBar from './SearchBar';
+import '../styles/Header.css';
 
 function Header({ name }) {
   const history = useHistory();
@@ -12,18 +13,6 @@ function Header({ name }) {
   const names = ['Profile', 'Done Recipes', 'Favorite Recipes'];
   return (
     <header>
-      <div>
-        <button
-          type="button"
-          data-testid="profile-top-btn"
-          onClick={ () => history.push('/profile') }
-          src={ profileIcon }
-          alt="User icon"
-        >
-          <img src={ profileIcon } alt="User icon" />
-        </button>
-        <h1 data-testid="page-title">{name}</h1>
-      </div>
       {!names.includes(name) && (
         <div>
           <button
@@ -35,9 +24,21 @@ function Header({ name }) {
           >
             <img src={ searchIcon } alt="Search Icon" />
           </button>
-          {isSearching && <SearchBar history={ history } />}
         </div>
       )}
+      <h1 data-testid="page-title">{name}</h1>
+      <div>
+        <button
+          type="button"
+          data-testid="profile-top-btn"
+          onClick={ () => history.push('/profile') }
+          src={ profileIcon }
+          alt="User icon"
+        >
+          <img src={ profileIcon } alt="User icon" />
+        </button>
+      </div>
+      {isSearching && <SearchBar history={ history } />}
     </header>
   );
 }

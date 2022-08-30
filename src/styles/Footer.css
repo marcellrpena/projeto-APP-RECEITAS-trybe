@@ -1,0 +1,12 @@
+footer {
+  background: black;
+  border-radius: 22px;
+  bottom: 0;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-evenly;
+  margin-bottom: 12px;
+  padding: 0.6rem;
+  position: fixed;
+  width: 95%;
+}
