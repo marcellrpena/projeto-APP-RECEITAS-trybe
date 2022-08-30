@@ -6,7 +6,11 @@ import whiteHeart from '../images/whiteHeartIcon.svg';
 import blackHeart from '../images/blackHeartIcon.svg';
 import useFavorites from '../hooks/useFavorites';
 import useRecipe from '../hooks/useRecipe';
-import { getRecipesInProgress, startRecipe } from '../services/saveStorage';
+import {
+  doneRecipe,
+  getRecipesInProgress,
+  startRecipe,
+} from '../services/saveStorage';
 
 function RecipeInProgress() {
   const history = useHistory();
@@ -49,11 +53,14 @@ function RecipeInProgress() {
 
   const shareRecipe = () => {
     setLinkCopied(true);
-    clipboardCopy(
-      window.location.href.split('/in-progress')[0],
-    );
+    clipboardCopy(window.location.href.split('/in-progress')[0]);
     setTimeout(() => setLinkCopied(false), INTERVAL_COPY_TAG);
     clearTimeout();
+  };
+
+  const finishRecipe = () => {
+    history.push('/done-recipes');
+    doneRecipe(recipe);
   };
 
   return (
@@ -87,7 +94,10 @@ function RecipeInProgress() {
                 alt="Share icon"
                 onClick={ addRecipeToFavorites }
               >
-                <img src={ isFavorite ? blackHeart : whiteHeart } alt="Share icon" />
+                <img
+                  src={ isFavorite ? blackHeart : whiteHeart }
+                  alt="Share icon"
+                />
               </button>
               {linkCopied && <span>Link copied!</span>}
             </div>
@@ -95,23 +105,23 @@ function RecipeInProgress() {
           </header>
           <h4>Ingredients</h4>
           {!refresh
-          && ingredients.map((ingredient, index) => (
-            <div key={ index }>
-              <label
-                data-testid={ `${index}-ingredient-step` }
-                htmlFor={ ingredient }
-              >
-                <input
-                  type="checkbox"
-                  name={ ingredient }
-                  id={ ingredient }
-                  checked={ checkSaved.includes(ingredient) }
-                  onChange={ (e) => setProgressRecipe(e) }
-                />
-                {`${ingredient} - ${measures[index]}`}
-              </label>
-            </div>
-          ))}
+            && ingredients.map((ingredient, index) => (
+              <div key={ index }>
+                <label
+                  data-testid={ `${index}-ingredient-step` }
+                  htmlFor={ ingredient }
+                >
+                  <input
+                    type="checkbox"
+                    name={ ingredient }
+                    id={ ingredient }
+                    checked={ checkSaved.includes(ingredient) }
+                    onChange={ (e) => setProgressRecipe(e) }
+                  />
+                  {`${ingredient} - ${measures[index]}`}
+                </label>
+              </div>
+            ))}
           <section>
             <h4>Instructions</h4>
             <p data-testid="instructions">{recipe.strInstructions}</p>
@@ -120,7 +130,7 @@ function RecipeInProgress() {
             type="button"
             data-testid="finish-recipe-btn"
             disabled={ ingredients.length !== checkSaved.length }
-            onClick={ () => history.push('/done-recipes') }
+            onClick={ finishRecipe }
           >
             Finish Recipe
           </button>

@@ -1,32 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import clipboardCopy from 'clipboard-copy';
-
+import { getDoneRecipes } from '../services/saveStorage';
 import Header from '../components/Header';
 import shareIcon from '../images/shareIcon.svg';
 
 function DoneRecipes() {
+  const history = useHistory();
   const [copyed, setCopyed] = useState(false);
   const [recipesList, setRecipesList] = useState([]);
 
   const getPath = (type) => (type === 'food' ? 'foods' : 'drinks');
 
-  const history = useHistory();
   const shareRecipe = (type, id) => {
-    const domain = window.location.href.split('/done-recipes')[0];
+    const domain = window.location.href.split('done-recipes')[0];
     const link = `${domain}${getPath(type)}/${id}`;
     clipboardCopy(link);
     setCopyed(true);
   };
 
+  const applyFilter = (recipeType) => (
+    getDoneRecipes().filter(({ type }) => type === recipeType));
+
   const filterRecipes = (filter) => {
-    const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes')) || [];
-    if (filter === 'food') {
-      setRecipesList(doneRecipes.filter(({ type }) => type === 'food'));
-    }
-    if (filter === 'drink') {
-      setRecipesList(doneRecipes.filter(({ type }) => type === 'drink'));
-    }
+    const doneRecipes = getDoneRecipes();
+    if (filter === 'food') return setRecipesList(applyFilter('food'));
+    if (filter === 'drink') return setRecipesList(applyFilter('drink'));
     return setRecipesList(doneRecipes);
   };
 
@@ -86,9 +85,6 @@ function DoneRecipes() {
                       data-testid={ `${index}-horizontal-image` }
                       width="100"
                     />
-                  </button>
-
-                  <button type="button" onClick={ () => toRecipePage(type, id) }>
                     <h1 data-testid={ `${index}-horizontal-name` }>{name}</h1>
                   </button>
 
@@ -97,11 +93,9 @@ function DoneRecipes() {
                       type === 'food' ? nationality : alcoholicOrNot
                     } - ${category}`}
                   </p>
-
                   <p data-testid={ `${index}-horizontal-done-date` }>
                     {doneDate}
                   </p>
-
                   <button
                     type="button"
                     data-testid={ `${index}-horizontal-share-btn` }
@@ -110,7 +104,6 @@ function DoneRecipes() {
                   >
                     <img src={ shareIcon } alt="search icon" />
                   </button>
-
                   {tags.map((tag) => (
                     <p key={ tag } data-testid={ `${index}-${tag}-horizontal-tag` }>
                       {tag}
