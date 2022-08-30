@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { Button, Form } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { LoginContext } from '../contexts/Contexts';
 
@@ -35,37 +36,36 @@ function Login() {
 
   return (
     <main>
-      <form onSubmit={ handleSubmit }>
-        <label htmlFor="email-input">
-          Email
-          <input
+      <Form onSubmit={ handleSubmit }>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label className="text-left">Email</Form.Label>
+          <Form.Control
             type="email"
+            placeholder="Enter email"
             data-testid="email-input"
-            placeholder="Digite seu e-mail"
-            id="email-input"
             value={ email }
             onChange={ (e) => setEmail(e.target.value) }
           />
-        </label>
-        <label htmlFor="password-input">
-          Password
-          <input
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
             type="password"
-            name="password"
-            id="password-input"
+            placeholder="Password"
             data-testid="password-input"
-            placeholder="Digite sua senha"
             onChange={ (e) => setPassword(e.target.value) }
           />
-        </label>
-        <button
+        </Form.Group>
+        <Button
+          variant={ disableBtn ? 'secondary' : 'warning' }
           type="submit"
-          data-testid="login-submit-btn"
           disabled={ disableBtn }
+          data-testid="login-submit-btn"
+          style={ { width: '100%' } }
         >
           Login
-        </button>
-      </form>
+        </Button>
+      </Form>
     </main>
   );
 }
