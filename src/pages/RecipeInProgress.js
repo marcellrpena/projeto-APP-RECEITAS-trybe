@@ -65,9 +65,9 @@ function RecipeInProgress() {
   };
 
   return (
-    <div className="recipe-in-progress">
+    <div>
       {isFetched && (
-        <>
+        <div className="recipe-in-progress">
           <img
             className="recipeImg"
             src={ recipe.strMealThumb || recipe.strDrinkThumb }
@@ -81,7 +81,7 @@ function RecipeInProgress() {
             >
               {recipe.strMeal || recipe.strDrink}
             </h4>
-            <div className="btn-s-f-position">
+            <div className="btn-shareAndfavorite-position">
               <button
                 className="btn-share-favorite"
                 type="button"
@@ -117,11 +117,11 @@ function RecipeInProgress() {
           <div className="ingredient-list">
             {!refresh
               && ingredients.map((ingredient, index) => (
-                <div key={ index }>
+                <div key={ index } className="ingredient-check">
                   <label
                     data-testid={ `${index}-ingredient-step` }
                     htmlFor={ ingredient }
-                    className="margin-zero"
+                    className="margin-zero ingredient-check"
                   >
                     <input
                       type="checkbox"
@@ -129,6 +129,7 @@ function RecipeInProgress() {
                       id={ ingredient }
                       checked={ checkSaved.includes(ingredient) }
                       onChange={ (e) => setProgressRecipe(e) }
+                      className="ingredient-check"
                     />
                     {` ${ingredient} - ${measures[index]}`}
                   </label>
@@ -149,11 +150,11 @@ function RecipeInProgress() {
             data-testid="finish-recipe-btn"
             disabled={ ingredients.length !== checkSaved.length }
             onClick={ finishRecipe }
-            className="btn btn-secondary"
+            className="btn btn-secondary btn-login"
           >
             Finish Recipe
           </button>
-        </>
+        </div>
       )}
     </div>
   );
