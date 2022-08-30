@@ -1,6 +1,5 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-import { meals } from '../../cypress/mocks/meals';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import renderWithRouterAndContext from './helpers/renderWithRouterAndContext';
@@ -10,7 +9,7 @@ describe('Testes do componente Header', () => {
     beforeEach(() => {
       jest.spyOn(global, 'fetch');
       global.fetch.mockResolvedValue({
-        json: jest.fn().mockResolvedValue(meals),
+        json: jest.fn().mockResolvedValue(),
       });
     });
 

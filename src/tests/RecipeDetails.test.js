@@ -8,6 +8,10 @@ import RecipeDetails from '../pages/RecipeDetails';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 
+// https://trybecourse.slack.com/archives/C01T2C18DSM/p1630099534116900?thread_ts=1630092847.100100&cid=C01T2C18DSM
+jest.mock('clipboard-copy', () => jest.fn());
+const mockClipboard = require('clipboard-copy');
+
 describe('Testes gerais da tela de detalhes de uma receita', () => {
   beforeEach(() => {
     jest.spyOn(global, 'fetch');
@@ -49,12 +53,6 @@ describe('Testes gerais da tela de detalhes de uma receita', () => {
 
   describe('Testa as funcionalidades da tela de detalhes', () => {
     it('Verifica se ao clicar no botão de compartilhar o link da receita é copiado', async () => {
-      // https://trybecourse.slack.com/archives/C02L53QUZSR/p1651684787996879?thread_ts=1651681821.247899&cid=C02L53QUZSR
-      Object.assign(window.navigator, {
-        clipboard: {
-          writeText: jest.fn().mockImplementation(() => Promise.resolve()),
-        },
-      });
       expect.assertions(2);
 
       const { history } = renderWithRouterAndContext(<RecipeDetails />);
@@ -62,8 +60,9 @@ describe('Testes gerais da tela de detalhes de uma receita', () => {
       await waitFor(() => expect(fetch).toHaveBeenCalled());
 
       const shareBtn = screen.getByTestId('share-btn');
+      mockClipboard.mockImplementation(() => null);
       userEvent.click(shareBtn);
-      expect(window.navigator.clipboard.writeText).toHaveBeenCalled();
+      expect(mockClipboard).toBeCalledTimes(1);
     });
 
     it('Testa se, ao adicionar aos favoritos, o ícone do coração fica preenchido', async () => {
@@ -90,7 +89,7 @@ describe('Testes gerais da tela de detalhes de uma receita', () => {
       const favBtn = screen.getByTestId('favorite-btn');
       userEvent.click(favBtn);
       expect(favBtn).toHaveAttribute('src', blackHeartIcon);
-      window.location.reload
+      window.location.reload;
       expect(favBtn).toHaveAttribute('src', blackHeartIcon);
       expect(favBtn).not.toHaveAttribute('src', whiteHeartIcon);
     });
@@ -147,7 +146,7 @@ describe('Testes gerais da tela de detalhes de uma receita', () => {
       const startBtn = screen.getByTestId('start-recipe-btn');
       userEvent.click(startBtn);
       const { pathname } = history.location;
-      expect(pathname).toBe(`/foods/${drinks.drinks[1].idDrink}/in-progress`);
+      expect(pathname).toBe(`/drinks/${drinks.drinks[1].idDrink}/in-progress`);
     });
 
     it('Testa se aparece o botao "Continue Recipe" caso a receita já tenha sido iniciada', async () => {
@@ -157,6 +156,6 @@ describe('Testes gerais da tela de detalhes de uma receita', () => {
 
       const startBtn = screen.getByTestId('start-recipe-btn');
       expect(startBtn).toHaveTextContent('Continue Recipe');
-    })
+    });
   });
 });
