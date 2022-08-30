@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import clipboardCopy from 'clipboard-copy';
-import { startRecipe } from '../services/saveStorage';
+import {
+  getDoneRecipes,
+  getRecipesInProgress,
+  startRecipe,
+} from '../services/saveStorage';
 import RecipeCardDetails from '../components/RecipeCardDetails';
 import useSuggestions from '../hooks/useSuggestions';
 import shareIcon from '../images/shareIcon.svg';
@@ -27,20 +31,14 @@ function RecipeDetails() {
   const [copiedToClipboard, setCopiedToClipboard] = useState(false);
 
   const questIsStartedRecipe = () => {
-    const localInProgressRecipes = JSON.parse(
-      localStorage.getItem('inProgressRecipes'),
-    );
-    setIsStartedRecipe(
-      !(
-        !localInProgressRecipes
-        || Object.keys(localInProgressRecipes).length === 0
-      ),
-    );
+    const recipesInProgress = getRecipesInProgress();
+    const type = pathname.includes('foods') ? 'meals' : 'cocktails';
+    setIsStartedRecipe(!!recipesInProgress[type][id]);
   };
 
   const questIsFinishedRecipe = () => {
-    const localDoneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
-    setIsFinishedRecipe(!(!localDoneRecipes || localDoneRecipes.length === 0));
+    const doneRecipes = getDoneRecipes();
+    setIsFinishedRecipe(doneRecipes.some((doneRecipe) => doneRecipe.id === id));
   };
 
   useEffect(() => {
@@ -74,13 +72,10 @@ function RecipeDetails() {
             showCategory
           />
           <div className="Recipe-Buttons-Container">
-            {copiedToClipboard ? (
-              <span>Link copied!</span>
-            ) : (
-              <button type="button" data-testid="share-btn" onClick={ copyLink }>
-                <img src={ shareIcon } alt="Share icon" />
-              </button>
-            )}
+            {copiedToClipboard && <span>Link copied!</span>}
+            <button type="button" data-testid="share-btn" onClick={ copyLink }>
+              <img src={ shareIcon } alt="Share icon" />
+            </button>
             <button
               type="button"
               data-testid="favorite-btn"
@@ -100,7 +95,7 @@ function RecipeDetails() {
                 key={ index }
                 data-testid={ `${index}-ingredient-name-and-measure` }
               >
-                {`${item}: ${measures[index]}`}
+                {`${item}${measures[index] ? `: ${measures[index]}` : ''}`}
               </p>
             ))}
           </div>
