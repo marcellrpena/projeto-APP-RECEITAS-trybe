@@ -1,11 +1,10 @@
 import React from 'react';
-
 import Header from '../components/Header';
 import RecipesList from '../components/RecipesList';
 
 function DoneRecipes() {
   return (
-    <>
+    <div>
       <Header name="Done Recipes" />
       <RecipesList
         props={ {
@@ -14,7 +13,7 @@ function DoneRecipes() {
           favoriteBtn: false,
         } }
       />
-    </>
+    </div>
   );
 }
 
