@@ -1,0 +1,113 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* posicionamento geral dos elementos da tela */
+.recipe-in-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* imagem principal */
+.recipeImg {
+  height: 170px;
+  object-fit: cover;
+  width: 100%;
+}
+
+/* titulo da receita e icones */
+.title {
+  font-size: 40px;
+  margin: 0;
+}
+
+.title-share-favorite {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-share-favorite {
+  background-color: transparent;
+  border: none;
+}
+
+.btn-s-f-position {
+  gap: 20px;
+}
+
+/* subtitulo ou categoria */
+.category {
+  font-size: 25px;
+  margin: 0;
+}
+
+.span-copied {
+  font-size: 18px;
+  margin: 0;
+  padding-right: 10px;
+}
+
+.span-category {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* lista de ingredientes */
+.ingredient-list {
+  align-self: center;
+  border: 2px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  height: fit-content;
+  padding: 10px;
+  padding-bottom: 5px;
+  width: 90%;
+}
+
+.title-ingredients {
+  align-self: center;
+  margin: 0;
+  padding-top: 15px;
+}
+
+.margin-zero {
+  margin: 0;
+}
+
+/* secção de instruções */
+.title-instructions {
+  align-self: center;
+  margin: 0;
+  padding-top: 15px;
+}
+
+.instructions-text {
+  align-self: center;
+  border: 2px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  height: fit-content;
+  margin: 0;
+  padding: 10px;
+  padding-bottom: 5px;
+  width: 90%;
+}
+
+.text-style {
+  text-align: left;
+}
+
+/* botão Finish Recipe */
+.btn {
+  align-self: center;
+  width: 90%;
+}
