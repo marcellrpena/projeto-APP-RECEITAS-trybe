@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import renderWithRouterAndContext from './helpers/renderWithRouterAndContext';
 import DoneRecipes from '../pages/DoneRecipes';
 import doneRecipesMock from './helpers/mocks/doneRecipes';
-import { Button } from 'bootstrap';
 
 describe('Testa a tela de receitas prontas', () => {
   it('Verifica se os botões de filtro foram renderizados', () => {
