@@ -2,7 +2,7 @@ footer {
   background: rgb(248, 248, 248);
   border-radius: 14px;
   bottom: 0;
-  box-shadow: 2px 2px 4px #47464777;
+  box-shadow: 1px 5px 4px #47464777;
   display: flex;
   gap: 1rem;
   justify-content: space-evenly;

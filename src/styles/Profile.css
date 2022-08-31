@@ -1,0 +1,10 @@
+.Profile-Container {
+  align-items: center;
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.Profile-Informations {
+  align-items: center;
+  flex-flow: column wrap;
+}

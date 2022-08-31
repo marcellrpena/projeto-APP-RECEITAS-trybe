@@ -16,12 +16,13 @@ function RecipeCard({ cardTestId, imgTestId, nameTestId, recipe, recipeType }) {
     <section>
       <button onClick={ goToDetails } type="button" data-testid={ cardTestId }>
         <h2 data-testid={ nameTestId }>{recipe.strMeal || recipe.strDrink}</h2>
-        <img
-          src={ recipe.strMealThumb || recipe.strDrinkThumb }
-          alt={ recipe.strMeal || recipe.strDrink }
-          data-testid={ imgTestId }
-          style={ { width: '125px' } }
-        />
+        <div>
+          <img
+            src={ recipe.strMealThumb || recipe.strDrinkThumb }
+            alt={ recipe.strMeal || recipe.strDrink }
+            data-testid={ imgTestId }
+          />
+        </div>
       </button>
     </section>
   );

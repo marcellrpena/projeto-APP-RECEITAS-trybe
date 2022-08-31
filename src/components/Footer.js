@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { BiDrink } from 'react-icons/bi';
 import { GiMeal } from 'react-icons/gi';
 import '../styles/Footer.css';
@@ -7,6 +7,7 @@ import { RecipesContext } from '../contexts/Contexts';
 
 function Footer() {
   const history = useHistory();
+  const { pathname } = useLocation();
   const { filterType, setFilterType } = useContext(RecipesContext);
   return (
     <footer style={ { position: 'fixed', bottom: '0px' } } data-testid="footer">
@@ -23,7 +24,7 @@ function Footer() {
         >
           <BiDrink
             data-testid="drinks-bottom-btn"
-            className={ filterType === 'drinks' ? 'Selected' : 'Unselected' }
+            className={ pathname.includes('drinks') ? 'Selected' : 'Unselected' }
           />
         </button>
       </div>
@@ -40,7 +41,7 @@ function Footer() {
         >
           <GiMeal
             data-testid="food-bottom-btn"
-            className={ filterType === 'foods' ? 'Selected' : 'Unselected' }
+            className={ pathname.includes('foods') ? 'Selected' : 'Unselected' }
           />
         </button>
       </div>

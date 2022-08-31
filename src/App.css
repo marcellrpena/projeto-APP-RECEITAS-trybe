@@ -8,10 +8,6 @@ header, header > div {
   display: flex;
 }
 
-body {
-  background: #ebeef5;
-}
-
 /* .meals {
   min-height: 100vh;
   width: 100%;

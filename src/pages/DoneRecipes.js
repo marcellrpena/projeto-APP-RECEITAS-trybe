@@ -4,7 +4,7 @@ import RecipesList from '../components/RecipesList';
 
 function DoneRecipes() {
   return (
-    <div>
+    <div className="done-recipes">
       <Header name="Done Recipes" />
       <RecipesList
         props={ {

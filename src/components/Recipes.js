@@ -1,5 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 
+import { IoMdInfinite } from 'react-icons/io';
+// import { TbMeat } from 'react-icons/tb';
+// import { FaCoffee } from 'react-icons/fa';
+// import { GiCupcake, GiRoastChicken, GiGoat } from 'react-icons/gi';
+
 import { useHistory } from 'react-router-dom';
 import { RecipesContext } from '../contexts/Contexts';
 import {
@@ -7,7 +12,6 @@ import {
   fetchRecipes,
   fetchCategories,
 } from '../services/fetchRecipes';
-import CategoryButton from './CategoryButton';
 import RecipeCard from './RecipeCard';
 
 function Recipes() {
@@ -46,36 +50,50 @@ function Recipes() {
 
   return (
     <div className="Recipes-Container">
-      <nav>
+      <nav className="nav-filter-buttons">
+        <button
+          className="filter-btn"
+          type="button"
+          onClick={ () => loadRecipes() }
+          dataTestid="All-category-filter"
+        >
+          <IoMdInfinite size="50px" />
+        </button>
         {categoriesToRender.length >= 1
           && categoriesToRender
             .slice(0, MAX_CATEGORIES)
             .map(({ strCategory }, index) => (
-              <CategoryButton
-                key={ `${index}-category` }
+              <button
+                key={ index }
+                type="button"
+                data-testid={ `${strCategory}-category-filter` }
                 onClick={ () => handleClickFilter(strCategory) }
-                categoryType={ strCategory }
                 dataTestid={ `${strCategory}-category-filter` }
-              />
+                className="filter-btn"
+              >
+                {/* { strCategory === 'Beef' && <TbMeat size="50px" />}
+                { strCategory === 'Breakfast' && <FaCoffee size="50px" />}
+                { strCategory === 'Chicken' && <GiRoastChicken size="50px" />}
+                { strCategory === 'Dessert' && <GiCupcake size="50px" />}
+                { strCategory === 'Goat' && <GiGoat size="50px" />} */}
+                { strCategory }
+              </button>
             ))}
-        <CategoryButton
-          categoryType="All"
-          onClick={ () => loadRecipes() }
-          dataTestid="All-category-filter"
-        />
       </nav>
       {recipesToRender.length >= 1 && (
         <main>
-          {recipesToRender.slice(0, MAX_RECIPES).map((recipe, index) => (
-            <RecipeCard
-              key={ `${index}-recipe` }
-              cardTestId={ `${index}-recipe-card` }
-              imgTestId={ `${index}-card-img` }
-              nameTestId={ `${index}-card-name` }
-              recipe={ recipe }
-              recipeType={ pathname }
-            />
-          ))}
+          <section className="listed-recipes">
+            {recipesToRender.slice(0, MAX_RECIPES).map((recipe, index) => (
+              <RecipeCard
+                key={ `${index}-recipe` }
+                cardTestId={ `${index}-recipe-card` }
+                imgTestId={ `${index}-card-img` }
+                nameTestId={ `${index}-card-name` }
+                recipe={ recipe }
+                recipeType={ pathname }
+              />
+            ))}
+          </section>
         </main>
       )}
     </div>

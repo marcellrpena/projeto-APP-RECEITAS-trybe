@@ -5,14 +5,20 @@
   justify-content: space-between;
   position: fixed;
   text-align: center;
+  top: 0;
   transition: 0.3s;
   width: 100%;
+  z-index: 10000;
+}
+
+.Main-Header h1 {
+  font-size: 2.2rem;
 }
 
 .Rounded {
   background: #f45d01;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
+  /* border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px; */
 }
 
 .Flat {
