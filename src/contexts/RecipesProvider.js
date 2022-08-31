@@ -5,6 +5,9 @@ import { RecipesContext } from './Contexts';
 function RecipesProvider({ children }) {
   const [isSearching, setIsSearching] = useState(false);
   const [filterType, setFilterType] = useState('foods');
+  const [isNewRecipe, setIsNewRecipe] = useState({
+    type: '', recipeId: '',
+  });
   const [recipes, setRecipes] = useState({
     meals: [],
     drinks: [],
@@ -23,6 +26,8 @@ function RecipesProvider({ children }) {
     setIsSearching,
     filterType,
     setFilterType,
+    isNewRecipe,
+    setIsNewRecipe,
   };
 
   return (

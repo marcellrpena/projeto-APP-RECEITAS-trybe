@@ -37,24 +37,24 @@
 
 .listed-recipes button {
   align-items: center;
-  flex-direction: column-reverse;
-  width: 200px;
-  display: flex;
-  margin: 20px;
-  justify-content: center;
-  border-radius: 10px;
-  overflow: hidden;
   border: none;
+  border-radius: 10px;
   box-shadow: 5px 5px 15px #a7a7a7;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+  margin: 20px;
+  overflow: hidden;
+  width: 200px;
 }
 
 .listed-recipes div {
-  width: 100%;
-  height: 100px;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
   align-items: center;
+  display: flex;
+  height: 100px;
+  justify-content: center;
+  overflow: hidden;
+  width: 100%;
 }
 
 .listed-recipes img {
@@ -64,3 +64,65 @@
 .listed-recipes h2 {
   margin-top: 25px;
 }
+
+.Side-Content {
+  align-items: center;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+}
+
+.Suggestions-Container {
+  border-radius: 16px;
+  overflow: hidden;
+  width: 315px;
+}
+
+.carousel-item {
+  height: 180px;
+}
+
+.carousel img {
+  border-radius: 16px;
+  height: 180px;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  width: 315px !important;
+}
+
+.carousel-control-prev span:nth-child( 2 ), .carousel-control-next span:nth-last-child( 1 ) {
+  display: none;
+}
+
+.carousel-inner { overflow: hidden; }
+
+.carousel-control-next, .carousel-control-prev {
+  background: black;
+  height: 40px;
+  opacity: 0.6;
+  text-align: center;
+  top: 12vh;
+  width: 40px;
+}
+
+.carousel-caption {
+  background: rgba(0, 0, 0, 0.507);
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  bottom: 0;
+  color: white;
+  height: 46px;
+  left: 0;
+  padding: 6px 0;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  z-index: 10;
+}
+
+.carousel-caption h3 {
+  font-weight: 700;
+}
+
+.carousel-indicators button { visibility: hidden; }

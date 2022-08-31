@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import clipboardCopy from 'clipboard-copy';
 import { HiOutlineHeart, HiHeart, HiOutlineShare } from 'react-icons/hi';
@@ -7,26 +7,27 @@ import {
   getRecipesInProgress,
   startRecipe,
 } from '../services/saveStorage';
+import SuggestedRecipe from '../components/SuggestedRecipe';
 import RecipeCardDetails from '../components/RecipeCardDetails';
-import useSuggestions from '../hooks/useSuggestions';
-import whiteHeartIcon from '../images/whiteHeartIcon.svg';
-import blackHeartIcon from '../images/blackHeartIcon.svg';
 import useFavorites from '../hooks/useFavorites';
 import useRecipe from '../hooks/useRecipe';
 import '../styles/Recipes.css';
 import '../styles/RecipeDetails.css';
+import { RecipesContext } from '../contexts/Contexts';
+import { fetchRecipeDetails } from '../services/fetchRecipes';
 
 function RecipeDetails() {
   const history = useHistory();
   const { pathname } = useLocation();
   const { id } = useParams();
-  const { suggestedRecipes, fetchSuggestions } = useSuggestions([], pathname);
   const { isFavorite, addRecipeToFavorites } = useFavorites(
     false,
     id,
     pathname,
   );
-  const { recipe, isFetched, ingredients, measures } = useRecipe(pathname, id);
+  const { isNewRecipe } = useContext(RecipesContext);
+  const { recipe, isFetched, ingredients,
+    measures, setRecipe } = useRecipe(pathname, id);
   const [isStartedRecipe, setIsStartedRecipe] = useState(false);
   const [isFinishedRecipe, setIsFinishedRecipe] = useState(false);
   const [copiedToClipboard, setCopiedToClipboard] = useState(false);
@@ -43,9 +44,15 @@ function RecipeDetails() {
   };
 
   useEffect(() => {
+    const renderNewRecipe = async () => {
+      const getRecipe = await fetchRecipeDetails(pathname, id);
+      setRecipe(getRecipe);
+    };
+    // precisa arrumar logica para renderizar a nova receita se clicar pelas recomendadas
+    renderNewRecipe();
     questIsStartedRecipe();
     questIsFinishedRecipe();
-  }, []);
+  }, [isNewRecipe]);
 
   const copyLink = () => {
     clipboardCopy(window.location.href);
@@ -93,7 +100,6 @@ function RecipeDetails() {
                 type="button"
                 data-testid="favorite-btn"
                 onClick={ () => addRecipeToFavorites(recipe) }
-                src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
               >
                 {isFavorite ? <HiHeart /> : <HiOutlineHeart />}
               </button>
@@ -132,7 +138,7 @@ function RecipeDetails() {
               {isStartedRecipe ? 'Continue Recipe' : 'Start Recipe'}
             </button>
           </section>
-          <section>
+          <section className="Side-Content">
             {pathname.includes('/food') && (
               <div className="video-style">
                 <iframe
@@ -146,21 +152,7 @@ function RecipeDetails() {
                 />
               </div>
             )}
-            {fetchSuggestions && (
-              <div className="Recommendations-Container">
-                {suggestedRecipes.map((item, index) => (
-                  <div
-                    key={ index }
-                    data-testid={ `${index}-recomendation-card` }
-                    className="Recommended-Recipe"
-                  >
-                    <p data-testid={ `${index}-recomendation-title` }>
-                      {item.strDrink || item.strMeal}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            )}
+            <SuggestedRecipe />
           </section>
         </>
       )}
