@@ -13,7 +13,7 @@ function Header({ name }) {
   // const [isSearching, setIsSearching] = useState(false);
   const names = ['Profile', 'Done Recipes', 'Favorite Recipes'];
   return (
-    <header className={ isSearching ? 'Rounded' : '' }>
+    <header className={ `Main-Header ${isSearching ? 'Rounded' : ''}` }>
       <div
         className={ `Header-Informations ${isSearching ? 'Flat' : 'Rounded'}` }
       >

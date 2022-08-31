@@ -1,19 +1,18 @@
-* {
-  background-color: #ebeef5;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+.Recipe-Details-Container {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1.2rem;
 }
 
 /* posicionamento geral dos elementos da tela */
 .recipe-Details {
+  background: #ebeef5;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 1.2rem;
 }
 
 /* RecipeCardDetails */
-/* imagem principal */
 .recipeImg {
   height: 170px;
   object-fit: cover;
@@ -38,10 +37,17 @@
   border: none;
 }
 
+.btn-share-favorite svg {
+  font-size: 1.8rem;
+}
+
 .btn-shareAndfavorite-position {
   display: flex;
   gap: 20px;
   padding-right: 10px;
+  position: absolute;
+  right: 0;
+  top: 30vh;
 }
 
 /* subtitulo ou categoria e span link copiado */

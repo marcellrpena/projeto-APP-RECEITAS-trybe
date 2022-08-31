@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { HiOutlineHeart, HiHeart, HiOutlineShare } from 'react-icons/hi';
 import clipboardCopy from 'clipboard-copy';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
@@ -90,17 +91,17 @@ function RecipeInProgress() {
                 alt="Share icon"
                 onClick={ () => shareRecipe() }
               >
-                <img src={ shareIcon } alt="Share icon" />
+                <HiOutlineShare />
               </button>
               <button
                 className="btn-share-favorite"
                 type="button"
                 data-testid="favorite-btn"
                 src={ isFavorite ? blackHeart : whiteHeart }
-                alt="Share icon"
+                alt="Favorite icon"
                 onClick={ addRecipeToFavorites }
               >
-                <img src={ isFavorite ? blackHeart : whiteHeart } alt="Share icon" />
+                {isFavorite ? <HiHeart /> : <HiOutlineHeart />}
               </button>
             </div>
           </header>
