@@ -163,7 +163,7 @@ function RecipeDetails() {
             data-testid="start-recipe-btn"
             disabled={ isFinishedRecipe }
             onClick={ startNewRecipe }
-            className="Start-Recipe-Btn"
+            className="btn btn-secondary btn-login"
           >
             {isStartedRecipe ? 'Continue Recipe' : 'Start Recipe'}
           </button>

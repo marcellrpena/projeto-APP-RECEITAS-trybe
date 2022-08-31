@@ -129,3 +129,14 @@
 .video-style {
   align-self: center;
 }
+
+.btn {
+  align-self: center;
+  width: 90%;
+}
+
+.btn-login {
+  background-color: #ffc107;
+  border-color: #ffc107;
+  color: black;
+}
