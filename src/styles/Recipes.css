@@ -1,3 +1,13 @@
+.Recipes-Container {
+  background-color: #ebeef5;
+  min-height: 90vh;
+  width: 100%;
+}
+
+.Recipes-Container nav {
+  margin-top: 10vh;
+}
+
 .Recommendations-Container {
   border: 1px solid red;
   display: flex;

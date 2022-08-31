@@ -2,6 +2,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { LoginContext } from '../contexts/Contexts';
+import logo from '../images/logo.png';
+import '../styles/Login.css';
 
 function Login() {
   const history = useHistory();
@@ -35,37 +37,42 @@ function Login() {
   }, [email, password, disableBtn]);
 
   return (
-    <main>
-      <Form onSubmit={ handleSubmit }>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label className="text-left">Email</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
-            data-testid="email-input"
-            value={ email }
-            onChange={ (e) => setEmail(e.target.value) }
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Password"
-            data-testid="password-input"
-            onChange={ (e) => setPassword(e.target.value) }
-          />
-        </Form.Group>
-        <Button
-          variant={ disableBtn ? 'secondary' : 'warning' }
-          type="submit"
-          disabled={ disableBtn }
-          data-testid="login-submit-btn"
-          style={ { width: '100%' } }
-        >
-          Login
-        </Button>
-      </Form>
+    <main className="Login-Container">
+      <div className="Logo-Container">
+        <img src={ logo } alt="Um coração com chapéu de chef, colher e garfo" />
+      </div>
+      <div className="Form-Container">
+        <h3>Entre para continuar</h3>
+        <Form onSubmit={ handleSubmit }>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label className="text-left">Enter your email</Form.Label>
+            <Form.Control
+              type="email"
+              placeholder="Ex.: foods@email.com"
+              data-testid="email-input"
+              value={ email }
+              onChange={ (e) => setEmail(e.target.value) }
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Your password"
+              data-testid="password-input"
+              onChange={ (e) => setPassword(e.target.value) }
+            />
+          </Form.Group>
+          <Button
+            type="submit"
+            disabled={ disableBtn }
+            data-testid="login-submit-btn"
+            className={ `${disableBtn ? 'btn-secondary' : 'btn-login'}` }
+          >
+            Login
+          </Button>
+        </Form>
+      </div>
     </main>
   );
 }

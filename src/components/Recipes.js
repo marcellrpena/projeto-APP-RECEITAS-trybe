@@ -45,7 +45,7 @@ function Recipes() {
     : categories.drinks;
 
   return (
-    <div>
+    <div className="Recipes-Container">
       <nav>
         {categoriesToRender.length >= 1
           && categoriesToRender

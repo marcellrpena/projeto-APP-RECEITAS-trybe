@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { RecipesContext } from './Contexts';
 
 function RecipesProvider({ children }) {
+  const [isSearching, setIsSearching] = useState(false);
+  const [filterType, setFilterType] = useState('foods');
   const [recipes, setRecipes] = useState({
     meals: [],
     drinks: [],
@@ -17,6 +19,10 @@ function RecipesProvider({ children }) {
     setRecipes,
     categories,
     setCategories,
+    isSearching,
+    setIsSearching,
+    filterType,
+    setFilterType,
   };
 
   return (

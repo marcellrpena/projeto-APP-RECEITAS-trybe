@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { shape, string } from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import { RecipesContext } from '../contexts/Contexts';
 
 function RecipeCard({ cardTestId, imgTestId, nameTestId, recipe, recipeType }) {
   const history = useHistory();
+  const { setIsSearching } = useContext(RecipesContext);
 
   const goToDetails = () => {
+    setIsSearching(false);
     history.push(`${recipeType}/${recipe.idMeal || recipe.idDrink}`);
   };
 

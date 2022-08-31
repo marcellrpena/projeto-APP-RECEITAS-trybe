@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { Form, InputGroup, Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { RecipesContext } from '../contexts/Contexts';
 import { fetchRecipesBy } from '../services/fetchRecipes';
@@ -10,7 +11,7 @@ function SearchBar() {
     search: '',
   });
 
-  const { recipes, setRecipes } = useContext(RecipesContext);
+  const { recipes, setRecipes, setIsSearching } = useContext(RecipesContext);
 
   const handleChange = ({ target }) => setUserSearch({
     ...userSearch,
@@ -19,6 +20,7 @@ function SearchBar() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSearching(false);
     const { pathname } = history.location;
     const recipeType = pathname.includes('foods') ? 'meals' : 'drinks';
     const recipesList = await fetchRecipesBy(pathname, userSearch);
@@ -45,57 +47,63 @@ function SearchBar() {
   }, [recipes]);
 
   return (
-    <div>
+    <div className="Search-Bar">
       <form onSubmit={ handleSubmit }>
-        <input
-          type="text"
-          name="search"
-          id="search-input"
-          placeholder="Search Recipe"
-          value={ userSearch.search }
-          data-testid="search-input"
-          onChange={ handleChange }
-        />
-        <label htmlFor="ingredient-radio">
-          <input
-            type="radio"
-            name="filter"
-            value="ingredient"
-            id="ingredient-radio"
-            data-testid="ingredient-search-radio"
+        <div className="Filters-Container">
+          <div className="mb-3">
+            <Form.Check
+              type="radio"
+              name="filter"
+              value="ingredient"
+              label="Ingredient"
+              id="ingredient-radio"
+              data-testid="ingredient-search-radio"
+              onChange={ handleChange }
+            />
+          </div>
+          <div className="mb-3">
+            <Form.Check
+              type="radio"
+              name="filter"
+              value="search"
+              label="Name"
+              id="search-radio"
+              data-testid="name-search-radio"
+              onChange={ handleChange }
+            />
+          </div>
+          <div className="mb-3">
+            <Form.Check
+              type="radio"
+              name="filter"
+              value="first-letter"
+              label="First Letter"
+              id="first-letter-radio"
+              data-testid="first-letter-search-radio"
+              onChange={ handleChange }
+            />
+          </div>
+        </div>
+        <InputGroup className="mb-3">
+          <Form.Control
+            placeholder="Search Recipe"
+            id="search-input"
+            name="search"
+            aria-label="Search Recipe"
+            value={ userSearch.search }
+            data-testid="search-input"
             onChange={ handleChange }
+            aria-describedby="basic-addon1"
           />
-          Ingredients
-        </label>
-        <label htmlFor="search-radio">
-          <input
-            type="radio"
-            name="filter"
-            value="search"
-            id="search-radio"
-            data-testid="name-search-radio"
-            onChange={ handleChange }
-          />
-          Name
-        </label>
-        <label htmlFor="first-letter-radio">
-          <input
-            type="radio"
-            name="filter"
-            value="first-letter"
-            id="first-letter-radio"
-            data-testid="first-letter-search-radio"
-            onChange={ handleChange }
-          />
-          First Letter
-        </label>
-        <button
+        </InputGroup>
+        <Button
           type="submit"
+          variant="light"
           disabled={ !(userSearch.search && userSearch.filter) }
           data-testid="exec-search-btn"
         >
           Search
-        </button>
+        </Button>
       </form>
     </div>
   );

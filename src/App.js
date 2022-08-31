@@ -6,7 +6,7 @@ import Content from './routes';
 
 function App() {
   return (
-    <div className="meals">
+    <div>
       <Content />
     </div>
   );
