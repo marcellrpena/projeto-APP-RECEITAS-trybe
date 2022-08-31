@@ -6,6 +6,7 @@ import whiteHeart from '../images/whiteHeartIcon.svg';
 import blackHeart from '../images/blackHeartIcon.svg';
 import useFavorites from '../hooks/useFavorites';
 import useRecipe from '../hooks/useRecipe';
+import '../styles/RecipeInProgress.css';
 import {
   doneRecipe,
   getRecipesInProgress,
@@ -66,19 +67,23 @@ function RecipeInProgress() {
   return (
     <div>
       {isFetched && (
-        <>
+        <div className="recipe-in-progress">
           <img
+            className="recipeImg"
             src={ recipe.strMealThumb || recipe.strDrinkThumb }
             alt={ recipe.strMeal || recipe.strDrink }
             data-testid="recipe-photo"
-            style={ { width: '125px' } }
           />
-          <header>
-            <div>
-              <h4 data-testid="recipe-title">
-                {recipe.strMeal || recipe.strDrink}
-              </h4>
+          <header className="title-share-favorite">
+            <h4
+              data-testid="recipe-title"
+              className="title"
+            >
+              {recipe.strMeal || recipe.strDrink}
+            </h4>
+            <div className="btn-shareAndfavorite-position">
               <button
+                className="btn-share-favorite"
                 type="button"
                 data-testid="share-btn"
                 src={ shareIcon }
@@ -88,53 +93,68 @@ function RecipeInProgress() {
                 <img src={ shareIcon } alt="Share icon" />
               </button>
               <button
+                className="btn-share-favorite"
                 type="button"
                 data-testid="favorite-btn"
                 src={ isFavorite ? blackHeart : whiteHeart }
                 alt="Share icon"
                 onClick={ addRecipeToFavorites }
               >
-                <img
-                  src={ isFavorite ? blackHeart : whiteHeart }
-                  alt="Share icon"
-                />
+                <img src={ isFavorite ? blackHeart : whiteHeart } alt="Share icon" />
               </button>
-              {linkCopied && <span>Link copied!</span>}
             </div>
-            <h6 data-testid="recipe-category">{recipe.strCategory}</h6>
           </header>
-          <h4>Ingredients</h4>
-          {!refresh
-            && ingredients.map((ingredient, index) => (
-              <div key={ index }>
-                <label
-                  data-testid={ `${index}-ingredient-step` }
-                  htmlFor={ ingredient }
-                >
-                  <input
-                    type="checkbox"
-                    name={ ingredient }
-                    id={ ingredient }
-                    checked={ checkSaved.includes(ingredient) }
-                    onChange={ (e) => setProgressRecipe(e) }
-                  />
-                  {`${ingredient} - ${measures[index]}`}
-                </label>
-              </div>
-            ))}
-          <section>
-            <h4>Instructions</h4>
-            <p data-testid="instructions">{recipe.strInstructions}</p>
-          </section>
+          <div className="span-category">
+            <h6
+              data-testid="recipe-category"
+              className="category"
+            >
+              {recipe.strCategory}
+            </h6>
+            {linkCopied && <p className="span-copied">Link copied!</p>}
+          </div>
+          <h4 className="title-ingredients">Ingredients</h4>
+          <div className="ingredient-list">
+            {!refresh
+              && ingredients.map((ingredient, index) => (
+                <div key={ index } className="ingredient-check">
+                  <label
+                    data-testid={ `${index}-ingredient-step` }
+                    htmlFor={ ingredient }
+                    className="margin-zero ingredient-check"
+                  >
+                    <input
+                      type="checkbox"
+                      name={ ingredient }
+                      id={ ingredient }
+                      checked={ checkSaved.includes(ingredient) }
+                      onChange={ (e) => setProgressRecipe(e) }
+                      className="ingredient-check"
+                    />
+                    {` ${ingredient} - ${measures[index]}`}
+                  </label>
+                </div>
+              ))}
+          </div>
+          <h4 className="title-instructions">Instructions</h4>
+          <div className="instructions-text">
+            <p
+              data-testid="instructions"
+              className="text-style"
+            >
+              {recipe.strInstructions}
+            </p>
+          </div>
           <button
             type="button"
             data-testid="finish-recipe-btn"
             disabled={ ingredients.length !== checkSaved.length }
             onClick={ finishRecipe }
+            className="btn btn-secondary btn-login"
           >
             Finish Recipe
           </button>
-        </>
+        </div>
       )}
     </div>
   );

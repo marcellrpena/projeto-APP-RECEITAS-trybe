@@ -14,6 +14,7 @@ import blackHeartIcon from '../images/blackHeartIcon.svg';
 import useFavorites from '../hooks/useFavorites';
 import useRecipe from '../hooks/useRecipe';
 import '../styles/Recipes.css';
+import '../styles/RecipeDetails.css';
 
 function RecipeDetails() {
   const history = useHistory();
@@ -62,48 +63,75 @@ function RecipeDetails() {
   };
 
   return (
-    <main className="Recipe-Details-Container">
+    <main>
       {isFetched && (
-        <section className="Recipe-Container">
+        <section className="recipe-Details">
           <RecipeCardDetails
             imgTestId="recipe-photo"
             nameTestId="recipe-title"
             recipe={ recipe }
             showCategory
           />
-          <div className="Recipe-Buttons-Container">
-            {copiedToClipboard && <span>Link copied!</span>}
-            <button type="button" data-testid="share-btn" onClick={ copyLink }>
-              <img src={ shareIcon } alt="Share icon" />
-            </button>
-            <button
-              type="button"
-              data-testid="favorite-btn"
-              onClick={ () => addRecipeToFavorites(recipe) }
-              src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
+          <div className="title-share-favorite">
+            <h2
+              className="title"
+              data-testid="recipe-title"
             >
-              {isFavorite ? (
-                <img src={ blackHeartIcon } alt="Black heart icon" />
-              ) : (
-                <img src={ whiteHeartIcon } alt="White heart icon" />
-              )}
-            </button>
+              {recipe.strMeal || recipe.strDrink}
+            </h2>
+            <div className="btn-shareAndfavorite-position">
+              <button
+                className="btn-share-favorite"
+                type="button"
+                data-testid="share-btn"
+                onClick={ copyLink }
+              >
+                <img src={ shareIcon } alt="Share icon" />
+              </button>
+              <button
+                className="btn-share-favorite"
+                type="button"
+                data-testid="favorite-btn"
+                onClick={ () => addRecipeToFavorites(recipe) }
+                src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
+              >
+                {isFavorite ? (
+                  <img src={ blackHeartIcon } alt="Black heart icon" />
+                ) : (
+                  <img src={ whiteHeartIcon } alt="White heart icon" />
+                )}
+              </button>
+            </div>
           </div>
-          <div className="Ingredients-Container">
+          <div className="span-category">
+            <p className="category" data-testid="recipe-category">
+              {recipe.strAlcoholic || recipe.strCategory}
+            </p>
+            {copiedToClipboard && <p className="span-copied">Link copied!</p>}
+          </div>
+          <h4 className="title-ingredients">Ingredients</h4>
+          <div className="ingredient-list">
             {ingredients.map((item, index) => (
               <p
                 key={ index }
                 data-testid={ `${index}-ingredient-name-and-measure` }
+                className="ingredient-check margin-zero"
               >
                 {`${item}${measures[index] ? `: ${measures[index]}` : ''}`}
               </p>
             ))}
           </div>
-          <div className="Instructions-Container">
-            <p data-testid="instructions">{recipe.strInstructions}</p>
+          <h4 className="title-instructions">Instructions</h4>
+          <div className="instructions-text">
+            <p
+              data-testid="instructions"
+              className="text-style"
+            >
+              {recipe.strInstructions}
+            </p>
           </div>
           {pathname.includes('/food') && (
-            <div className="Video-Container">
+            <div className="video-style">
               <iframe
                 title={ recipe.strMeal }
                 frameBorder="0"
@@ -135,7 +163,7 @@ function RecipeDetails() {
             data-testid="start-recipe-btn"
             disabled={ isFinishedRecipe }
             onClick={ startNewRecipe }
-            className="Start-Recipe-Btn"
+            className="btn btn-secondary btn-login"
           >
             {isStartedRecipe ? 'Continue Recipe' : 'Start Recipe'}
           </button>
