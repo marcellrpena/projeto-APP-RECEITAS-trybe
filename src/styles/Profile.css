@@ -8,3 +8,20 @@
   align-items: center;
   flex-flow: column wrap;
 }
+
+/* botões */
+.all-btn-profile {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 30px;
+}
+
+.btn-login {
+  background-color: #ffc107;
+  border-color: #ffc107;
+  color: black;
+  height: 30px;
+  width: 150%;
+}

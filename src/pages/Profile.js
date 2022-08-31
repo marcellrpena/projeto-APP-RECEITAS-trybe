@@ -21,11 +21,12 @@ function Profile() {
         >
           {email.email}
         </h5>
-        <section>
+        <section className="all-btn-profile">
           <button
             type="button"
             data-testid="profile-done-btn"
             onClick={ () => history.push('/done-recipes') }
+            className="btn-login"
           >
             Done Recipes
           </button>
@@ -33,6 +34,7 @@ function Profile() {
             type="button"
             data-testid="profile-favorite-btn"
             onClick={ () => history.push('/favorite-recipes') }
+            className="btn-login"
           >
             Favorite Recipes
           </button>
@@ -40,6 +42,7 @@ function Profile() {
             type="button"
             data-testid="profile-logout-btn"
             onClick={ logoutApp }
+            className="btn-login"
           >
             Logout
           </button>
