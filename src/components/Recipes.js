@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 
 import { IoMdInfinite } from 'react-icons/io';
-import { TbMeat } from 'react-icons/tb';
-import { FaCoffee } from 'react-icons/fa';
-import { GiCupcake, GiRoastChicken, GiGoat } from 'react-icons/gi';
+// import { TbMeat } from 'react-icons/tb';
+// import { FaCoffee } from 'react-icons/fa';
+// import { GiCupcake, GiRoastChicken, GiGoat } from 'react-icons/gi';
 
 import { useHistory } from 'react-router-dom';
 import { RecipesContext } from '../contexts/Contexts';
