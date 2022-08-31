@@ -55,7 +55,7 @@ function Recipes() {
           className="filter-btn"
           type="button"
           onClick={ () => loadRecipes() }
-          dataTestid="All-category-filter"
+          data-testid="All-category-filter"
         >
           <IoMdInfinite size="50px" />
         </button>
@@ -68,7 +68,6 @@ function Recipes() {
                 type="button"
                 data-testid={ `${strCategory}-category-filter` }
                 onClick={ () => handleClickFilter(strCategory) }
-                dataTestid={ `${strCategory}-category-filter` }
                 className="filter-btn"
               >
                 {/* { strCategory === 'Beef' && <TbMeat size="50px" />}

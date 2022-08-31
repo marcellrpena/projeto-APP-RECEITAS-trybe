@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import clipboardCopy from 'clipboard-copy';
-import { HiOutlineHeart, HiHeart, HiOutlineShare } from 'react-icons/hi';
+import { HiOutlineHeart, HiHeart, HiOutlineShare, HiShare } from 'react-icons/hi';
 import {
   getDoneRecipes,
   getRecipesInProgress,
@@ -14,7 +14,6 @@ import useRecipe from '../hooks/useRecipe';
 import '../styles/Recipes.css';
 import '../styles/RecipeDetails.css';
 import { RecipesContext } from '../contexts/Contexts';
-import { fetchRecipeDetails } from '../services/fetchRecipes';
 
 function RecipeDetails() {
   const history = useHistory();
@@ -26,8 +25,7 @@ function RecipeDetails() {
     pathname,
   );
   const { isNewRecipe } = useContext(RecipesContext);
-  const { recipe, isFetched, ingredients,
-    measures, setRecipe } = useRecipe(pathname, id);
+  const { recipe, isFetched, ingredients, measures } = useRecipe(pathname, id);
   const [isStartedRecipe, setIsStartedRecipe] = useState(false);
   const [isFinishedRecipe, setIsFinishedRecipe] = useState(false);
   const [copiedToClipboard, setCopiedToClipboard] = useState(false);
@@ -44,19 +42,13 @@ function RecipeDetails() {
   };
 
   useEffect(() => {
-    const renderNewRecipe = async () => {
-      const getRecipe = await fetchRecipeDetails(pathname, id);
-      setRecipe(getRecipe);
-    };
-    // precisa arrumar logica para renderizar a nova receita se clicar pelas recomendadas
-    renderNewRecipe();
     questIsStartedRecipe();
     questIsFinishedRecipe();
   }, [isNewRecipe]);
 
   const copyLink = () => {
     clipboardCopy(window.location.href);
-    setCopiedToClipboard(!copiedToClipboard);
+    setCopiedToClipboard(true);
   };
 
   const getEmbedId = () => {
@@ -93,7 +85,7 @@ function RecipeDetails() {
                 onClick={ copyLink }
                 alt="Share icon"
               >
-                <HiOutlineShare />
+                {copiedToClipboard ? <HiShare /> : <HiOutlineShare /> }
               </button>
               <button
                 className="btn-share-favorite"
@@ -108,7 +100,6 @@ function RecipeDetails() {
               <p className="category" data-testid="recipe-category">
                 {recipe.strAlcoholic || recipe.strCategory}
               </p>
-              {copiedToClipboard && <p className="span-copied">Link copied!</p>}
             </div>
             <h4 className="title-ingredients">Ingredients</h4>
             <div className="ingredient-list">
@@ -141,6 +132,7 @@ function RecipeDetails() {
           <section className="Side-Content">
             {pathname.includes('/food') && (
               <div className="video-style">
+                <h3>Check this video!</h3>
                 <iframe
                   title={ recipe.strMeal }
                   frameBorder="0"

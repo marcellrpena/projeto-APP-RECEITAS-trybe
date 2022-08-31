@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { HiOutlineHeart, HiHeart, HiOutlineShare } from 'react-icons/hi';
+import { HiOutlineHeart, HiHeart, HiOutlineShare, HiShare } from 'react-icons/hi';
 import clipboardCopy from 'clipboard-copy';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
@@ -56,8 +56,6 @@ function RecipeInProgress() {
   const shareRecipe = () => {
     setLinkCopied(true);
     clipboardCopy(window.location.href.split('/in-progress')[0]);
-    setTimeout(() => setLinkCopied(false), INTERVAL_COPY_TAG);
-    clearTimeout();
   };
 
   const finishRecipe = () => {
@@ -89,9 +87,9 @@ function RecipeInProgress() {
                 data-testid="share-btn"
                 src={ shareIcon }
                 alt="Share icon"
-                onClick={ () => shareRecipe() }
+                onClick={ shareRecipe }
               >
-                <HiOutlineShare />
+                { linkCopied ? <HiShare /> : <HiOutlineShare /> }
               </button>
               <button
                 className="btn-share-favorite"
@@ -112,7 +110,6 @@ function RecipeInProgress() {
             >
               {recipe.strCategory}
             </h6>
-            {linkCopied && <p className="span-copied">Link copied!</p>}
           </div>
           <h4 className="title-ingredients">Ingredients</h4>
           <div className="ingredient-list">

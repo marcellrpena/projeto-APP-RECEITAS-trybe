@@ -9,6 +9,16 @@
   flex-flow: column wrap;
 }
 
+.User-Informations {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.User-Informations img {
+  width: 160px;
+}
+
 /* botões */
 .all-btn-profile {
   align-items: center;
@@ -18,10 +28,13 @@
   padding-top: 30px;
 }
 
+.all-btn-profile button {
+  width: 200px;
+}
+
 .btn-login {
   background-color: #ffc107;
   border-color: #ffc107;
   color: black;
-  height: 30px;
   width: 150%;
 }

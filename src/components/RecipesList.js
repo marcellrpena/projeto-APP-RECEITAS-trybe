@@ -11,7 +11,7 @@ import '../styles/RecipesList.css';
 
 function RecipesList({ props: { key, useTags, favoriteBtn } }) {
   const history = useHistory();
-  // const [copyed, setCopyed] = useState(false);
+  // const [copiedToClipboard, setCopiedToClipboard] = useState(false);
   const [recipesList, setRecipesList] = useState([]);
   const [filterSelected, setFilterSelected] = useState({
     all: true,
@@ -27,7 +27,7 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
     const domain = window.location.href.split(routeIdentifier)[0];
     const link = `${domain}${getPath(type)}/${id}`;
     clipboardCopy(link);
-    // setCopyed(true);
+    // setCopiedToClipboard(true);
   };
 
   const applyFilter = (recipeType) => (
@@ -154,13 +154,11 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
                   >
                     <h3 data-testid={ `${index}-horizontal-name` }>{name}</h3>
                   </button>
-
                   {!favoriteBtn && (
                     <p data-testid={ `${index}-horizontal-done-date` }>
                       {`Done in: ${doneDate}`}
                     </p>
                   )}
-
                   <div className="tags">
                     {useTags
                       && tags.map((tag) => (
@@ -173,7 +171,6 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
                       ))}
                   </div>
                 </div>
-
                 <div className="share-btn">
                   <button
                     type="button"
@@ -183,7 +180,6 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
                   >
                     <HiOutlineShare />
                   </button>
-
                   {favoriteBtn && (
                     <button
                       type="button"
@@ -199,14 +195,6 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
             ),
           )}
         </ul>
-        {/* {copyed && (
-          <div style={ { display: 'flex' } }>
-            <p>Link copied!</p>
-            <button type="button" onClick={ () => setCopyed(false) }>
-              x
-            </button>
-          </div>
-        )} */}
       </main>
     </>
   );

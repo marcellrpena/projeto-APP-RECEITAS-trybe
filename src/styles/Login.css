@@ -44,6 +44,7 @@
 
 .Logo-Container img {
   width: 320px;
+  z-index: 1000;
 }
 
 .btn-login, .btn-login:hover, .btn-login:active {
@@ -54,6 +55,7 @@
 @media screen and ( max-width : 800px ) {
 
   .Form-Container {
+    align-items: center;
     height: 100%;
     padding: 0;
     width: 100%;
@@ -70,8 +72,12 @@
   }
 
   .Login-Container form {
+    background: rgb(248, 248, 248);
+    border-radius: 12px;
+    box-shadow: 2px 5px 4px #47464777;
     position: absolute;
     top: 30vh;
+    width: 90%;
   }
 
   .Logo-Container img {
