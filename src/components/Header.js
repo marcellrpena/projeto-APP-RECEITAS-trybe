@@ -1,49 +1,58 @@
-import React, { useState } from 'react';
-import { string } from 'prop-types';
+import React, { useContext } from 'react';
+import { bool, string } from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import searchIcon from '../images/searchIcon.svg';
-import profileIcon from '../images/profileIcon.svg';
+import { FaUser, FaSearch, FaHome } from 'react-icons/fa';
+import { RecipesContext } from '../contexts/Contexts';
 import SearchBar from './SearchBar';
+import '../styles/Header.css';
 
-function Header({ name }) {
+function Header({ name, showHomeBtn }) {
   const history = useHistory();
 
-  const [isSearching, setIsSearching] = useState(false);
+  const { isSearching, setIsSearching } = useContext(RecipesContext);
   const names = ['Profile', 'Done Recipes', 'Favorite Recipes'];
   return (
-    <header>
-      <div>
-        <button
-          type="button"
-          data-testid="profile-top-btn"
-          onClick={ () => history.push('/profile') }
-          src={ profileIcon }
-          alt="User icon"
-        >
-          <img src={ profileIcon } alt="User icon" />
-        </button>
+    <header className={ `Main-Header ${isSearching ? 'Rounded' : ''}` }>
+      <div
+        className={ `Header-Informations ${isSearching ? 'Flat' : 'Rounded'}` }
+      >
+        {!names.includes(name) && (
+          <div className="Header-Button">
+            <button
+              type="button"
+              alt="Search Icon"
+              data-testid="search-top-btn"
+              onClick={ () => setIsSearching(!isSearching) }
+            >
+              <FaSearch />
+            </button>
+          </div>
+        )}
+        {showHomeBtn && (
+          <FaHome
+            style={ { fontSize: '2rem' } }
+            onClick={ () => history.push('/foods') }
+          />
+        )}
         <h1 data-testid="page-title">{name}</h1>
-      </div>
-      {!names.includes(name) && (
-        <div>
+        <div className="Header-Button">
           <button
             type="button"
-            src={ searchIcon }
-            alt="Search Icon"
-            data-testid="search-top-btn"
-            onClick={ () => setIsSearching(!isSearching) }
+            data-testid="profile-top-btn"
+            onClick={ () => history.push('/profile') }
+            alt="User icon"
           >
-            <img src={ searchIcon } alt="Search Icon" />
+            <FaUser />
           </button>
-          {isSearching && <SearchBar history={ history } />}
         </div>
-      )}
+      </div>
+      {isSearching && <SearchBar history={ history } />}
     </header>
   );
 }
 
-Header.defaultProps = { name: '' };
+Header.defaultProps = { name: '', showHomeBtn: false };
 
-Header.propTypes = { name: string };
+Header.propTypes = { name: string, showHomeBtn: bool };
 
 export default Header;

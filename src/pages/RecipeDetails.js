@@ -1,30 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import clipboardCopy from 'clipboard-copy';
+import { HiOutlineHeart, HiHeart, HiOutlineShare, HiShare } from 'react-icons/hi';
 import {
   getDoneRecipes,
   getRecipesInProgress,
   startRecipe,
 } from '../services/saveStorage';
+import SuggestedRecipe from '../components/SuggestedRecipe';
 import RecipeCardDetails from '../components/RecipeCardDetails';
-import useSuggestions from '../hooks/useSuggestions';
-import shareIcon from '../images/shareIcon.svg';
-import whiteHeartIcon from '../images/whiteHeartIcon.svg';
-import blackHeartIcon from '../images/blackHeartIcon.svg';
 import useFavorites from '../hooks/useFavorites';
 import useRecipe from '../hooks/useRecipe';
 import '../styles/Recipes.css';
+import '../styles/RecipeDetails.css';
+import { RecipesContext } from '../contexts/Contexts';
+import GoBackButton from '../components/GoBackButton';
 
 function RecipeDetails() {
   const history = useHistory();
   const { pathname } = useLocation();
   const { id } = useParams();
-  const { suggestedRecipes, fetchSuggestions } = useSuggestions([], pathname);
   const { isFavorite, addRecipeToFavorites } = useFavorites(
     false,
     id,
     pathname,
   );
+  const { isNewRecipe } = useContext(RecipesContext);
   const { recipe, isFetched, ingredients, measures } = useRecipe(pathname, id);
   const [isStartedRecipe, setIsStartedRecipe] = useState(false);
   const [isFinishedRecipe, setIsFinishedRecipe] = useState(false);
@@ -44,11 +45,11 @@ function RecipeDetails() {
   useEffect(() => {
     questIsStartedRecipe();
     questIsFinishedRecipe();
-  }, []);
+  }, [isNewRecipe]);
 
   const copyLink = () => {
     clipboardCopy(window.location.href);
-    setCopiedToClipboard(!copiedToClipboard);
+    setCopiedToClipboard(true);
   };
 
   const getEmbedId = () => {
@@ -64,82 +65,90 @@ function RecipeDetails() {
   return (
     <main className="Recipe-Details-Container">
       {isFetched && (
-        <section className="Recipe-Container">
-          <RecipeCardDetails
-            imgTestId="recipe-photo"
-            nameTestId="recipe-title"
-            recipe={ recipe }
-            showCategory
-          />
-          <div className="Recipe-Buttons-Container">
-            {copiedToClipboard && <span>Link copied!</span>}
-            <button type="button" data-testid="share-btn" onClick={ copyLink }>
-              <img src={ shareIcon } alt="Share icon" />
-            </button>
-            <button
-              type="button"
-              data-testid="favorite-btn"
-              onClick={ () => addRecipeToFavorites(recipe) }
-              src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
-            >
-              {isFavorite ? (
-                <img src={ blackHeartIcon } alt="Black heart icon" />
-              ) : (
-                <img src={ whiteHeartIcon } alt="White heart icon" />
-              )}
-            </button>
-          </div>
-          <div className="Ingredients-Container">
-            {ingredients.map((item, index) => (
-              <p
-                key={ index }
-                data-testid={ `${index}-ingredient-name-and-measure` }
-              >
-                {`${item}${measures[index] ? `: ${measures[index]}` : ''}`}
-              </p>
-            ))}
-          </div>
-          <div className="Instructions-Container">
-            <p data-testid="instructions">{recipe.strInstructions}</p>
-          </div>
-          {pathname.includes('/food') && (
-            <div className="Video-Container">
-              <iframe
-                title={ recipe.strMeal }
-                frameBorder="0"
-                data-testid="video"
-                width="320"
-                height="144"
-                allowFullScreen
-                src={ `https://www.youtube.com/embed/${getEmbedId()}` }
-              />
-            </div>
-          )}
-          {fetchSuggestions && (
-            <div className="Recommendations-Container">
-              {suggestedRecipes.map((item, index) => (
-                <div
-                  key={ index }
-                  data-testid={ `${index}-recomendation-card` }
-                  className="Recommended-Recipe"
+        <>
+          <section className="recipe-Details">
+            <GoBackButton />
+            <RecipeCardDetails
+              imgTestId="recipe-photo"
+              nameTestId="recipe-title"
+              recipe={ recipe }
+              showCategory
+            />
+            <div className="title-share-favorite">
+              <h2 className="title" data-testid="recipe-title">
+                {recipe.strMeal || recipe.strDrink}
+              </h2>
+              <div className="btn-shareAndfavorite-position">
+                <button
+                  className="btn-share-favorite"
+                  type="button"
+                  data-testid="share-btn"
+                  onClick={ copyLink }
+                  alt="Share icon"
                 >
-                  <p data-testid={ `${index}-recomendation-title` }>
-                    {item.strDrink || item.strMeal}
-                  </p>
-                </div>
+                  {copiedToClipboard ? <HiShare /> : <HiOutlineShare /> }
+                </button>
+                <button
+                  className="btn-share-favorite"
+                  type="button"
+                  data-testid="favorite-btn"
+                  onClick={ () => addRecipeToFavorites(recipe) }
+                >
+                  {isFavorite ? <HiHeart /> : <HiOutlineHeart />}
+                </button>
+              </div>
+            </div>
+            <div className="span-category">
+              <p className="category" data-testid="recipe-category">
+                {recipe.strAlcoholic || recipe.strCategory}
+              </p>
+            </div>
+            <h4 className="title-ingredients">Ingredients</h4>
+            <div className="ingredient-list">
+              {ingredients.map((item, index) => (
+                <p
+                  key={ index }
+                  data-testid={ `${index}-ingredient-name-and-measure` }
+                  className="margin-zero"
+                >
+                  {`${item}${measures[index] ? `: ${measures[index]}` : ''}`}
+                </p>
               ))}
             </div>
-          )}
-          <button
-            type="button"
-            data-testid="start-recipe-btn"
-            disabled={ isFinishedRecipe }
-            onClick={ startNewRecipe }
-            className="Start-Recipe-Btn"
-          >
-            {isStartedRecipe ? 'Continue Recipe' : 'Start Recipe'}
-          </button>
-        </section>
+            <h4 className="title-instructions">Instructions</h4>
+            <div className="instructions-text">
+              <p data-testid="instructions" className="text-style">
+                {recipe.strInstructions}
+              </p>
+            </div>
+            <button
+              type="button"
+              data-testid="start-recipe-btn"
+              disabled={ isFinishedRecipe }
+              onClick={ startNewRecipe }
+              className="btn btn-secondary btn-login"
+            >
+              {isStartedRecipe ? 'Continue Recipe' : 'Start Recipe'}
+            </button>
+          </section>
+          <section className="Side-Content">
+            {pathname.includes('/food') && (
+              <div className="video-style">
+                <h3>Check this video!</h3>
+                <iframe
+                  title={ recipe.strMeal }
+                  frameBorder="0"
+                  data-testid="video"
+                  width="320"
+                  height="144"
+                  allowFullScreen
+                  src={ `https://www.youtube.com/embed/${getEmbedId()}` }
+                />
+              </div>
+            )}
+            <SuggestedRecipe />
+          </section>
+        </>
       )}
     </main>
   );

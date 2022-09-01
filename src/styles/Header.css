@@ -1,0 +1,67 @@
+.Main-Header {
+  color: white;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  position: fixed;
+  text-align: center;
+  top: 0;
+  transition: 0.3s;
+  width: 100%;
+  z-index: 10000;
+}
+
+.Main-Header h1 {
+  font-size: 2rem;
+  margin: 0;
+}
+
+.Rounded {
+  background: #f45d01;
+}
+
+.Flat {
+  border-radius: 0;
+}
+
+.Header-Informations {
+  align-items: center;
+  background: #f45d01;
+  justify-content: space-between;
+  min-height: 10vh;
+  padding: 0.4rem 1rem 0;
+  transition: 0.3s;
+  width: 100%;
+}
+
+.Header-Button button, .Footer-Button button {
+  background: none;
+  border: none;
+}
+
+.Header-Button button svg {
+  color: rgb(243, 243, 243);
+  font-size: 2rem;
+}
+
+.Search-Bar {
+  padding: 1rem;
+  width: 100%;
+}
+
+.Search-Bar form {
+  display: flex;
+  flex-flow: column wrap;
+  font-size: 18px;
+  width: 100%;
+}
+
+.Filters-Container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.form-check {
+  display: flex;
+}

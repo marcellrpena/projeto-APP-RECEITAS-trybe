@@ -1,0 +1,27 @@
+footer {
+  background: rgb(248, 248, 248);
+  border-radius: 14px;
+  bottom: 0;
+  box-shadow: 1px 5px 4px #47464777;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-evenly;
+  margin-bottom: 12px;
+  padding: 0.6rem;
+  position: fixed;
+  width: 80%;
+}
+
+.Footer-Button button svg {
+  font-size: 2.6rem;
+}
+
+.Unselected {
+  color: #1c3144;
+  opacity: 0.4;
+}
+
+.Selected {
+  color: #152736;
+  filter: brightness(60%);
+}

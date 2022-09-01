@@ -1,0 +1,127 @@
+main {
+  background-color: #ebeef5;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.nav-filter-buttons {
+  align-items: center;
+  background-color: #f77f00;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  margin-top: 10vh;
+}
+
+.filter-btn {
+  background: none;
+  border: none;
+  border-radius: 10px;
+  color: #ebeef5;
+  font-weight: 600;
+  padding: 10px 15px;
+  size: 50px;
+  width: 30%;
+}
+
+.recipes-list {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+
+.recipe {
+  align-items: center;
+  border-radius: 15px;
+  box-shadow: 5px 5px 15px #a7a7a7;
+  display: flex;
+  height: 200px;
+  justify-content: space-between;
+  margin: 20px 0;
+  overflow: hidden;
+  position: relative;
+  width: 95vw;
+}
+
+.recipe-img-btn {
+  background: none;
+  border: none;
+  display: flex;
+  height: 250px;
+  justify-content: center;
+  overflow: hidden;
+  width: 220px;
+}
+
+.recipe-img {
+  height: 250px;
+}
+
+.recipe-info {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-evenly;
+  max-width: 50%;
+  padding: 5px;
+  padding-left: 10px;
+  width: 400px;
+}
+
+.recipe-info p {
+  color: #959595;
+  margin: 1px 0;
+  max-inline-size: 80%;
+}
+
+.recipe-info button {
+  background-color: #ebeef5;
+  border: none;
+  margin: 0;
+}
+
+.recipe-title {
+  align-items: flex-start;
+  display: flex;
+  justify-content: start;
+  margin: 0;
+  text-align: left;
+}
+
+.recipe-title h3 { font-size: 22px; }
+
+.share-btn button {
+  background: none;
+  border: none;
+  display: flex;
+  font-size: 2rem;
+  position: absolute;
+  right: 6px;
+  top: 3px;
+}
+
+.share-btn button:nth-child( 2 ) {
+  top: 160px;
+}
+
+.tags {
+  display: flex;
+  justify-content: space-around;
+  margin: 6px 0;
+}
+
+.tags p {
+  background-color: #1c3144;
+  border-radius: 15px;
+  color: #ebeef5;
+  /* margin: 5px 20px 0 0; */
+  padding: 5px 15px;
+}
+
+.done-recipes {
+  height: 100vh;
+  width: 100%;
+}

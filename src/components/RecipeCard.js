@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { shape, string } from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import { RecipesContext } from '../contexts/Contexts';
 
 function RecipeCard({ cardTestId, imgTestId, nameTestId, recipe, recipeType }) {
   const history = useHistory();
+  const { setIsSearching } = useContext(RecipesContext);
 
   const goToDetails = () => {
+    setIsSearching(false);
     history.push(`${recipeType}/${recipe.idMeal || recipe.idDrink}`);
   };
 
@@ -13,12 +16,13 @@ function RecipeCard({ cardTestId, imgTestId, nameTestId, recipe, recipeType }) {
     <section>
       <button onClick={ goToDetails } type="button" data-testid={ cardTestId }>
         <h2 data-testid={ nameTestId }>{recipe.strMeal || recipe.strDrink}</h2>
-        <img
-          src={ recipe.strMealThumb || recipe.strDrinkThumb }
-          alt={ recipe.strMeal || recipe.strDrink }
-          data-testid={ imgTestId }
-          style={ { width: '125px' } }
-        />
+        <div>
+          <img
+            src={ recipe.strMealThumb || recipe.strDrinkThumb }
+            alt={ recipe.strMeal || recipe.strDrink }
+            data-testid={ imgTestId }
+          />
+        </div>
       </button>
     </section>
   );

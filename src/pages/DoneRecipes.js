@@ -4,8 +4,8 @@ import RecipesList from '../components/RecipesList';
 
 function DoneRecipes() {
   return (
-    <div>
-      <Header name="Done Recipes" />
+    <div className="done-recipes">
+      <Header name="Done Recipes" showHomeBtn />
       <RecipesList
         props={ {
           key: 'doneRecipes',

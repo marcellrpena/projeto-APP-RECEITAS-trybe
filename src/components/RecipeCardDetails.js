@@ -1,19 +1,16 @@
 import React from 'react';
 import { shape, string } from 'prop-types';
+import '../styles/RecipeDetails.css';
 
-function RecipeCardDetails({ imgTestId, nameTestId, recipe }) {
+function RecipeCardDetails({ imgTestId, recipe }) {
   return (
     <section>
-      <h2 data-testid={ nameTestId }>{recipe.strMeal || recipe.strDrink}</h2>
       <img
+        className="recipeImg"
         src={ recipe.strMealThumb || recipe.strDrinkThumb }
         alt={ recipe.strMeal || recipe.strDrink }
         data-testid={ imgTestId }
-        style={ { width: '125px' } }
       />
-      <p data-testid="recipe-category">
-        {recipe.strAlcoholic || recipe.strCategory}
-      </p>
     </section>
   );
 }

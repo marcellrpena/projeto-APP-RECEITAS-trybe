@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
+import {
+  HiOutlineHeart,
+  HiHeart,
+  HiOutlineShare,
+  HiShare,
+} from 'react-icons/hi';
 import clipboardCopy from 'clipboard-copy';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
 import blackHeart from '../images/blackHeartIcon.svg';
 import useFavorites from '../hooks/useFavorites';
 import useRecipe from '../hooks/useRecipe';
+import '../styles/RecipeInProgress.css';
 import {
   doneRecipe,
   getRecipesInProgress,
   startRecipe,
 } from '../services/saveStorage';
+import GoBackButton from '../components/GoBackButton';
 
 function RecipeInProgress() {
   const history = useHistory();
@@ -41,6 +49,7 @@ function RecipeInProgress() {
   }, []);
 
   const setProgressRecipe = ({ target }) => {
+    console.log(target.name);
     const type = pathname.includes('foods') ? 'meals' : 'cocktails';
     let doneIngredients = [...checkSaved, target.name];
     if (target.checked) setCheckSaved(doneIngredients);
@@ -54,8 +63,6 @@ function RecipeInProgress() {
   const shareRecipe = () => {
     setLinkCopied(true);
     clipboardCopy(window.location.href.split('/in-progress')[0]);
-    setTimeout(() => setLinkCopied(false), INTERVAL_COPY_TAG);
-    clearTimeout();
   };
 
   const finishRecipe = () => {
@@ -63,78 +70,100 @@ function RecipeInProgress() {
     doneRecipe(recipe);
   };
 
+  const checkIngredientsList = (newIngredient) => checkSaved.some((ingredient) => ingredient === newIngredient);
+
   return (
     <div>
       {isFetched && (
-        <>
+        <div className="recipe-in-progress">
           <img
+            className="recipeImg"
             src={ recipe.strMealThumb || recipe.strDrinkThumb }
             alt={ recipe.strMeal || recipe.strDrink }
             data-testid="recipe-photo"
-            style={ { width: '125px' } }
           />
-          <header>
-            <div>
-              <h4 data-testid="recipe-title">
-                {recipe.strMeal || recipe.strDrink}
-              </h4>
+          <header className="title-share-favorite">
+            <h4 data-testid="recipe-title" className="title">
+              {recipe.strMeal || recipe.strDrink}
+            </h4>
+            <div className="btn-shareAndfavorite-position">
               <button
+                className="btn-share-favorite"
                 type="button"
                 data-testid="share-btn"
                 src={ shareIcon }
                 alt="Share icon"
-                onClick={ () => shareRecipe() }
+                onClick={ shareRecipe }
               >
-                <img src={ shareIcon } alt="Share icon" />
+                {linkCopied ? <HiShare /> : <HiOutlineShare />}
               </button>
               <button
+                className="btn-share-favorite"
                 type="button"
                 data-testid="favorite-btn"
                 src={ isFavorite ? blackHeart : whiteHeart }
-                alt="Share icon"
+                alt="Favorite icon"
                 onClick={ addRecipeToFavorites }
               >
-                <img
-                  src={ isFavorite ? blackHeart : whiteHeart }
-                  alt="Share icon"
-                />
+                {isFavorite ? <HiHeart /> : <HiOutlineHeart />}
               </button>
-              {linkCopied && <span>Link copied!</span>}
             </div>
-            <h6 data-testid="recipe-category">{recipe.strCategory}</h6>
           </header>
-          <h4>Ingredients</h4>
-          {!refresh
-            && ingredients.map((ingredient, index) => (
-              <div key={ index }>
-                <label
-                  data-testid={ `${index}-ingredient-step` }
-                  htmlFor={ ingredient }
-                >
-                  <input
-                    type="checkbox"
-                    name={ ingredient }
-                    id={ ingredient }
-                    checked={ checkSaved.includes(ingredient) }
-                    onChange={ (e) => setProgressRecipe(e) }
-                  />
-                  {`${ingredient} - ${measures[index]}`}
-                </label>
-              </div>
-            ))}
-          <section>
-            <h4>Instructions</h4>
-            <p data-testid="instructions">{recipe.strInstructions}</p>
-          </section>
+          <div className="span-category">
+            <h6 data-testid="recipe-category" className="category">
+              {recipe.strCategory}
+            </h6>
+          </div>
+          <h4 className="title-ingredients">Ingredients</h4>
+          <GoBackButton />
+          <div className="ingredient-list">
+            {!refresh
+              && ingredients.map((ingredient, index) => (
+                <div key={ index }>
+                  <label
+                    data-testid={ `${index}-ingredient-step` }
+                    htmlFor={ `${ingredient} - ${measures[index]}` }
+                    className="margin-zero ingredient-progress"
+                    style={ { gap: '0.6rem' } }
+                  >
+                    <input
+                      type="checkbox"
+                      name={ `${ingredient} - ${measures[index]}` }
+                      id={ `${ingredient} - ${measures[index]}` }
+                      checked={ checkIngredientsList(
+                        `${ingredient} - ${measures[index]}`,
+                      ) }
+                      onChange={ (e) => setProgressRecipe(e) }
+                    />
+                    <span
+                      className={ `${
+                        checkIngredientsList(ingredient)
+                          ? 'ingredient-check'
+                          : ''
+                      }` }
+                    >
+                      {`${ingredient} - ${measures[index]}`}
+                    </span>
+                  </label>
+                </div>
+              ))}
+          </div>
+          <h4 className="title-instructions">Instructions</h4>
+          <div className="instructions-text">
+            <p data-testid="instructions" className="text-style">
+              {recipe.strInstructions}
+            </p>
+          </div>
           <button
             type="button"
             data-testid="finish-recipe-btn"
             disabled={ ingredients.length !== checkSaved.length }
             onClick={ finishRecipe }
+            className="btn btn-secondary btn-login"
           >
             Finish Recipe
           </button>
-        </>
+        </div>
       )}
     </div>
   );

@@ -1,0 +1,91 @@
+.Login-Container {
+  align-items: center;
+  display: flex;
+  flex-flow: row wrap;
+  height: 100vh;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.Login-Container input {
+  width: 100%;
+}
+
+.Login-Container button {
+  width: 80px;
+}
+
+.Logo-Container {
+  display: flex;
+  justify-content: center;
+}
+
+.Form-Container, .Form-Container form {
+  display: flex;
+  flex-direction: column;
+  height: 80%;
+  justify-content: center;
+}
+
+.Form-Container {
+  width: 30%;
+}
+
+.Login-Container form {
+  align-items: center;
+  gap: 1rem;
+  height: 60%;
+  width: 100%;
+}
+
+.Login-Container form div {
+  width: 100%;
+}
+
+.Logo-Container img {
+  width: 320px;
+  z-index: 1000;
+}
+
+.btn-login, .btn-login:hover, .btn-login:active {
+  background: #f45d01;
+  border-color: #f45d01;
+}
+
+@media screen and ( max-width : 800px ) {
+
+  .Form-Container {
+    align-items: center;
+    height: 100%;
+    padding: 0;
+    width: 100%;
+  }
+
+  .Form-Container h3 {
+    display: none;
+  }
+
+  .Logo-Container {
+    left: 40px;
+    position: absolute;
+    top: -115px;
+    width: 100%;
+  }
+
+  .Login-Container form {
+    background: rgb(248, 248, 248);
+    border-radius: 12px;
+    box-shadow: 2px 5px 6px #47464777;
+    position: absolute;
+    top: 30vh;
+    width: 90%;
+  }
+
+  .Logo-Container img {
+    width: 70%;
+  }
+
+  .Login-Container form div {
+    width: 80%;
+  }
+}
