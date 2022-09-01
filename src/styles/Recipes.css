@@ -33,8 +33,10 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  padding-bottom: 8vh;
+  padding-bottom: 10vh;
 }
+
+.listed-recipes h2 { font-size: 1.5rem; }
 
 .listed-recipes button {
   align-items: center;

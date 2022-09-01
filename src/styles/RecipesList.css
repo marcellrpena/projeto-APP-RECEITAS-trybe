@@ -43,7 +43,7 @@ main {
   margin: 20px 0;
   overflow: hidden;
   position: relative;
-  width: 90vw;
+  width: 95vw;
 }
 
 .recipe-img-btn {
@@ -64,12 +64,16 @@ main {
   display: flex;
   flex-direction: column;
   height: 100%;
+  justify-content: space-evenly;
   max-width: 50%;
-  padding: 8px;
+  padding: 5px;
+  padding-left: 10px;
   width: 400px;
 }
 
 .recipe-info p {
+  color: #959595;
+  margin: 1px 0;
   max-inline-size: 80%;
 }
 
@@ -82,16 +86,12 @@ main {
 .recipe-title {
   align-items: flex-start;
   display: flex;
-  font-size: 1.65rem;
   justify-content: start;
   margin: 0;
   text-align: left;
 }
 
-.recipe-info p {
-  color: #959595;
-  margin: 1px 0;
-}
+.recipe-title h3 { font-size: 22px; }
 
 .share-btn button {
   background: none;
@@ -109,13 +109,15 @@ main {
 
 .tags {
   display: flex;
+  justify-content: space-around;
+  margin: 6px 0;
 }
 
 .tags p {
   background-color: #1c3144;
   border-radius: 15px;
   color: #ebeef5;
-  margin: 5px 20px 0 0;
+  /* margin: 5px 20px 0 0; */
   padding: 5px 15px;
 }
 

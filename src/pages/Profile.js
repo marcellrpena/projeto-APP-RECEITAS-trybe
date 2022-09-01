@@ -16,7 +16,7 @@ function Profile() {
 
   return (
     <div className="Profile-Container">
-      <Header name="Profile" />
+      <Header name="Profile" showHomeBtn />
       <main className="Profile-Informations">
         <div className="User-Informations">
           <img src={ profileIcon } alt="Profile" />

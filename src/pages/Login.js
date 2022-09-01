@@ -38,12 +38,12 @@ function Login() {
 
   return (
     <main className="Login-Container">
-      <div className="Logo-Container">
-        <img src={ logo } alt="Um coração com chapéu de chef, colher e garfo" />
-      </div>
       <div className="Form-Container">
         <h3>Entre para continuar</h3>
         <Form onSubmit={ handleSubmit }>
+          <div className="Logo-Container">
+            <img src={ logo } alt="Um coração com chapéu de chef, colher e garfo" />
+          </div>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label className="text-left">Enter your email</Form.Label>
             <Form.Control

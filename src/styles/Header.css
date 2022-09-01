@@ -12,13 +12,12 @@
 }
 
 .Main-Header h1 {
-  font-size: 2.2rem;
+  font-size: 2rem;
+  margin: 0;
 }
 
 .Rounded {
   background: #f45d01;
-
-  /* border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; */
 }
 
 .Flat {

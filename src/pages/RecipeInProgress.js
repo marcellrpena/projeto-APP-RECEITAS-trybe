@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { HiOutlineHeart, HiHeart, HiOutlineShare, HiShare } from 'react-icons/hi';
+import {
+  HiOutlineHeart,
+  HiHeart,
+  HiOutlineShare,
+  HiShare,
+} from 'react-icons/hi';
 import clipboardCopy from 'clipboard-copy';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
@@ -13,6 +18,7 @@ import {
   getRecipesInProgress,
   startRecipe,
 } from '../services/saveStorage';
+import GoBackButton from '../components/GoBackButton';
 
 function RecipeInProgress() {
   const history = useHistory();
@@ -43,6 +49,7 @@ function RecipeInProgress() {
   }, []);
 
   const setProgressRecipe = ({ target }) => {
+    console.log(target.name);
     const type = pathname.includes('foods') ? 'meals' : 'cocktails';
     let doneIngredients = [...checkSaved, target.name];
     if (target.checked) setCheckSaved(doneIngredients);
@@ -63,6 +70,8 @@ function RecipeInProgress() {
     doneRecipe(recipe);
   };
 
+  const checkIngredientsList = (newIngredient) => checkSaved.some((ingredient) => ingredient === newIngredient);
+
   return (
     <div>
       {isFetched && (
@@ -74,10 +83,7 @@ function RecipeInProgress() {
             data-testid="recipe-photo"
           />
           <header className="title-share-favorite">
-            <h4
-              data-testid="recipe-title"
-              className="title"
-            >
+            <h4 data-testid="recipe-title" className="title">
               {recipe.strMeal || recipe.strDrink}
             </h4>
             <div className="btn-shareAndfavorite-position">
@@ -89,7 +95,7 @@ function RecipeInProgress() {
                 alt="Share icon"
                 onClick={ shareRecipe }
               >
-                { linkCopied ? <HiShare /> : <HiOutlineShare /> }
+                {linkCopied ? <HiShare /> : <HiOutlineShare />}
               </button>
               <button
                 className="btn-share-favorite"
@@ -104,42 +110,47 @@ function RecipeInProgress() {
             </div>
           </header>
           <div className="span-category">
-            <h6
-              data-testid="recipe-category"
-              className="category"
-            >
+            <h6 data-testid="recipe-category" className="category">
               {recipe.strCategory}
             </h6>
           </div>
           <h4 className="title-ingredients">Ingredients</h4>
+          <GoBackButton />
           <div className="ingredient-list">
             {!refresh
               && ingredients.map((ingredient, index) => (
-                <div key={ index } className="ingredient-check">
+                <div key={ index }>
                   <label
                     data-testid={ `${index}-ingredient-step` }
-                    htmlFor={ ingredient }
-                    className="margin-zero ingredient-check"
+                    htmlFor={ `${ingredient} - ${measures[index]}` }
+                    className="margin-zero ingredient-progress"
+                    style={ { gap: '0.6rem' } }
                   >
                     <input
                       type="checkbox"
-                      name={ ingredient }
-                      id={ ingredient }
-                      checked={ checkSaved.includes(ingredient) }
+                      name={ `${ingredient} - ${measures[index]}` }
+                      id={ `${ingredient} - ${measures[index]}` }
+                      checked={ checkIngredientsList(
+                        `${ingredient} - ${measures[index]}`,
+                      ) }
                       onChange={ (e) => setProgressRecipe(e) }
-                      className="ingredient-check"
                     />
-                    {` ${ingredient} - ${measures[index]}`}
+                    <span
+                      className={ `${
+                        checkIngredientsList(ingredient)
+                          ? 'ingredient-check'
+                          : ''
+                      }` }
+                    >
+                      {`${ingredient} - ${measures[index]}`}
+                    </span>
                   </label>
                 </div>
               ))}
           </div>
           <h4 className="title-instructions">Instructions</h4>
           <div className="instructions-text">
-            <p
-              data-testid="instructions"
-              className="text-style"
-            >
+            <p data-testid="instructions" className="text-style">
               {recipe.strInstructions}
             </p>
           </div>

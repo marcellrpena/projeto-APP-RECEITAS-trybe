@@ -5,7 +5,6 @@
   padding-bottom: 1.2rem;
 }
 
-/* posicionamento geral dos elementos da tela */
 .recipe-Details {
   background: #ebeef5;
   display: flex;
@@ -13,14 +12,12 @@
   gap: 1.2rem;
 }
 
-/* RecipeCardDetails */
 .recipeImg {
   height: 170px;
   object-fit: cover;
   width: 100%;
 }
 
-/* titulo da receita e icones */
 .title {
   font-size: 40px;
   margin: 0;
@@ -43,15 +40,14 @@
 }
 
 .btn-shareAndfavorite-position {
+  align-self: flex-start;
   display: flex;
   gap: 20px;
   padding-right: 10px;
-  position: absolute;
   right: 0;
   top: 30vh;
 }
 
-/* subtitulo ou categoria e span link copiado */
 .span-category {
   align-items: center;
   display: flex;
@@ -71,7 +67,6 @@
   padding-right: 10px;
 }
 
-/* lista de ingredientes */
 .ingredient-list {
   align-self: center;
   background-color: rgb(248, 248, 248);
@@ -86,11 +81,6 @@
   width: 90%;
 }
 
-.ingredient-check {
-  background-color: transparent;
-  font-weight: 600;
-}
-
 .title-ingredients {
   align-self: center;
   font-weight: 545;
@@ -102,7 +92,6 @@
   margin: 0;
 }
 
-/* secção de instruções */
 .title-instructions {
   align-self: center;
   background-color: transparent;
@@ -132,7 +121,6 @@
   text-align: left;
 }
 
-/* video */
 .video-style {
   align-self: center;
 }
@@ -146,4 +134,16 @@
   background-color: #ffc107;
   border-color: #ffc107;
   color: black;
+}
+
+.Go-Back-Btn {
+  background: rgba(0, 0, 0, 0.475);
+  border-bottom-right-radius: 12px;
+  border-top-right-radius: 12px;
+  color: #ebeef5;
+  cursor: pointer;
+  font-size: 2.2rem;
+  position: absolute;
+  top: 12px;
+  width: 45px;
 }

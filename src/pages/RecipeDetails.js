@@ -14,6 +14,7 @@ import useRecipe from '../hooks/useRecipe';
 import '../styles/Recipes.css';
 import '../styles/RecipeDetails.css';
 import { RecipesContext } from '../contexts/Contexts';
+import GoBackButton from '../components/GoBackButton';
 
 function RecipeDetails() {
   const history = useHistory();
@@ -66,6 +67,7 @@ function RecipeDetails() {
       {isFetched && (
         <>
           <section className="recipe-Details">
+            <GoBackButton />
             <RecipeCardDetails
               imgTestId="recipe-photo"
               nameTestId="recipe-title"
@@ -76,25 +78,25 @@ function RecipeDetails() {
               <h2 className="title" data-testid="recipe-title">
                 {recipe.strMeal || recipe.strDrink}
               </h2>
-            </div>
-            <div className="btn-shareAndfavorite-position">
-              <button
-                className="btn-share-favorite"
-                type="button"
-                data-testid="share-btn"
-                onClick={ copyLink }
-                alt="Share icon"
-              >
-                {copiedToClipboard ? <HiShare /> : <HiOutlineShare /> }
-              </button>
-              <button
-                className="btn-share-favorite"
-                type="button"
-                data-testid="favorite-btn"
-                onClick={ () => addRecipeToFavorites(recipe) }
-              >
-                {isFavorite ? <HiHeart /> : <HiOutlineHeart />}
-              </button>
+              <div className="btn-shareAndfavorite-position">
+                <button
+                  className="btn-share-favorite"
+                  type="button"
+                  data-testid="share-btn"
+                  onClick={ copyLink }
+                  alt="Share icon"
+                >
+                  {copiedToClipboard ? <HiShare /> : <HiOutlineShare /> }
+                </button>
+                <button
+                  className="btn-share-favorite"
+                  type="button"
+                  data-testid="favorite-btn"
+                  onClick={ () => addRecipeToFavorites(recipe) }
+                >
+                  {isFavorite ? <HiHeart /> : <HiOutlineHeart />}
+                </button>
+              </div>
             </div>
             <div className="span-category">
               <p className="category" data-testid="recipe-category">
@@ -107,7 +109,7 @@ function RecipeDetails() {
                 <p
                   key={ index }
                   data-testid={ `${index}-ingredient-name-and-measure` }
-                  className="ingredient-check margin-zero"
+                  className="margin-zero"
                 >
                   {`${item}${measures[index] ? `: ${measures[index]}` : ''}`}
                 </p>

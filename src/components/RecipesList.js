@@ -11,7 +11,6 @@ import '../styles/RecipesList.css';
 
 function RecipesList({ props: { key, useTags, favoriteBtn } }) {
   const history = useHistory();
-  // const [copiedToClipboard, setCopiedToClipboard] = useState(false);
   const [recipesList, setRecipesList] = useState([]);
   const [filterSelected, setFilterSelected] = useState({
     all: true,
@@ -27,7 +26,6 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
     const domain = window.location.href.split(routeIdentifier)[0];
     const link = `${domain}${getPath(type)}/${id}`;
     clipboardCopy(link);
-    // setCopiedToClipboard(true);
   };
 
   const applyFilter = (recipeType) => (
@@ -161,7 +159,7 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
                   )}
                   <div className="tags">
                     {useTags
-                      && tags.map((tag) => (
+                      && tags.slice(0, 2).map((tag) => (
                         <p
                           key={ tag }
                           data-testid={ `${index}-${tag}-horizontal-tag` }

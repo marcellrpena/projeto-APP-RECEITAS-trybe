@@ -1,16 +1,15 @@
 import React, { useContext } from 'react';
-import { string } from 'prop-types';
+import { bool, string } from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { FaUser, FaSearch } from 'react-icons/fa';
+import { FaUser, FaSearch, FaHome } from 'react-icons/fa';
 import { RecipesContext } from '../contexts/Contexts';
 import SearchBar from './SearchBar';
 import '../styles/Header.css';
 
-function Header({ name }) {
+function Header({ name, showHomeBtn }) {
   const history = useHistory();
 
   const { isSearching, setIsSearching } = useContext(RecipesContext);
-  // const [isSearching, setIsSearching] = useState(false);
   const names = ['Profile', 'Done Recipes', 'Favorite Recipes'];
   return (
     <header className={ `Main-Header ${isSearching ? 'Rounded' : ''}` }>
@@ -29,6 +28,12 @@ function Header({ name }) {
             </button>
           </div>
         )}
+        {showHomeBtn && (
+          <FaHome
+            style={ { fontSize: '2rem' } }
+            onClick={ () => history.push('/foods') }
+          />
+        )}
         <h1 data-testid="page-title">{name}</h1>
         <div className="Header-Button">
           <button
@@ -46,8 +51,8 @@ function Header({ name }) {
   );
 }
 
-Header.defaultProps = { name: '' };
+Header.defaultProps = { name: '', showHomeBtn: false };
 
-Header.propTypes = { name: string };
+Header.propTypes = { name: string, showHomeBtn: bool };
 
 export default Header;

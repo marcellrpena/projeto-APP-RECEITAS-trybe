@@ -66,22 +66,23 @@
   }
 
   .Logo-Container {
+    left: 40px;
     position: absolute;
-    top: 16vh;
+    top: -115px;
     width: 100%;
   }
 
   .Login-Container form {
     background: rgb(248, 248, 248);
     border-radius: 12px;
-    box-shadow: 2px 5px 4px #47464777;
+    box-shadow: 2px 5px 6px #47464777;
     position: absolute;
     top: 30vh;
     width: 90%;
   }
 
   .Logo-Container img {
-    width: 140px;
+    width: 70%;
   }
 
   .Login-Container form div {
