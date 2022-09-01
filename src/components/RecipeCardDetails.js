@@ -17,7 +17,6 @@ function RecipeCardDetails({ imgTestId, recipe }) {
 
 RecipeCardDetails.defaultProps = {
   imgTestId: '',
-  nameTestId: '',
   recipe: {
     idMeal: '',
     strMeal: '',
@@ -28,7 +27,6 @@ RecipeCardDetails.defaultProps = {
 
 RecipeCardDetails.propTypes = {
   imgTestId: string,
-  nameTestId: string,
   recipe: shape({
     idMeal: string,
     strMeal: string,
