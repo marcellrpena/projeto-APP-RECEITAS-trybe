@@ -8,7 +8,7 @@ import { RecipesContext } from '../contexts/Contexts';
 function Footer() {
   const history = useHistory();
   const { pathname } = useLocation();
-  const { filterType, setFilterType } = useContext(RecipesContext);
+  const { setFilterType } = useContext(RecipesContext);
   return (
     <footer style={ { position: 'fixed', bottom: '0px' } } data-testid="footer">
       <div className="Footer-Button">

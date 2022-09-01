@@ -34,8 +34,6 @@ function RecipeInProgress() {
     pathname,
   );
 
-  const INTERVAL_COPY_TAG = 4000;
-
   const getAndSetProgressRecipes = () => {
     const storageData = getRecipesInProgress();
     const type = pathname.includes('foods') ? 'meals' : 'cocktails';
@@ -70,7 +68,8 @@ function RecipeInProgress() {
     doneRecipe(recipe);
   };
 
-  const checkIngredientsList = (newIngredient) => checkSaved.some((ingredient) => ingredient === newIngredient);
+  const checkIngredientsList = (newIngredient) => (
+    checkSaved.some((ingredient) => ingredient === newIngredient));
 
   return (
     <div>
