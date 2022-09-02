@@ -6,11 +6,16 @@ main {
   width: 100%;
 }
 
+.Recipes-List-Container {
+  min-height: 80vh;
+}
+
 .nav-filter-buttons {
   align-items: center;
   background-color: #f77f00;
   display: flex;
   flex-flow: row wrap;
+  min-height: 10vh;
   justify-content: space-evenly;
   margin-top: 10vh;
 }
@@ -117,11 +122,9 @@ main {
   background-color: #1c3144;
   border-radius: 15px;
   color: #ebeef5;
-  /* margin: 5px 20px 0 0; */
   padding: 5px 15px;
 }
 
 .done-recipes {
-  height: 100vh;
   width: 100%;
 }

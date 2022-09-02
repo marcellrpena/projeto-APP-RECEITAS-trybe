@@ -109,7 +109,7 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
           />
         </button>
       </nav>
-      <main>
+      <main className="Recipes-List-Container">
         <ul className="recipes-list">
           {recipesList.map(
             (

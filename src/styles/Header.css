@@ -1,8 +1,10 @@
 .Main-Header {
+  background: #f45d01;
   color: white;
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
+  min-height: 10vh;
   position: fixed;
   text-align: center;
   top: 0;
@@ -14,14 +16,6 @@
 .Main-Header h1 {
   font-size: 2rem;
   margin: 0;
-}
-
-.Rounded {
-  background: #f45d01;
-}
-
-.Flat {
-  border-radius: 0;
 }
 
 .Header-Informations {
@@ -46,6 +40,7 @@
 
 .Search-Bar {
   padding: 1rem;
+  transition: 0.3s;
   width: 100%;
 }
 
