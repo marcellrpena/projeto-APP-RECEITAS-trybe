@@ -1,5 +1,4 @@
 .Main-Header {
-  background: #f45d01;
   color: white;
   display: flex;
   flex-flow: row wrap;
@@ -39,6 +38,9 @@
 }
 
 .Search-Bar {
+  background: #f45d01;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
   padding: 1rem;
   transition: 0.3s;
   width: 100%;

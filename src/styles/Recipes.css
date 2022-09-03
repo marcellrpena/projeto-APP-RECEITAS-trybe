@@ -4,25 +4,7 @@
   width: 100%;
 }
 
-.Recipes-Container nav {
-  margin-top: 10vh;
-}
-
-.Recommendations-Container {
-  border: 1px solid red;
-  display: flex;
-  overflow: scroll;
-  width: 200px;
-}
-
-.Recommended-Recipe {
-  align-items: center;
-  border: 1px solidred;
-  display: flex;
-  justify-content: center;
-  min-width: 100px;
-  padding: 10px;
-}
+.Recipes-Container nav { margin-top: 10vh; }
 
 .Start-Recipe-Btn {
   bottom: 2vh;
@@ -38,7 +20,11 @@
   padding-bottom: 10vh;
 }
 
-.listed-recipes h2 { font-size: 1.5rem; }
+.listed-recipes h2 {
+  font-size: 1.5rem;
+  margin: 0;
+  padding: 0.6rem;
+}
 
 .listed-recipes button {
   align-items: center;
@@ -64,11 +50,6 @@
 
 .listed-recipes img {
   width: 200px;
-}
-
-.listed-recipes h2 {
-  margin: 0;
-  padding: 0.6rem;
 }
 
 .Side-Content {

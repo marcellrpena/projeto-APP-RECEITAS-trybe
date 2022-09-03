@@ -5,7 +5,7 @@ import { bool, shape, string } from 'prop-types';
 import { BiDrink } from 'react-icons/bi';
 import { GiMeal } from 'react-icons/gi';
 import { IoMdInfinite } from 'react-icons/io';
-import { HiOutlineShare } from 'react-icons/hi';
+import { HiOutlineShare, HiShare } from 'react-icons/hi';
 import favoriteIcon from '../images/blackHeartIcon.svg';
 import '../styles/RecipesList.css';
 
@@ -17,6 +17,7 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
     foods: false,
     drinks: false,
   });
+  const [isLinkToClipboard, setIsLinkToClipboard] = useState({});
 
   const localRecipes = JSON.parse(localStorage.getItem(key)) || [];
   const getPath = (type) => (type === 'food' ? 'foods' : 'drinks');
@@ -26,6 +27,7 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
     const domain = window.location.href.split(routeIdentifier)[0];
     const link = `${domain}${getPath(type)}/${id}`;
     clipboardCopy(link);
+    setIsLinkToClipboard({ [id]: true });
   };
 
   const applyFilter = (recipeType) => (
@@ -53,7 +55,7 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
 
   return (
     <>
-      <nav className="nav-filter-buttons">
+      <nav className="nav-filter-buttons fav-done-nav">
         <button
           type="button"
           data-testid="filter-by-all-btn"
@@ -176,7 +178,7 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
                     alt="Share icon"
                     onClick={ () => shareRecipe(type, id) }
                   >
-                    <HiOutlineShare />
+                    {isLinkToClipboard[id] ? <HiShare /> : <HiOutlineShare />}
                   </button>
                   {favoriteBtn && (
                     <button
