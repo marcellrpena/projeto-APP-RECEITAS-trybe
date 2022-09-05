@@ -1,10 +1,22 @@
-.Recipes-Container {
+.Recipes-Container, .Loading {
   background-color: #ebeef5;
   min-height: 100vh;
   width: 100%;
 }
 
 .Recipes-Container nav { margin-top: 10vh; }
+
+.Loading {
+  align-items: center;
+  display: flex;
+  font-size: 2rem;
+  justify-content: center;
+}
+
+.Loading svg {
+  height: 90px;
+  width: 90px;
+}
 
 .Start-Recipe-Btn {
   bottom: 2vh;
@@ -61,7 +73,7 @@
 .Side-Content {
   align-items: center;
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: row wrap;
   gap: 0.6rem;
   justify-content: center;
 }
@@ -69,7 +81,7 @@
 .Suggestions-Container {
   border-radius: 16px;
   overflow: hidden;
-  width: 315px;
+  width: 90%;
 }
 
 .carousel-item {
@@ -82,7 +94,7 @@
   left: 0;
   object-fit: cover;
   position: absolute;
-  width: 315px ! important;
+  width: 100% ! important;
 }
 
 .carousel-control-prev span:nth-child( 2 ), .carousel-control-next span:nth-last-child( 1 ) {
@@ -120,6 +132,13 @@
 }
 
 .carousel-indicators button { visibility: hidden; }
+
+@media screen and ( min-width : 420px ) {
+
+  .Suggestions-Container {
+    width: 355px;
+  }
+}
 
 @media screen and ( min-width : 1024px ) {
 

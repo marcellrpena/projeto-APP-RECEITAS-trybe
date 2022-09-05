@@ -6,12 +6,16 @@ main {
   width: 100%;
 }
 
-.Recipes-List-Container, .Empty-Message-Container {
+.Recipes-List-Container {
   margin-top: 20vh;
   min-height: 80vh;
 }
 
-.Empty-Message-Container { text-align: center; }
+.Empty-Message-Container {
+  position: absolute;
+  text-align: center;
+  top: 50%;
+}
 
 .nav-filter-buttons {
   align-items: center;
@@ -25,11 +29,14 @@ main {
 
 .fav-done-nav {
   margin-top: 0;
+  min-height: 10vh;
   position: fixed;
   top: 10vh;
   width: 100%;
   z-index: 2000;
 }
+
+.fav-done-nav button { width: 50px; }
 
 .filter-btn {
   background: none;
@@ -126,6 +133,7 @@ main {
 
 .tags {
   display: flex;
+  gap: 4px;
   justify-content: space-around;
   margin: 6px 0;
 }
@@ -134,9 +142,14 @@ main {
   background-color: #1c3144;
   border-radius: 15px;
   color: #ebeef5;
-  padding: 5px 15px;
+  padding: 5px;
 }
 
 .done-recipes {
   width: 100%;
+}
+
+@media screen and ( min-width : 420px ) {
+
+  .recipe { width: 400px; }
 }

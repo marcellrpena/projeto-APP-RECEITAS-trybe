@@ -10,7 +10,7 @@ function SuggestedRecipe() {
 
   return (
     <div className="Suggestions-Container">
-      <h2>Suggestions</h2>
+      <h4>Suggestions</h4>
       {fetchSuggestions && (
         <Carousel>
           {suggestedRecipes.map((item, index) => (
