@@ -19,13 +19,15 @@ function Recipes() {
   const { recipes, categories, setRecipes, setCategories } = useContext(RecipesContext);
   const { meals, drinks } = recipes;
   const { pathname } = history.location;
-  const [isFiltered, setIsFiltered] = useState(false);
+  // const [isFiltered, setIsFiltered] = useState(false);
+  const [categoryToFilter, setCategoryToFilter] = useState('');
 
   const loadRecipes = async () => {
     const recipesData = await fetchRecipes(pathname);
     const categoriesData = await fetchCategories(pathname);
     setRecipes({ ...recipes, ...recipesData });
     setCategories({ ...categories, ...categoriesData });
+    setCategoryToFilter('');
   };
 
   useEffect(() => {
@@ -33,12 +35,13 @@ function Recipes() {
   }, []);
 
   const handleClickFilter = async (category) => {
-    if (!isFiltered) {
-      setIsFiltered(!isFiltered);
-      const filter = await fetchByFilter(pathname, category);
-      return setRecipes({ ...recipes, ...filter });
+    if (categoryToFilter === category) {
+      setCategoryToFilter('');
+      return loadRecipes();
     }
-    loadRecipes();
+    setCategoryToFilter(category);
+    const filteredRecipes = await fetchByFilter(pathname, category);
+    return setRecipes({ ...recipes, ...filteredRecipes });
   };
 
   const MAX_RECIPES = 12;
@@ -70,11 +73,6 @@ function Recipes() {
                 onClick={ () => handleClickFilter(strCategory) }
                 className="filter-btn"
               >
-                {/* { strCategory === 'Beef' && <TbMeat size="50px" />}
-                { strCategory === 'Breakfast' && <FaCoffee size="50px" />}
-                { strCategory === 'Chicken' && <GiRoastChicken size="50px" />}
-                { strCategory === 'Dessert' && <GiCupcake size="50px" />}
-                { strCategory === 'Goat' && <GiGoat size="50px" />} */}
                 { strCategory }
               </button>
             ))}
