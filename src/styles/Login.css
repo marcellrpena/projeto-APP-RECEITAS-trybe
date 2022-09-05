@@ -47,6 +47,7 @@
 .Logo { display: none; }
 
 .Logo-Container img {
+  transition: 0.3s;
   width: 400px;
   z-index: 1000;
 }

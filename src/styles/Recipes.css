@@ -23,7 +23,9 @@
 .listed-recipes h2 {
   font-size: 1.5rem;
   margin: 0;
-  padding: 0.6rem;
+  margin-top: 95px;
+  padding: 0.6rem 0.2rem;
+  width: 100%;
 }
 
 .listed-recipes button {
@@ -35,7 +37,9 @@
   flex-direction: column-reverse;
   justify-content: center;
   margin: 20px;
+  min-height: 180px;
   overflow: hidden;
+  position: relative;
   width: 145px;
 }
 
@@ -45,6 +49,8 @@
   height: 100px;
   justify-content: center;
   overflow: hidden;
+  position: absolute;
+  top: 0;
   width: 100%;
 }
 
@@ -114,3 +120,8 @@
 }
 
 .carousel-indicators button { visibility: hidden; }
+
+@media screen and ( min-width : 1024px ) {
+
+  .listed-recipes { width: 70%; }
+}
