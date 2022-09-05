@@ -9,6 +9,7 @@ import userEvent from '@testing-library/user-event';
 import renderWithRouterAndContext from './helpers/renderWithRouterAndContext';
 import Header from '../components/Header';
 import App from '../App';
+import SearchBar from '../components/SearchBar';
 
 describe('Testes da barra de pesquisa', () => {
   beforeEach(() => {
@@ -23,10 +24,10 @@ describe('Testes da barra de pesquisa', () => {
   it('Testa se o botão "Search" está desativado quando os inputs estão vazios', () => {
     expect.assertions(1);
 
-    renderWithRouterAndContext(<Header />);
+    renderWithRouterAndContext(<SearchBar />);
 
-    const showSearchBtn = screen.getByTestId('search-top-btn');
-    userEvent.click(showSearchBtn);
+    // const showSearchBtn = screen.getByTestId('search-top-btn');
+    // userEvent.click(showSearchBtn);
 
     const searchBtn = screen.getByTestId('exec-search-btn');
     expect(searchBtn).toBeDisabled();
@@ -36,10 +37,10 @@ describe('Testes da barra de pesquisa', () => {
     expect.assertions(2);
     global.alert = jest.fn();
 
-    renderWithRouterAndContext(<Header />);
+    renderWithRouterAndContext(<SearchBar />);
 
-    const showSearchBtn = screen.getByTestId('search-top-btn');
-    userEvent.click(showSearchBtn);
+    // const showSearchBtn = screen.getByTestId('search-top-btn');
+    // userEvent.click(showSearchBtn);
 
     const searchInput = screen.getByTestId('search-input');
     const fistLetterRadio = screen.getByTestId('first-letter-search-radio');
@@ -60,10 +61,10 @@ describe('Testes da barra de pesquisa', () => {
     });
     global.alert = jest.fn();
 
-    renderWithRouterAndContext(<Header />);
+    renderWithRouterAndContext(<SearchBar />);
 
-    const showSearchBtn = screen.getByTestId('search-top-btn');
-    userEvent.click(showSearchBtn);
+    // const showSearchBtn = screen.getByTestId('search-top-btn');
+    // userEvent.click(showSearchBtn);
 
     const searchInput = screen.getByTestId('search-input');
     const nameRadio = screen.getByTestId('name-search-radio');
@@ -79,24 +80,20 @@ describe('Testes da barra de pesquisa', () => {
   describe('Testes de Filtro', () => {
     it('Testa se é chamado a API de comidas quando está na rota "/foods" e faz uma pesquisa', () => {
       expect.assertions(1);
-      const { history } = renderWithRouterAndContext(<Header />);
-      history.push('/foods');
-
-      const showSearchBtn = screen.getByTestId('search-top-btn');
-      userEvent.click(showSearchBtn);
-
-      const searchInput = screen.getByTestId('search-input');
-      const radio = screen.getByTestId('ingredient-search-radio');
-      const searchBtn = screen.getByTestId('exec-search-btn');
-      userEvent.type(searchInput, 'beef');
-      userEvent.click(radio);
-
       jest.resetAllMocks();
       jest.spyOn(global, 'fetch');
       global.fetch.mockResolvedValue({
         json: jest.fn().mockResolvedValue(beefMeals),
       });
 
+      const { history } = renderWithRouterAndContext(<SearchBar />);
+      history.push('/foods');
+
+      const searchInput = screen.getByTestId('search-input');
+      const radio = screen.getByTestId('ingredient-search-radio');
+      const searchBtn = screen.getByTestId('exec-search-btn');
+      userEvent.type(searchInput, 'beef');
+      userEvent.click(radio);
       userEvent.click(searchBtn);
 
       const URL = 'https://www.themealdb.com/api/json/v1/1/filter.php?i=beef';
@@ -105,23 +102,19 @@ describe('Testes da barra de pesquisa', () => {
 
     it('Testa se é chamado a API de bebidas quando está na rota "/drinks" e faz uma pesquisa', () => {
       expect.assertions(1);
-      renderWithRouterAndContext(<Header />);
-
-      const showSearchBtn = screen.getByTestId('search-top-btn');
-      userEvent.click(showSearchBtn);
-
-      const searchInput = screen.getByTestId('search-input');
-      const nameRadio = screen.getByTestId('name-search-radio');
-      const searchBtn = screen.getByTestId('exec-search-btn');
-      userEvent.type(searchInput, 'milk');
-      userEvent.click(nameRadio);
-
       jest.resetAllMocks();
       jest.spyOn(global, 'fetch');
       global.fetch.mockResolvedValue({
         json: jest.fn().mockResolvedValue(milkDrinks),
       });
 
+      renderWithRouterAndContext(<SearchBar />);
+
+      const searchInput = screen.getByTestId('search-input');
+      const nameRadio = screen.getByTestId('name-search-radio');
+      const searchBtn = screen.getByTestId('exec-search-btn');
+      userEvent.type(searchInput, 'milk');
+      userEvent.click(nameRadio);
       userEvent.click(searchBtn);
 
       const URL =
@@ -163,24 +156,20 @@ describe('Testes da barra de pesquisa', () => {
 
     it('Testa se redireciona para pagina da comida caso encontre apenas uma', async () => {
       expect.assertions(2);
-      const { history } = renderWithRouterAndContext(<Header />);
-      history.push('/foods');
-
-      const showSearchBtn = screen.getByTestId('search-top-btn');
-      userEvent.click(showSearchBtn);
-
-      const searchInput = screen.getByTestId('search-input');
-      const nameRadio = screen.getByTestId('name-search-radio');
-      const searchBtn = screen.getByTestId('exec-search-btn');
-      userEvent.type(searchInput, 'Spicy Arrabiata Penne');
-      userEvent.click(nameRadio);
-
       jest.restoreAllMocks();
       jest.spyOn(global, 'fetch');
       global.fetch.mockResolvedValue({
         json: jest.fn().mockResolvedValue(oneMeal),
       });
 
+      const { history } = renderWithRouterAndContext(<SearchBar />);
+      history.push('/foods');
+
+      const searchInput = screen.getByTestId('search-input');
+      const nameRadio = screen.getByTestId('name-search-radio');
+      const searchBtn = screen.getByTestId('exec-search-btn');
+      userEvent.type(searchInput, 'Spicy Arrabiata Penne');
+      userEvent.click(nameRadio);
       userEvent.click(searchBtn);
 
       await waitFor(() => expect(fetch).toHaveBeenCalled());
@@ -189,24 +178,20 @@ describe('Testes da barra de pesquisa', () => {
 
     it('Testa se redireciona para pagina da bebida caso encontre apenas uma', async () => {
       expect.assertions(2);
-      const { history } = renderWithRouterAndContext(<Header />);
-      history.push('/drinks');
-
-      const showSearchBtn = screen.getByTestId('search-top-btn');
-      userEvent.click(showSearchBtn);
-
-      const searchInput = screen.getByTestId('search-input');
-      const nameRadio = screen.getByTestId('name-search-radio');
-      const searchBtn = screen.getByTestId('exec-search-btn');
-      userEvent.type(searchInput, 'Aquamarine');
-      userEvent.click(nameRadio);
-
       jest.restoreAllMocks();
       jest.spyOn(global, 'fetch');
       global.fetch.mockResolvedValue({
         json: jest.fn().mockResolvedValue(oneDrink),
       });
 
+      const { history } = renderWithRouterAndContext(<SearchBar />);
+      history.push('/drinks');
+
+      const searchInput = screen.getByTestId('search-input');
+      const nameRadio = screen.getByTestId('name-search-radio');
+      const searchBtn = screen.getByTestId('exec-search-btn');
+      userEvent.type(searchInput, 'Aquamarine');
+      userEvent.click(nameRadio);
       userEvent.click(searchBtn);
 
       await waitFor(() => expect(fetch).toHaveBeenCalled());
