@@ -45,7 +45,6 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
 
   const removeFavorite = (id) => {
     const newLocalRecipes = recipesList.filter((recipe) => recipe.id !== id);
-    console.log(newLocalRecipes);
     setRecipesList(newLocalRecipes);
     localStorage.setItem(key, JSON.stringify(newLocalRecipes));
   };

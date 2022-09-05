@@ -131,14 +131,19 @@
 .btn { width: 240px; }
 
 .Go-Back-Btn {
+  border: none;
+  left: 0;
+  position: absolute;
+  top: 8px;
+}
+
+.Go-Back-Btn svg {
   background: rgba(0, 0, 0, 0.475);
   border-bottom-right-radius: 12px;
   border-top-right-radius: 12px;
   color: #ebeef5;
   cursor: pointer;
   font-size: 2.2rem;
-  position: absolute;
-  top: 12px;
   width: 45px;
 }
 

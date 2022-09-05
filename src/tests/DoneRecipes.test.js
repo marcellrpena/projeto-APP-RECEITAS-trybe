@@ -204,8 +204,13 @@ describe('Testa a tela de receitas prontas', () => {
     userEvent.click(shareButtonDrinks);
 
     expect(window.navigator.clipboard.writeText).toHaveBeenCalled();
-    // expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith(
-    //   'http://localhost:3000/drinks/178319'
-    // );
+  });
+
+  it('Testa se o botão para remover dos favoritos não aparece', () => {
+    const { history } = renderWithRouterAndContext(<DoneRecipes />);
+    history.push('/done-recipes');
+
+    const favoriteBtn = screen.queryByTestId('0-horizontal-favorite-btn');
+    expect(favoriteBtn).not.toBeInTheDocument();
   });
 });

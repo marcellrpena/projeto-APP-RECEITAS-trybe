@@ -8,8 +8,8 @@ import meals from '../../cypress/mocks/meals';
 import beefMeals from '../../cypress/mocks/beefMeals';
 import drinks from '../../cypress/mocks/drinks';
 import cocktailDrinks from '../../cypress/mocks/cocktailDrinks';
-import App from '../App';
-import Recipes from '../components/Recipes';
+import Foods from '../pages/Foods';
+import Drinks from '../pages/Drinks';
 
 describe('Testes do componente de Receitas', () => {
   beforeEach(() => {
@@ -23,13 +23,9 @@ describe('Testes do componente de Receitas', () => {
 
   it('Testa se, após fazer Login, são renderizados "cards" de comidas', async () => {
     expect.assertions(2);
-    renderWithRouterAndContext(<App />);
-    const emailInput = screen.getByTestId('email-input');
-    const passInput = screen.getByTestId('password-input');
-    const loginBtn = screen.getByTestId('login-submit-btn');
-    userEvent.type(emailInput, 'test@test.com');
-    userEvent.type(passInput, '1234567');
-    userEvent.click(loginBtn);
+
+    const { history } = renderWithRouterAndContext(<Foods />);
+    history.push('/foods');
 
     await waitFor(() => expect(fetch).toHaveBeenCalled());
     const corba = screen.getByRole('heading', { name: /corba/i });
@@ -43,7 +39,7 @@ describe('Testes do componente de Receitas', () => {
       json: jest.fn().mockResolvedValue(drinks),
     });
 
-    const { history } = renderWithRouterAndContext(<Recipes />);
+    const { history } = renderWithRouterAndContext(<Drinks />);
     history.push('/drinks');
 
     await waitFor(() => expect(fetch).toHaveBeenCalled());
@@ -57,7 +53,8 @@ describe('Testes do componente de Receitas', () => {
       return Promise.reject([]);
     });
 
-    renderWithRouterAndContext(<Recipes />);
+    const { history } = renderWithRouterAndContext(<Foods />);
+    history.push('/foods');
 
     await waitFor(() => expect(fetch).toHaveBeenCalled());
     const corba = screen.queryByRole('heading', { name: /corba/i });
@@ -66,7 +63,7 @@ describe('Testes do componente de Receitas', () => {
 
   it('Testa se, após clicar em uma receita de comida, é redirecionado para os detalhes dela', async () => {
     expect.assertions(2);
-    const { history } = renderWithRouterAndContext(<Recipes />);
+    const { history } = renderWithRouterAndContext(<Foods />);
     history.push('/foods');
 
     await waitFor(() => expect(fetch).toHaveBeenCalled());
@@ -84,7 +81,7 @@ describe('Testes do componente de Receitas', () => {
       json: jest.fn().mockResolvedValue(drinks),
     });
 
-    const { history } = renderWithRouterAndContext(<Recipes />);
+    const { history } = renderWithRouterAndContext(<Drinks />);
     history.push('/drinks');
 
     await waitFor(() => expect(fetch).toHaveBeenCalled());
@@ -103,7 +100,7 @@ describe('Testes do componente de Receitas', () => {
       json: jest.fn().mockResolvedValue(mealCategories),
     });
 
-    const { history } = renderWithRouterAndContext(<Recipes />);
+    const { history } = renderWithRouterAndContext(<Foods />);
     history.push('/foods');
     await waitFor(() => expect(fetch).toHaveBeenCalled());
 
@@ -132,7 +129,7 @@ describe('Testes do componente de Receitas', () => {
       json: jest.fn().mockResolvedValue(mealCategories),
     });
 
-    const { history } = renderWithRouterAndContext(<Recipes />);
+    const { history } = renderWithRouterAndContext(<Foods />);
     history.push('/foods');
 
     await waitFor(() => expect(fetch).toHaveBeenCalled());
@@ -170,7 +167,7 @@ describe('Testes do componente de Receitas', () => {
       json: jest.fn().mockResolvedValue(drinkCategories),
     });
 
-    const { history } = renderWithRouterAndContext(<Recipes />);
+    const { history } = renderWithRouterAndContext(<Drinks />);
     history.push('/drinks');
 
     await waitFor(() => expect(fetch).toHaveBeenCalled());
@@ -196,5 +193,34 @@ describe('Testes do componente de Receitas', () => {
     await waitFor(() => expect(fetch).toHaveBeenCalled());
     const ggDrink = screen.getByRole('heading', { name: /gg/i });
     expect(ggDrink).toBeInTheDocument();
+  });
+
+  it('Testa se mostra todas as categorias caso clicar duas vezes na já selecionada', async () => {
+    expect.assertions(3);
+    jest.restoreAllMocks();
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(mealCategories),
+    });
+
+    const { history } = renderWithRouterAndContext(<Foods />);
+    history.push('/foods');
+
+    await waitFor(() => expect(fetch).toHaveBeenCalled());
+    const beefBtn = screen.getByTestId('Beef-category-filter');
+
+    jest.restoreAllMocks();
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(meals),
+    });
+
+    userEvent.click(beefBtn);
+    userEvent.click(beefBtn);
+
+    await waitFor(() => expect(fetch).toHaveBeenCalled());
+
+    const corba = screen.getByRole('heading', { name: /corba/i });
+    expect(corba).toBeInTheDocument();
   });
 });

@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import RecipeDetails from '../pages/RecipeDetails';
 import oneMeal from '../../cypress/mocks/oneMeal';
 import oneDrink from '../../cypress/mocks/oneDrink';
+import doneRecipesMock from './helpers/mocks/doneRecipes';
 
 // https://trybecourse.slack.com/archives/C01T2C18DSM/p1630099534116900?thread_ts=1630092847.100100&cid=C01T2C18DSM
 jest.mock('clipboard-copy', () => jest.fn());
@@ -29,7 +30,8 @@ describe('Testes gerais da tela de detalhes de uma receita', () => {
       await waitFor(() => expect(fetch).toHaveBeenCalled());
 
       const arrabiata = screen.getByRole('heading', {
-        name: /Spicy Arrabiata Penne/i, level: 2,
+        name: /Spicy Arrabiata Penne/i,
+        level: 2,
       });
       expect(arrabiata).toBeInTheDocument();
     });
@@ -47,7 +49,8 @@ describe('Testes gerais da tela de detalhes de uma receita', () => {
       await waitFor(() => expect(fetch).toHaveBeenCalled());
 
       const aquamarine = screen.getByRole('heading', {
-        name: /aquamarine/i, level: 2,
+        name: /aquamarine/i,
+        level: 2,
       });
       expect(aquamarine).toBeInTheDocument();
     });
@@ -67,7 +70,7 @@ describe('Testes gerais da tela de detalhes de uma receita', () => {
       expect(mockClipboard).toBeCalledTimes(1);
     });
 
-    it('Testa se, ao adicionar aos favoritos, o ícone do coração fica preenchido', async () => {
+    it('Testa se a receita foi favoritada', async () => {
       localStorage.clear();
       expect.assertions(3);
 
@@ -81,7 +84,7 @@ describe('Testes gerais da tela de detalhes de uma receita', () => {
       expect(favBtn).toHaveAttribute('name', 'favorite');
     });
 
-    it('Testa se a receita continua favoritada após "recarregar" a página', async () => {
+    it('Testa se a receita continua favoritada após recarregar a página', async () => {
       expect.assertions(4);
       localStorage.clear();
       const { history } = renderWithRouterAndContext(<RecipeDetails />);
@@ -96,7 +99,7 @@ describe('Testes gerais da tela de detalhes de uma receita', () => {
       expect(favBtn).not.toHaveAttribute('name', 'not-favorite');
     });
 
-    it('Testa se, ao remover dos favoritos, o ícone do coração fica "vazio"', async () => {
+    it('Testa se a receita foi removida dos favoritos', async () => {
       localStorage.clear();
       jest.resetAllMocks();
       jest.spyOn(global, 'fetch');
@@ -119,20 +122,21 @@ describe('Testes gerais da tela de detalhes de uma receita', () => {
 
     it('Testa se ao clicar em "Start Recipe" é redirecionado para página de progresso da comida', async () => {
       localStorage.clear();
-      expect.assertions(2);
+      expect.assertions(3);
 
       const { history } = renderWithRouterAndContext(<RecipeDetails />);
       history.push(`/foods/${oneMeal.meals[0].idMeal}`);
       await waitFor(() => expect(fetch).toHaveBeenCalled());
 
       const startBtn = screen.getByTestId('start-recipe-btn');
+      expect(startBtn).toHaveTextContent('Start Recipe');
       userEvent.click(startBtn);
       const { pathname } = history.location;
       expect(pathname).toBe(`/foods/${oneMeal.meals[0].idMeal}/in-progress`);
     });
 
     it('Testa se ao clicar em "Start Recipe" é redirecionado para página de progresso da bebida', async () => {
-      expect.assertions(2);
+      expect.assertions(3);
 
       localStorage.clear();
       jest.resetAllMocks();
@@ -146,18 +150,40 @@ describe('Testes gerais da tela de detalhes de uma receita', () => {
       await waitFor(() => expect(fetch).toHaveBeenCalled());
 
       const startBtn = screen.getByTestId('start-recipe-btn');
+      expect(startBtn).toHaveTextContent('Start Recipe');
       userEvent.click(startBtn);
       const { pathname } = history.location;
-      expect(pathname).toBe(`/drinks/${oneDrink.drinks[0].idDrink}/in-progress`);
+      expect(pathname).toBe(
+        `/drinks/${oneDrink.drinks[0].idDrink}/in-progress`
+      );
     });
 
-    it('Testa se aparece o botao "Continue Recipe" caso a receita já tenha sido iniciada', async () => {
+    it('Testa se aparece o botão "Continue Recipe" caso a receita da comida já tenha sido iniciada', async () => {
       const { history } = renderWithRouterAndContext(<RecipeDetails />);
       history.push(`/foods/${oneMeal.meals[0].idMeal}`);
       await waitFor(() => expect(fetch).toHaveBeenCalled());
 
       const startBtn = screen.getByTestId('start-recipe-btn');
       expect(startBtn).toHaveTextContent('Continue Recipe');
+    });
+
+    it('Testa se aparece o botão "Continue Recipe" caso a receita da bebida já tenha sido iniciada', async () => {
+      const { history } = renderWithRouterAndContext(<RecipeDetails />);
+      history.push(`/drinks/${oneDrink.drinks[0].idDrink}`);
+      await waitFor(() => expect(fetch).toHaveBeenCalled());
+
+      const startBtn = screen.getByTestId('start-recipe-btn');
+      expect(startBtn).toHaveTextContent('Continue Recipe');
+    });
+
+    it('Testa se o botão para voltar a página de detalhes funciona corretamente', async () => {
+      const { history } = renderWithRouterAndContext(<RecipeDetails />);
+      history.push(`/drinks/${oneDrink.drinks[0].idDrink}/in-progress`);
+      
+      await waitFor(() => expect(fetch).toHaveBeenCalled());
+      const goBackBtn = screen.getByTestId('go-back-btn');
+      userEvent.click(goBackBtn);
+      expect(history.location.pathname).toBe('/drinks/178319');
     });
   });
 });

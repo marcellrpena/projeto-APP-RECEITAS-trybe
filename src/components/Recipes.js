@@ -9,6 +9,7 @@ import {
   fetchCategories,
 } from '../services/fetchRecipes';
 import RecipeCard from './RecipeCard';
+import CategoryButton from './CategoryButton';
 
 function Recipes() {
   const history = useHistory();
@@ -70,15 +71,11 @@ function Recipes() {
               && categoriesToRender
                 .slice(0, MAX_CATEGORIES)
                 .map(({ strCategory }, index) => (
-                  <button
+                  <CategoryButton
                     key={ index }
-                    type="button"
-                    data-testid={ `${strCategory}-category-filter` }
+                    categoryType={ strCategory }
                     onClick={ () => handleClickFilter(strCategory) }
-                    className="filter-btn"
-                  >
-                    {strCategory}
-                  </button>
+                  />
                 ))}
           </nav>
           {recipesToRender.length >= 1 && (

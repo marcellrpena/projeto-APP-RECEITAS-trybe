@@ -67,7 +67,7 @@ function RecipeDetails() {
       {isFetched && (
         <>
           <section className="recipe-Details">
-            <GoBackButton />
+            <GoBackButton alt="Ícone de seta para o lado esquerdo" />
             <RecipeCardDetails
               imgTestId="recipe-photo"
               nameTestId="recipe-title"

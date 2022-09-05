@@ -17,6 +17,7 @@ function Footer() {
         <button
           type="button"
           alt="Check List icon"
+          data-testid="done-recipes-bottom-btn"
           className="Aside-Icon"
           onClick={ () => history.push('/done-recipes') }
         >
@@ -61,6 +62,7 @@ function Footer() {
         <button
           type="button"
           alt="Star Icon"
+          data-testid="favorites-bottom-btn"
           className="Aside-Icon"
           onClick={ () => history.push('/favorite-recipes') }
         >

@@ -5,14 +5,6 @@ import renderWithRouterAndContext from './helpers/renderWithRouterAndContext';
 import Foods from '../pages/Foods';
 
 describe('Testes do Footer', () => {
-  it('Testa se o footer é renderizado', () => {
-    renderWithRouterAndContext(<Foods />);
-
-    const foods = screen.getByRole('heading', { name: /foods/i, level: 1 });
-
-    expect(foods).toBeInTheDocument();
-  });
-
   it('Testa se o footer renderiza os botões de Drinks e Meals', () => {
     renderWithRouterAndContext(<Foods />);
 
@@ -43,5 +35,27 @@ describe('Testes do Footer', () => {
 
     const { pathname } = history.location;
     expect(pathname).toBe('/foods');
+  });
+
+  it('Testa se, ao clicar no botão de Done Recipes renderiza a página de receitas feitas', () => {
+    const { history } = renderWithRouterAndContext(<Foods />);
+
+    const doneRecipesButton = screen.getByTestId('done-recipes-bottom-btn');
+
+    userEvent.click(doneRecipesButton);
+
+    const { pathname } = history.location;
+    expect(pathname).toBe('/done-recipes');
+  });
+
+  it('Testa se, ao clicar no botão de Favorites renderiza a página de receitas favoritas', () => {
+    const { history } = renderWithRouterAndContext(<Foods />);
+
+    const favoritesButton = screen.getByTestId('favorites-bottom-btn');
+
+    userEvent.click(favoritesButton);
+
+    const { pathname } = history.location;
+    expect(pathname).toBe('/favorite-recipes');
   });
 });
