@@ -53,7 +53,7 @@ function Login() {
         />
       </div>
       <div className="Form-Container">
-        <h3>Entre para continuar</h3>
+        <h3>Sign in</h3>
         <Form onSubmit={ handleSubmit }>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label className="text-left">Enter your email</Form.Label>

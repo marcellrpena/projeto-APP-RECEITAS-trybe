@@ -89,6 +89,7 @@ function RecipeDetails() {
                   {copiedToClipboard ? <HiShare /> : <HiOutlineShare /> }
                 </button>
                 <button
+                  name={ isFavorite ? 'favorite' : 'not-favorite' }
                   className="btn-share-favorite"
                   type="button"
                   data-testid="favorite-btn"

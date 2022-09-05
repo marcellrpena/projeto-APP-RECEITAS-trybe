@@ -69,6 +69,7 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
             });
           } }
           className="filter-btn"
+          alt="Símbolo de infinito"
         >
           <IoMdInfinite
             size="40px"
@@ -87,6 +88,7 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
             });
           } }
           className="filter-btn"
+          alt="Ícone de um prato de comida"
         >
           <GiMeal
             size="40px"
@@ -105,6 +107,7 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
             });
           } }
           className="filter-btn"
+          alt="Ícone de um copo"
         >
           <BiDrink
             size="40px"
