@@ -67,7 +67,7 @@ function RecipeDetails() {
       {isFetched && (
         <>
           <section className="recipe-Details">
-            <GoBackButton />
+            <GoBackButton alt="Ícone de seta para o lado esquerdo" />
             <RecipeCardDetails
               imgTestId="recipe-photo"
               nameTestId="recipe-title"
@@ -89,6 +89,7 @@ function RecipeDetails() {
                   {copiedToClipboard ? <HiShare /> : <HiOutlineShare /> }
                 </button>
                 <button
+                  name={ isFavorite ? 'favorite' : 'not-favorite' }
                   className="btn-share-favorite"
                   type="button"
                   data-testid="favorite-btn"

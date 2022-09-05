@@ -14,7 +14,16 @@ function GoBackButton() {
     history.push(route);
   };
 
-  return <IoIosArrowBack className="Go-Back-Btn" onClick={ toPreviousPage } />;
+  return (
+    <button
+      data-testid="go-back-btn"
+      className="Go-Back-Btn"
+      type="button"
+      onClick={ toPreviousPage }
+    >
+      <IoIosArrowBack className="Go-Back-Btn" />
+    </button>
+  );
 }
 
 export default GoBackButton;

@@ -29,10 +29,14 @@ function Header({ name, showHomeBtn }) {
           </div>
         )}
         {showHomeBtn && (
-          <FaHome
-            style={ { fontSize: '2rem' } }
+          <button
+            className="Home-Btn"
+            type="button"
+            data-testid="go-home-btn"
             onClick={ () => history.push('/foods') }
-          />
+          >
+            <FaHome style={ { fontSize: '2rem' } } />
+          </button>
         )}
         <h1 data-testid="page-title">{name}</h1>
         <div className="Header-Button">

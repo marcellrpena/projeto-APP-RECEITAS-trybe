@@ -45,7 +45,6 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
 
   const removeFavorite = (id) => {
     const newLocalRecipes = recipesList.filter((recipe) => recipe.id !== id);
-    console.log(newLocalRecipes);
     setRecipesList(newLocalRecipes);
     localStorage.setItem(key, JSON.stringify(newLocalRecipes));
   };
@@ -69,6 +68,7 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
             });
           } }
           className="filter-btn"
+          alt="Símbolo de infinito"
         >
           <IoMdInfinite
             size="40px"
@@ -87,6 +87,7 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
             });
           } }
           className="filter-btn"
+          alt="Ícone de um prato de comida"
         >
           <GiMeal
             size="40px"
@@ -105,6 +106,7 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
             });
           } }
           className="filter-btn"
+          alt="Ícone de um copo"
         >
           <BiDrink
             size="40px"

@@ -47,7 +47,6 @@ function RecipeInProgress() {
   }, []);
 
   const setProgressRecipe = ({ target }) => {
-    console.log(target.name);
     const type = pathname.includes('foods') ? 'meals' : 'cocktails';
     let doneIngredients = [...checkSaved, target.name];
     if (target.checked) setCheckSaved(doneIngredients);

@@ -13,7 +13,7 @@
 }
 
 .Main-Header h1 {
-  font-size: 2rem;
+  font-size: 1.8rem;
   margin: 0;
 }
 
@@ -22,7 +22,8 @@
   background: #f45d01;
   justify-content: space-between;
   min-height: 10vh;
-  padding: 0.4rem 1rem 0;
+  padding: 0.4rem;
+  padding-bottom: 0;
   transition: 0.3s;
   width: 100%;
 }
@@ -32,9 +33,14 @@
   border: none;
 }
 
-.Header-Button button svg {
+.Home-Btn svg, .Header-Button button svg {
   color: rgb(243, 243, 243);
   font-size: 2rem;
+}
+
+.Home-Btn {
+  background: none;
+  border: none;
 }
 
 .Search-Bar {

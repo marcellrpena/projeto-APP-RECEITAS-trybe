@@ -4,6 +4,7 @@ import React from 'react';
 function CategoryButton({ categoryType, onClick }) {
   return (
     <button
+      className="filter-btn"
       type="button"
       data-testid={ `${categoryType}-category-filter` }
       onClick={ onClick }
