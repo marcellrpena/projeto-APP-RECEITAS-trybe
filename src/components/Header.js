@@ -12,7 +12,7 @@ function Header({ name, showHomeBtn }) {
   const { isSearching, setIsSearching } = useContext(RecipesContext);
   const names = ['Profile', 'Done Recipes', 'Favorite Recipes'];
   return (
-    <header className={ `Main-Header ${isSearching ? 'Rounded' : ''}` }>
+    <header className="Main-Header">
       <div
         className={ `Header-Informations ${isSearching ? 'Flat' : 'Rounded'}` }
       >

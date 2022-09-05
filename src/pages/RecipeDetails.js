@@ -103,30 +103,34 @@ function RecipeDetails() {
                 {recipe.strAlcoholic || recipe.strCategory}
               </p>
             </div>
-            <h4 className="title-ingredients">Ingredients</h4>
-            <div className="ingredient-list">
-              {ingredients.map((item, index) => (
-                <p
-                  key={ index }
-                  data-testid={ `${index}-ingredient-name-and-measure` }
-                  className="margin-zero"
-                >
-                  {`${item}${measures[index] ? `: ${measures[index]}` : ''}`}
+            <section className="Ingredients-Container">
+              <h4 className="title-ingredients">Ingredients</h4>
+              <div className="ingredient-list">
+                {ingredients.map((item, index) => (
+                  <p
+                    key={ index }
+                    data-testid={ `${index}-ingredient-name-and-measure` }
+                    className="margin-zero"
+                  >
+                    {`${item}${measures[index] ? `: ${measures[index]}` : ''}`}
+                  </p>
+                ))}
+              </div>
+            </section>
+            <section className="Instructions-Container">
+              <h4 className="title-instructions">Instructions</h4>
+              <div className="instructions-text">
+                <p data-testid="instructions" className="text-style">
+                  {recipe.strInstructions}
                 </p>
-              ))}
-            </div>
-            <h4 className="title-instructions">Instructions</h4>
-            <div className="instructions-text">
-              <p data-testid="instructions" className="text-style">
-                {recipe.strInstructions}
-              </p>
-            </div>
+              </div>
+            </section>
             <button
               type="button"
               data-testid="start-recipe-btn"
               disabled={ isFinishedRecipe }
               onClick={ startNewRecipe }
-              className="btn btn-secondary btn-login"
+              className="btn btn-secondary btn-login Start-Recipe-Btn"
             >
               {isStartedRecipe ? 'Continue Recipe' : 'Start Recipe'}
             </button>
@@ -134,7 +138,7 @@ function RecipeDetails() {
           <section className="Side-Content">
             {pathname.includes('/food') && (
               <div className="video-style">
-                <h3>Check this video!</h3>
+                <h4>Check this video!</h4>
                 <iframe
                   title={ recipe.strMeal }
                   frameBorder="0"

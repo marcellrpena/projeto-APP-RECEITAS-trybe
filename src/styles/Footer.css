@@ -9,7 +9,7 @@ footer {
   margin-bottom: 12px;
   padding: 0.6rem;
   position: fixed;
-  width: 80%;
+  width: 90%;
 }
 
 .Footer-Button button svg {
@@ -21,7 +21,12 @@ footer {
   opacity: 0.4;
 }
 
-.Selected {
+.Selected, .Aside-Icon {
   color: #152736;
   filter: brightness(60%);
+}
+
+@media screen and ( min-width : 780px ) {
+
+  footer { width: 704px; }
 }

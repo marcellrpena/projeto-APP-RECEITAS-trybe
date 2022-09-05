@@ -74,7 +74,7 @@ function RecipeInProgress() {
   return (
     <div>
       {isFetched && (
-        <div className="recipe-in-progress">
+        <main className="recipe-in-progress">
           <img
             className="recipeImg"
             src={ recipe.strMealThumb || recipe.strDrinkThumb }
@@ -121,9 +121,9 @@ function RecipeInProgress() {
                 <div key={ index }>
                   <label
                     data-testid={ `${index}-ingredient-step` }
-                    htmlFor={ `${ingredient} - ${measures[index]}` }
                     className="margin-zero ingredient-progress"
                     style={ { gap: '0.6rem' } }
+                    htmlFor={ `${ingredient} - ${measures[index]}` }
                   >
                     <input
                       type="checkbox"
@@ -158,11 +158,11 @@ function RecipeInProgress() {
             data-testid="finish-recipe-btn"
             disabled={ ingredients.length !== checkSaved.length }
             onClick={ finishRecipe }
-            className="btn btn-secondary btn-login"
+            className="btn btn-secondary btn-login Start-Recipe-Btn"
           >
             Finish Recipe
           </button>
-        </div>
+        </main>
       )}
     </div>
   );

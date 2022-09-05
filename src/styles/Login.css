@@ -12,7 +12,8 @@
 }
 
 .Login-Container button {
-  width: 80px;
+  padding: 0.5rem;
+  width: 120px;
 }
 
 .Logo-Container {
@@ -34,16 +35,20 @@
 .Login-Container form {
   align-items: center;
   gap: 1rem;
-  height: 60%;
+  height: 380px;
   width: 100%;
 }
 
 .Login-Container form div {
   width: 100%;
+  z-index: 99999;
 }
 
+.Logo { display: none; }
+
 .Logo-Container img {
-  width: 320px;
+  transition: 0.3s;
+  width: 400px;
   z-index: 1000;
 }
 
@@ -54,9 +59,15 @@
 
 @media screen and ( max-width : 800px ) {
 
+  .Logo { display: flex; }
+
+  .Logo-Alt {
+    display: none;
+  }
+
   .Form-Container {
     align-items: center;
-    height: 100%;
+    height: fit-content;
     padding: 0;
     width: 100%;
   }
@@ -66,9 +77,8 @@
   }
 
   .Logo-Container {
-    left: 40px;
     position: absolute;
-    top: -115px;
+    top: 0;
     width: 100%;
   }
 
@@ -76,16 +86,43 @@
     background: rgb(248, 248, 248);
     border-radius: 12px;
     box-shadow: 2px 5px 6px #47464777;
-    position: absolute;
     top: 30vh;
-    width: 90%;
+    width: 360px;
   }
 
   .Logo-Container img {
-    width: 70%;
+    width: 180px;
   }
 
   .Login-Container form div {
     width: 80%;
   }
 }
+
+@media screen and ( max-width : 390px ) {
+
+  .Login-Container form { width: 90%; }
+}
+
+@media screen and ( max-height : 621px ) {
+
+  .Logo-Container { top: 0; }
+
+  .Logo-Container img { width: 112px; }
+}
+
+@media screen and ( min-height : 621px ) {
+
+  .Logo-Container { top: 25px; }
+}
+
+@media screen and ( min-height : 700px ) {
+
+  .Logo-Container { top: 60px; }
+}
+
+@media screen and ( min-height : 780px ) {
+
+  .Logo-Container { top: 100px; }
+}
+

@@ -3,6 +3,7 @@ import { Button, Form } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { LoginContext } from '../contexts/Contexts';
 import logo from '../images/logo.png';
+import logoAlt from '../images/logo-alt.png';
 import '../styles/Login.css';
 
 function Login() {
@@ -38,12 +39,22 @@ function Login() {
 
   return (
     <main className="Login-Container">
+      <div className="Logo-Container">
+        <img
+          className="Logo"
+          src={ logo }
+          alt="Um coração com chapéu de chef, colher e garfo"
+        />
+        <img
+          className="Logo-Alt"
+          src={ logoAlt }
+          alt={ `Um coração com chapéu de chef,
+          colher e garfo com legenda a legenda "Big Chefe, o seu App de Receitas"` }
+        />
+      </div>
       <div className="Form-Container">
         <h3>Entre para continuar</h3>
         <Form onSubmit={ handleSubmit }>
-          <div className="Logo-Container">
-            <img src={ logo } alt="Um coração com chapéu de chef, colher e garfo" />
-          </div>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label className="text-left">Enter your email</Form.Label>
             <Form.Control

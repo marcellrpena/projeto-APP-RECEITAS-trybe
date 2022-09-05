@@ -5,7 +5,8 @@ import { bool, shape, string } from 'prop-types';
 import { BiDrink } from 'react-icons/bi';
 import { GiMeal } from 'react-icons/gi';
 import { IoMdInfinite } from 'react-icons/io';
-import { HiOutlineShare } from 'react-icons/hi';
+import { HiOutlineShare, HiShare } from 'react-icons/hi';
+import EmptyListMessage from './EmptyListMessage';
 import favoriteIcon from '../images/blackHeartIcon.svg';
 import '../styles/RecipesList.css';
 
@@ -17,6 +18,7 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
     foods: false,
     drinks: false,
   });
+  const [isLinkToClipboard, setIsLinkToClipboard] = useState({});
 
   const localRecipes = JSON.parse(localStorage.getItem(key)) || [];
   const getPath = (type) => (type === 'food' ? 'foods' : 'drinks');
@@ -26,6 +28,7 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
     const domain = window.location.href.split(routeIdentifier)[0];
     const link = `${domain}${getPath(type)}/${id}`;
     clipboardCopy(link);
+    setIsLinkToClipboard({ [id]: true });
   };
 
   const applyFilter = (recipeType) => (
@@ -52,8 +55,8 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
   }, []);
 
   return (
-    <>
-      <nav className="nav-filter-buttons">
+    <section>
+      <nav className="nav-filter-buttons fav-done-nav">
         <button
           type="button"
           data-testid="filter-by-all-btn"
@@ -109,92 +112,102 @@ function RecipesList({ props: { key, useTags, favoriteBtn } }) {
           />
         </button>
       </nav>
-      <main>
+      <main className="Recipes-List-Container">
         <ul className="recipes-list">
-          {recipesList.map(
-            (
-              {
-                id,
-                image,
-                name,
-                category,
-                nationality,
-                alcoholicOrNot,
-                type,
-                doneDate,
-                tags,
-              },
-              index,
-            ) => (
-              <li key={ id } className="recipe">
-                <button
-                  type="button"
-                  onClick={ () => toRecipePage(type, id) }
-                  className="recipe-img-btn"
-                >
-                  <img
-                    src={ image }
-                    alt={ name }
-                    data-testid={ `${index}-horizontal-image` }
-                    className="recipe-img"
-                  />
-                </button>
-                <div className="recipe-info">
-                  <p data-testid={ `${index}-horizontal-top-text` }>
-                    {`${
-                      type === 'food' ? nationality : alcoholicOrNot
-                    } - ${category}`}
-                  </p>
+          {recipesList.length === 0 ? (
+            <EmptyListMessage />
+          ) : (
+            recipesList.map(
+              (
+                {
+                  id,
+                  image,
+                  name,
+                  category,
+                  nationality,
+                  alcoholicOrNot,
+                  type,
+                  doneDate,
+                  tags,
+                },
+                index,
+              ) => (
+                <li key={ id } className="recipe">
                   <button
                     type="button"
                     onClick={ () => toRecipePage(type, id) }
-                    className="recipe-title"
+                    className="recipe-img-btn"
                   >
-                    <h3 data-testid={ `${index}-horizontal-name` }>{name}</h3>
+                    <img
+                      src={ image }
+                      alt={ name }
+                      data-testid={ `${index}-horizontal-image` }
+                      className="recipe-img"
+                    />
                   </button>
-                  {!favoriteBtn && (
-                    <p data-testid={ `${index}-horizontal-done-date` }>
-                      {`Done in: ${doneDate}`}
+                  <div className="recipe-info">
+                    <p data-testid={ `${index}-horizontal-top-text` }>
+                      {`${
+                        type === 'food' ? nationality : alcoholicOrNot
+                      } - ${category}`}
                     </p>
-                  )}
-                  <div className="tags">
-                    {useTags
-                      && tags.slice(0, 2).map((tag) => (
-                        <p
-                          key={ tag }
-                          data-testid={ `${index}-${tag}-horizontal-tag` }
-                        >
-                          {tag}
-                        </p>
-                      ))}
-                  </div>
-                </div>
-                <div className="share-btn">
-                  <button
-                    type="button"
-                    data-testid={ `${index}-horizontal-share-btn` }
-                    alt="Share icon"
-                    onClick={ () => shareRecipe(type, id) }
-                  >
-                    <HiOutlineShare />
-                  </button>
-                  {favoriteBtn && (
                     <button
                       type="button"
-                      data-testid={ `${index}-horizontal-favorite-btn` }
-                      src={ favoriteIcon }
-                      onClick={ () => removeFavorite(id) }
+                      onClick={ () => toRecipePage(type, id) }
+                      className="recipe-title"
                     >
-                      <img src={ favoriteIcon } alt="Favorite icon" />
+                      <h3 data-testid={ `${index}-horizontal-name` }>
+                        {name}
+                      </h3>
                     </button>
-                  )}
-                </div>
-              </li>
-            ),
+                    {!favoriteBtn && (
+                      <p data-testid={ `${index}-horizontal-done-date` }>
+                        {`Done in: ${doneDate}`}
+                      </p>
+                    )}
+                    <div className="tags">
+                      {useTags
+                            && tags.slice(0, 2).map((tag) => (
+                              <p
+                                key={ tag }
+                                data-testid={ `${index}-${tag}-horizontal-tag` }
+                              >
+                                {tag}
+                              </p>
+                            ))}
+                    </div>
+                  </div>
+                  <div className="share-btn">
+                    <button
+                      type="button"
+                      data-testid={ `${index}-horizontal-share-btn` }
+                      alt="Share icon"
+                      onClick={ () => shareRecipe(type, id) }
+                    >
+                      {isLinkToClipboard[id] ? (
+                        <HiShare />
+                      ) : (
+                        <HiOutlineShare />
+                      )}
+                    </button>
+                    {favoriteBtn && (
+                      <button
+                        type="button"
+                        data-testid={ `${index}-horizontal-favorite-btn` }
+                        src={ favoriteIcon }
+                        onClick={ () => removeFavorite(id) }
+                      >
+                        <img src={ favoriteIcon } alt="Favorite icon" />
+                      </button>
+                    )}
+                  </div>
+                </li>
+              ),
+            )
           )}
         </ul>
       </main>
-    </>
+    </section>
   );
 }
 
