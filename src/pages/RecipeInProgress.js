@@ -28,11 +28,7 @@ function RecipeInProgress() {
   const [linkCopied, setLinkCopied] = useState(false);
   const [refresh, setRefresh] = useState(true);
   const { recipe, isFetched, ingredients, measures } = useRecipe(pathname, id);
-  const { isFavorite, addRecipeToFavorites } = useFavorites(
-    false,
-    id,
-    pathname,
-  );
+  const { isFavorite, addRecipeToFavorites } = useFavorites(id, pathname);
 
   const getAndSetProgressRecipes = () => {
     const storageData = getRecipesInProgress();

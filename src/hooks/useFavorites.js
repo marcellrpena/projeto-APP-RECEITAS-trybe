@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { fetchRecipeDetails } from '../services/fetchRecipes';
 import { addToFavorites, getFavoritesRecipes } from '../services/saveStorage';
 
-function useFavorites(defaultValue, recipeId, recipeType) {
-  const [isFavorite, setIsFavorite] = useState(defaultValue);
+function useFavorites(recipeId, recipeType) {
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const addRecipeToFavorites = async () => {
     setIsFavorite(!isFavorite);

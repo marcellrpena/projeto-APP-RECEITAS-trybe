@@ -8,7 +8,7 @@ function useSuggestions(recipeType) {
   const { isNewRecipe } = useContext(RecipesContext);
 
   const ONE_HALF = 0.5;
-  const randomize = (recipes) => recipes.sort(() => Math.random() - ONE_HALF);
+  const randomize = (recipes = []) => recipes.sort(() => Math.random() - ONE_HALF);
 
   useEffect(() => {
     const getSuggestions = async () => {

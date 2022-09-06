@@ -176,7 +176,27 @@ describe('Testes gerais da tela de detalhes de uma receita', () => {
       expect(startBtn).toHaveTextContent('Continue Recipe');
     });
 
-    it('Testa se o botão para voltar a página de detalhes funciona corretamente', async () => {
+    it('Testa se o botão de voltar para a rota "/foods" funciona ', async () => {
+      const { history } = renderWithRouterAndContext(<RecipeDetails />);
+      history.push(`/foods/${oneMeal.meals[0].idMeal}`);
+      
+      await waitFor(() => expect(fetch).toHaveBeenCalled());
+      const goBackBtn = screen.getByTestId('go-back-btn');
+      userEvent.click(goBackBtn);
+      expect(history.location.pathname).toBe('/foods');
+    });
+
+    it('Testa se o botão de voltar para a rota "/drinks" funciona ', async () => {
+      const { history } = renderWithRouterAndContext(<RecipeDetails />);
+      history.push(`/drinks/${oneDrink.drinks[0].idDrink}`);
+      
+      await waitFor(() => expect(fetch).toHaveBeenCalled());
+      const goBackBtn = screen.getByTestId('go-back-btn');
+      userEvent.click(goBackBtn);
+      expect(history.location.pathname).toBe('/drinks');
+    });
+
+    it('Testa se o botão de voltar para a página de detalhes funciona', async () => {
       const { history } = renderWithRouterAndContext(<RecipeDetails />);
       history.push(`/drinks/${oneDrink.drinks[0].idDrink}/in-progress`);
       
@@ -184,6 +204,18 @@ describe('Testes gerais da tela de detalhes de uma receita', () => {
       const goBackBtn = screen.getByTestId('go-back-btn');
       userEvent.click(goBackBtn);
       expect(history.location.pathname).toBe('/drinks/178319');
+    });
+
+    it('Testa se a receita não é renderizada caso a requisição para a API falhe', () => {
+      jest.spyOn(global, 'fetch').mockImplementation(async () => {
+        return Promise.reject({});
+      });
+
+      const { history } = renderWithRouterAndContext(<RecipeDetails />);
+      history.push(`/foods/${oneMeal.meals[0].idMeal}`);
+
+      const arrabiata = screen.queryByText(/Spicy Arrabiata Penne/i);
+      expect(arrabiata).not.toBeInTheDocument();
     });
   });
 });

@@ -1,7 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import clipboardCopy from 'clipboard-copy';
-import { HiOutlineHeart, HiHeart, HiOutlineShare, HiShare } from 'react-icons/hi';
+import {
+  HiOutlineHeart,
+  HiHeart,
+  HiOutlineShare,
+  HiShare,
+} from 'react-icons/hi';
 import {
   getDoneRecipes,
   getRecipesInProgress,
@@ -20,11 +25,7 @@ function RecipeDetails() {
   const history = useHistory();
   const { pathname } = useLocation();
   const { id } = useParams();
-  const { isFavorite, addRecipeToFavorites } = useFavorites(
-    false,
-    id,
-    pathname,
-  );
+  const { isFavorite, addRecipeToFavorites } = useFavorites(id, pathname);
   const { isNewRecipe } = useContext(RecipesContext);
   const { recipe, isFetched, ingredients, measures } = useRecipe(pathname, id);
   const [isStartedRecipe, setIsStartedRecipe] = useState(false);
@@ -53,12 +54,16 @@ function RecipeDetails() {
   };
 
   const getEmbedId = () => {
-    if (isFetched) return recipe.strYoutube.split('watch?v=')[1];
+    if (isFetched && recipe.strYoutube) {
+      return recipe.strYoutube.split('watch?v=')[1];
+    }
   };
 
   const startNewRecipe = () => {
-    const recipeType = pathname.includes('foods') ? 'meals' : 'cocktails';
-    startRecipe(id, recipeType);
+    if (!isStartedRecipe) {
+      const recipeType = pathname.includes('foods') ? 'meals' : 'cocktails';
+      startRecipe(id, recipeType);
+    }
     history.push(`${pathname}/in-progress`);
   };
 
@@ -67,7 +72,7 @@ function RecipeDetails() {
       {isFetched && (
         <>
           <section className="recipe-Details">
-            <GoBackButton alt="Ícone de seta para o lado esquerdo" />
+            <GoBackButton />
             <RecipeCardDetails
               imgTestId="recipe-photo"
               nameTestId="recipe-title"
@@ -86,7 +91,7 @@ function RecipeDetails() {
                   onClick={ copyLink }
                   alt="Share icon"
                 >
-                  {copiedToClipboard ? <HiShare /> : <HiOutlineShare /> }
+                  {copiedToClipboard ? <HiShare /> : <HiOutlineShare />}
                 </button>
                 <button
                   name={ isFavorite ? 'favorite' : 'not-favorite' }

@@ -1,16 +1,16 @@
 import React from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 function GoBackButton() {
   const history = useHistory();
   const { pathname } = useLocation();
-  const { id } = useParams();
 
   const toPreviousPage = () => {
+    const type = pathname.includes('foods') ? 'foods' : 'drinks';
     const route = pathname.includes('in-progress')
       ? pathname.split('/in-progress')[0]
-      : pathname.split(`/${id}`)[0];
+      : `/${type}`;
     history.push(route);
   };
 
@@ -21,7 +21,10 @@ function GoBackButton() {
       type="button"
       onClick={ toPreviousPage }
     >
-      <IoIosArrowBack className="Go-Back-Btn" />
+      <IoIosArrowBack
+        alt="Ícone de seta para o lado esquerdo"
+        className="Go-Back-Btn"
+      />
     </button>
   );
 }

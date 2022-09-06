@@ -4,10 +4,10 @@ const getEndpoint = ({ search, filter }) => {
   return `search.php?f=${search}`;
 };
 
-export const domain = (type) => (type.includes('foods') ? 'meal' : 'cocktail');
+export const getType = (type) => (type.includes('foods') ? 'meal' : 'cocktail');
 
 export const fetchRecipesBy = async (type, userSearch) => {
-  const ENDPOINT = `https://www.the${domain(
+  const ENDPOINT = `https://www.the${getType(
     type,
   )}db.com/api/json/v1/1/${getEndpoint(userSearch)}`;
   try {
@@ -20,7 +20,7 @@ export const fetchRecipesBy = async (type, userSearch) => {
 };
 
 export const fetchRecipes = async (type) => {
-  const ENDPOINT = `https://www.the${domain(
+  const ENDPOINT = `https://www.the${getType(
     type,
   )}db.com/api/json/v1/1/search.php?s=`;
   try {
@@ -33,7 +33,7 @@ export const fetchRecipes = async (type) => {
 };
 
 export const fetchCategories = async (type) => {
-  const ENDPOINT = `https://www.the${domain(
+  const ENDPOINT = `https://www.the${getType(
     type,
   )}db.com/api/json/v1/1/list.php?c=list`;
   try {
@@ -46,7 +46,7 @@ export const fetchCategories = async (type) => {
 };
 
 export const fetchByFilter = async (type, category) => {
-  const ENDPOINT = `https://www.the${domain(
+  const ENDPOINT = `https://www.the${getType(
     type,
   )}db.com/api/json/v1/1/filter.php?c=${category}`;
   try {
@@ -59,7 +59,7 @@ export const fetchByFilter = async (type, category) => {
 };
 
 export const fetchRecipeDetails = async (type, id) => {
-  const ENDPOINT = `https://www.the${domain(
+  const ENDPOINT = `https://www.the${getType(
     type,
   )}db.com/api/json/v1/1/lookup.php?i=${id}`;
   try {

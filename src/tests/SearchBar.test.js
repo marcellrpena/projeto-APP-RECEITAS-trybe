@@ -10,6 +10,7 @@ import renderWithRouterAndContext from './helpers/renderWithRouterAndContext';
 import Header from '../components/Header';
 import App from '../App';
 import SearchBar from '../components/SearchBar';
+import Foods from '../pages/Foods';
 
 describe('Testes da barra de pesquisa', () => {
   beforeEach(() => {
@@ -196,6 +197,31 @@ describe('Testes da barra de pesquisa', () => {
 
       await waitFor(() => expect(fetch).toHaveBeenCalled());
       expect(history.location.pathname).toBe('/drinks/178319');
+    });
+
+    it('Testa se nada acontece caso a requisição para a API de filtros falhe', async () => {
+      expect.assertions(3);
+      const { history } = renderWithRouterAndContext(<Foods />);
+      history.push('/foods');
+
+      await waitFor(() => expect(fetch).toHaveBeenCalled());
+
+      const corba = screen.queryByText(/corba/i);
+      expect(corba).toBeInTheDocument();
+      const searchBtn = screen.getByTestId('search-top-btn');
+      userEvent.click(searchBtn);
+
+      const searchInput = screen.getByTestId('search-input');
+      const nameRadio = screen.getByTestId('name-search-radio');
+      const searchFilterBtn = screen.getByTestId('exec-search-btn');
+      userEvent.type(searchInput, 'milk');
+      userEvent.click(nameRadio);
+
+      jest.spyOn(global, 'fetch').mockImplementation(async () => {
+        return Promise.reject({});
+      });
+      userEvent.click(searchFilterBtn);
+      expect(corba).toBeInTheDocument();
     });
   });
 });

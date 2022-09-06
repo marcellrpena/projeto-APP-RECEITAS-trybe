@@ -223,4 +223,26 @@ describe('Testes do componente de Receitas', () => {
     const corba = screen.getByRole('heading', { name: /corba/i });
     expect(corba).toBeInTheDocument();
   });
+
+  it('Testa se nao renderiza nenhuma receita caso a requisição da API de categorias falhe', async () => {
+    expect.assertions(2);
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(drinkCategories),
+    });
+
+    const { history } = renderWithRouterAndContext(<Drinks />);
+    history.push('/drinks');
+
+    await waitFor(() => expect(fetch).toHaveBeenCalled());
+    const cocktailBtn = screen.getByTestId('Cocktail-category-filter');
+
+    jest.spyOn(global, 'fetch').mockImplementation(async () => {
+      return Promise.reject({});
+    });
+    userEvent.click(cocktailBtn);
+
+    const ggDrink = screen.queryByRole('heading', { name: /gg/i });
+    expect(ggDrink).not.toBeInTheDocument();
+  });
 });
