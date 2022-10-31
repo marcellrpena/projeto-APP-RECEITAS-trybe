@@ -8,6 +8,7 @@
   "dependencies": {
     "bootstrap": "^4.5.3",
     "clipboard-copy": "^4.0.1",
+    "gh-pages": "^4.0.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-bootstrap": "^2.4.0",
@@ -17,7 +18,10 @@
     "react-router-dom": "^5.3.3",
     "react-scripts": "^5.0.1"
   },
+  "homepage": "https://marcellrpena.github.io/projeto-APP-RECEITAS-trybe",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "cy": "cypress run",
     "cy:open": "cypress open",
     "start": "react-scripts start",
