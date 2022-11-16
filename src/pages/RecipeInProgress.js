@@ -1,24 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import {
-  HiOutlineHeart,
-  HiHeart,
-  HiOutlineShare,
-  HiShare,
-} from 'react-icons/hi';
 import clipboardCopy from 'clipboard-copy';
-import shareIcon from '../images/shareIcon.svg';
-import whiteHeart from '../images/whiteHeartIcon.svg';
-import blackHeart from '../images/blackHeartIcon.svg';
 import useFavorites from '../hooks/useFavorites';
 import useRecipe from '../hooks/useRecipe';
-import '../styles/RecipeInProgress.css';
 import {
   doneRecipe,
   getRecipesInProgress,
   startRecipe,
 } from '../services/saveStorage';
 import GoBackButton from '../components/GoBackButton';
+import RecipeCardDetails from '../components/RecipeCardDetails';
+import RecipeDetail from '../components/RecipeDetail';
+import IngredientsList from '../components/IngredientsList';
+import Instructions from '../components/Instructions';
+import '../styles/RecipeInProgress.css';
 
 function RecipeInProgress() {
   const history = useHistory();
@@ -67,87 +62,31 @@ function RecipeInProgress() {
     checkSaved.some((ingredient) => ingredient === newIngredient));
 
   return (
-    <div>
+    <main>
       {isFetched && (
         <main className="recipe-in-progress">
-          <img
-            className="recipeImg"
-            src={ recipe.strMealThumb || recipe.strDrinkThumb }
-            alt={ recipe.strMeal || recipe.strDrink }
-            data-testid="recipe-photo"
-          />
-          <header className="title-share-favorite">
-            <h4 data-testid="recipe-title" className="title">
-              {recipe.strMeal || recipe.strDrink}
-            </h4>
-            <div className="btn-shareAndfavorite-position">
-              <button
-                className="btn-share-favorite"
-                type="button"
-                data-testid="share-btn"
-                src={ shareIcon }
-                alt="Share icon"
-                onClick={ shareRecipe }
-              >
-                {linkCopied ? <HiShare /> : <HiOutlineShare />}
-              </button>
-              <button
-                className="btn-share-favorite"
-                type="button"
-                data-testid="favorite-btn"
-                src={ isFavorite ? blackHeart : whiteHeart }
-                alt="Favorite icon"
-                onClick={ addRecipeToFavorites }
-              >
-                {isFavorite ? <HiHeart /> : <HiOutlineHeart />}
-              </button>
-            </div>
-          </header>
-          <div className="span-category">
-            <h6 data-testid="recipe-category" className="category">
-              {recipe.strCategory}
-            </h6>
-          </div>
-          <h4 className="title-ingredients">Ingredients</h4>
           <GoBackButton />
-          <div className="ingredient-list">
-            {!refresh
-              && ingredients.map((ingredient, index) => (
-                <div key={ index }>
-                  <label
-                    data-testid={ `${index}-ingredient-step` }
-                    className="margin-zero ingredient-progress"
-                    style={ { gap: '0.6rem' } }
-                    htmlFor={ `${ingredient} - ${measures[index]}` }
-                  >
-                    <input
-                      type="checkbox"
-                      name={ `${ingredient} - ${measures[index]}` }
-                      id={ `${ingredient} - ${measures[index]}` }
-                      checked={ checkIngredientsList(
-                        `${ingredient} - ${measures[index]}`,
-                      ) }
-                      onChange={ (e) => setProgressRecipe(e) }
-                    />
-                    <span
-                      className={ `${
-                        checkIngredientsList(ingredient)
-                          ? 'ingredient-check'
-                          : ''
-                      }` }
-                    >
-                      {`${ingredient} - ${measures[index]}`}
-                    </span>
-                  </label>
-                </div>
-              ))}
-          </div>
-          <h4 className="title-instructions">Instructions</h4>
-          <div className="instructions-text">
-            <p data-testid="instructions" className="text-style">
-              {recipe.strInstructions}
-            </p>
-          </div>
+          <RecipeCardDetails
+            imgTestId="recipe-photo"
+            nameTestId="recipe-title"
+            recipe={ recipe }
+            showCategory
+          />
+          <RecipeDetail
+            recipe={ recipe }
+            copyLink={ shareRecipe }
+            addToFavorites={ addRecipeToFavorites }
+            isFavorite={ isFavorite }
+            linkCopied={ linkCopied }
+          />
+          <IngredientsList
+            ingredients={ ingredients }
+            measures={ measures }
+            refresh={ refresh }
+            checkIngredientsList={ checkIngredientsList }
+            setProgressRecipe={ setProgressRecipe }
+          />
+          <Instructions recipe={ recipe } />
           <button
             type="button"
             data-testid="finish-recipe-btn"
@@ -159,7 +98,7 @@ function RecipeInProgress() {
           </button>
         </main>
       )}
-    </div>
+    </main>
   );
 }
 

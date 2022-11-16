@@ -1,16 +1,16 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import meals from '../../cypress/mocks/meals';
-import milkDrinks from '../../cypress/mocks/milkDrinks';
-import beefMeals from '../../cypress/mocks/beefMeals';
-import oneMeal from '../../cypress/mocks/oneMeal';
-import oneDrink from '../../cypress/mocks/oneDrink';
+import meals from './helpers/mocks/meals';
+import milkDrinks from './helpers/mocks/milkDrinks';
+import beefMeals from './helpers/mocks/beefMeals';
+import oneMeal from './helpers/mocks/oneMeal';
+import oneDrink from './helpers/mocks/oneDrink';
 import userEvent from '@testing-library/user-event';
 import renderWithRouterAndContext from './helpers/renderWithRouterAndContext';
-import Header from '../components/Header';
 import App from '../App';
 import SearchBar from '../components/SearchBar';
 import Foods from '../pages/Foods';
+import { act } from 'react-dom/test-utils';
 
 describe('Testes da barra de pesquisa', () => {
   beforeEach(() => {
@@ -27,9 +27,6 @@ describe('Testes da barra de pesquisa', () => {
 
     renderWithRouterAndContext(<SearchBar />);
 
-    // const showSearchBtn = screen.getByTestId('search-top-btn');
-    // userEvent.click(showSearchBtn);
-
     const searchBtn = screen.getByTestId('exec-search-btn');
     expect(searchBtn).toBeDisabled();
   });
@@ -39,9 +36,6 @@ describe('Testes da barra de pesquisa', () => {
     global.alert = jest.fn();
 
     renderWithRouterAndContext(<SearchBar />);
-
-    // const showSearchBtn = screen.getByTestId('search-top-btn');
-    // userEvent.click(showSearchBtn);
 
     const searchInput = screen.getByTestId('search-input');
     const fistLetterRadio = screen.getByTestId('first-letter-search-radio');
@@ -64,9 +58,6 @@ describe('Testes da barra de pesquisa', () => {
 
     renderWithRouterAndContext(<SearchBar />);
 
-    // const showSearchBtn = screen.getByTestId('search-top-btn');
-    // userEvent.click(showSearchBtn);
-
     const searchInput = screen.getByTestId('search-input');
     const nameRadio = screen.getByTestId('name-search-radio');
     const searchBtn = screen.getByTestId('exec-search-btn');
@@ -79,7 +70,7 @@ describe('Testes da barra de pesquisa', () => {
   });
 
   describe('Testes de Filtro', () => {
-    it('Testa se é chamado a API de comidas quando está na rota "/foods" e faz uma pesquisa', () => {
+    it('Testa se é chamado a API de comidas quando está na rota "/foods" e faz uma pesquisa', async () => {
       expect.assertions(1);
       jest.resetAllMocks();
       jest.spyOn(global, 'fetch');
@@ -95,13 +86,13 @@ describe('Testes da barra de pesquisa', () => {
       const searchBtn = screen.getByTestId('exec-search-btn');
       userEvent.type(searchInput, 'beef');
       userEvent.click(radio);
-      userEvent.click(searchBtn);
+      await act(async() => userEvent.click(searchBtn));
 
       const URL = 'https://www.themealdb.com/api/json/v1/1/filter.php?i=beef';
       expect(fetch).toHaveBeenCalledWith(URL);
     });
 
-    it('Testa se é chamado a API de bebidas quando está na rota "/drinks" e faz uma pesquisa', () => {
+    it('Testa se é chamado a API de bebidas quando está na rota "/drinks" e faz uma pesquisa', async () => {
       expect.assertions(1);
       jest.resetAllMocks();
       jest.spyOn(global, 'fetch');
@@ -116,14 +107,14 @@ describe('Testes da barra de pesquisa', () => {
       const searchBtn = screen.getByTestId('exec-search-btn');
       userEvent.type(searchInput, 'milk');
       userEvent.click(nameRadio);
-      userEvent.click(searchBtn);
+      await act(async() => userEvent.click(searchBtn));
 
       const URL =
         'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=milk';
       expect(fetch).toHaveBeenCalledWith(URL);
     });
 
-    it('Testa se traz comidas pelo filtro "First-Letter"', () => {
+    it('Testa se traz comidas pelo filtro "First-Letter"', async () => {
       expect.assertions(1);
       renderWithRouterAndContext(<App />);
 
@@ -149,7 +140,7 @@ describe('Testes da barra de pesquisa', () => {
         json: jest.fn().mockResolvedValue(oneMeal),
       });
 
-      userEvent.click(searchBtn);
+      await act(async() => userEvent.click(searchBtn));
 
       const URL = 'https://www.themealdb.com/api/json/v1/1/search.php?f=b';
       expect(fetch).toHaveBeenCalledWith(URL);
@@ -199,7 +190,7 @@ describe('Testes da barra de pesquisa', () => {
       expect(history.location.pathname).toBe('/drinks/178319');
     });
 
-    it('Testa se nada acontece caso a requisição para a API de filtros falhe', async () => {
+    it('Testa se as receitas somem caso a requisição para a API de filtros falhe', async () => {
       expect.assertions(3);
       const { history } = renderWithRouterAndContext(<Foods />);
       history.push('/foods');
@@ -220,8 +211,8 @@ describe('Testes da barra de pesquisa', () => {
       jest.spyOn(global, 'fetch').mockImplementation(async () => {
         return Promise.reject({});
       });
-      userEvent.click(searchFilterBtn);
-      expect(corba).toBeInTheDocument();
+      await act(async () => userEvent.click(searchFilterBtn));
+      expect(corba).not.toBeInTheDocument();
     });
   });
 });
