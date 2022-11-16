@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/projeto-APP-RECEITAS-trybe/static/css/main.85c503c8.css",
+    "main.js": "/projeto-APP-RECEITAS-trybe/static/js/main.331583ef.js",
+    "static/media/logo.png": "/projeto-APP-RECEITAS-trybe/static/media/logo.23e21c5eab11e166b438.png",
+    "static/media/logo-alt.png": "/projeto-APP-RECEITAS-trybe/static/media/logo-alt.12d3d697ade6b361d5ab.png",
+    "static/media/blackHeartIcon.svg": "/projeto-APP-RECEITAS-trybe/static/media/blackHeartIcon.083cb006913d197c95857ebfa2161db7.svg",
+    "index.html": "/projeto-APP-RECEITAS-trybe/index.html",
+    "static/media/default-user.svg": "/projeto-APP-RECEITAS-trybe/static/media/default-user.347d90fa33db6c0bd42c6f7990aff802.svg",
+    "main.85c503c8.css.map": "/projeto-APP-RECEITAS-trybe/static/css/main.85c503c8.css.map",
+    "main.331583ef.js.map": "/projeto-APP-RECEITAS-trybe/static/js/main.331583ef.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.85c503c8.css",
+    "static/js/main.331583ef.js"
+  ]
+}
